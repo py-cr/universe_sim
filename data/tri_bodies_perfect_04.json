@@ -1,0 +1,107 @@
+{
+  "bodies": [
+    {
+      "name": "红轨太阳A",
+      "mass": 2e+30,
+      "init_position": [
+        0.0,
+        518222240.0,
+        0.0
+      ],
+      "init_velocity": [
+        -12.0,
+        0.0,
+        0.0
+      ],
+      "density": 1408.0,
+      "color": [
+        170,
+        98,
+        25
+      ],
+      "texture": "sun2.jpg",
+      "size_scale": 50.0,
+      "distance_scale": 1.0,
+      "rotation_speed": 0.613,
+      "ignore_mass": false,
+      "is_fixed_star": true,
+      "trail_color": [
+        255,
+        0,
+        0
+      ]
+    },
+    {
+      "name": "绿轨太阳B",
+      "mass": 2e+30,
+      "init_position": [
+        -299195744.0,
+        0.0,
+        0.0
+      ],
+      "init_velocity": [
+        6.0,
+        -10.392304420471191,
+        0.0
+      ],
+      "density": 1408.0,
+      "color": [
+        170,
+        98,
+        25
+      ],
+      "texture": "sun2.jpg",
+      "size_scale": 50.0,
+      "distance_scale": 1.0,
+      "rotation_speed": 0.613,
+      "ignore_mass": false,
+      "is_fixed_star": true,
+      "trail_color": [
+        0,
+        255,
+        0
+      ]
+    },
+    {
+      "name": "蓝轨太阳C",
+      "mass": 2e+30,
+      "init_position": [
+        299195744.0,
+        0.0,
+        0.0
+      ],
+      "init_velocity": [
+        6.0,
+        10.392304420471191,
+        0.0
+      ],
+      "density": 1408.0,
+      "color": [
+        170,
+        98,
+        25
+      ],
+      "texture": "sun2.jpg",
+      "size_scale": 50.0,
+      "distance_scale": 1.0,
+      "rotation_speed": 0.613,
+      "ignore_mass": false,
+      "is_fixed_star": true,
+      "trail_color": [
+        0,
+        0,
+        255
+      ]
+    }
+  ],
+  "params": {
+    "dt": 31536000,
+    "position": [
+      -299195741.4,
+      224396806.04999998,
+      -1196782965.6
+    ],
+    "show_trail": true,
+    "show_name": false
+  }
+}

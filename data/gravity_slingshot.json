@@ -24,7 +24,12 @@
       "distance_scale": 1.0,
       "rotation_speed": 0.613,
       "ignore_mass": false,
-      "is_fixed_star": true
+      "is_fixed_star": true,
+      "trail_color": [
+        170,
+        98,
+        25
+      ]
     },
     {
       "name": "地球",
@@ -50,15 +55,22 @@
       "distance_scale": 1.0,
       "rotation_speed": 15,
       "ignore_mass": false,
-      "is_fixed_star": false
+      "is_fixed_star": false,
+      "trail_color": [
+        1,
+        89,
+        162
+      ]
     }
   ],
   "params": {
     "dt": 2592000,
     "position": [
       0,
-      149597870.7,
-      -448793612.09999996
-    ]
+      74798935.35,
+      -598391482.8
+    ],
+    "show_trail": true,
+    "show_name": false
   }
 }

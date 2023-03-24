@@ -5,11 +5,13 @@
 # 介绍
 《宇宙模拟器》是一个基于Python语言的开源项目，通过万有引力定理来模拟宇宙的运行轨迹。该项目包含了太阳系中各行星的轨迹和运行状态，可以进行任意角度观察和交互操作。同时，该项目还模拟了引力弹弓的实验、月球的月相变化过程和戴森球的模拟等等。此外，该项目还包含了三体模拟，帮助用户更好地理解三体问题。这个项目不仅可以让你更深入地了解宇宙，还可以为你提供一个学习Python3D编程的平台。
 # 模拟器效果图
-<img src="https://gitcode.net/pythoncr/three_body_sim/-/raw/master/images/solar_system_3.png" width="80.7%">
-
+<img src="https://gitcode.net/pythoncr/universe_sim/-/raw/master/images/1.png" width="80.7%">
+<img src="https://gitcode.net/pythoncr/universe_sim/-/raw/master/images/2.png" width="80.7%">
+<img src="https://gitcode.net/pythoncr/universe_sim/-/raw/master/images/3.png" width="80.7%">
+<img src="https://gitcode.net/pythoncr/universe_sim/-/raw/master/images/4.png" width="80.7%">
 
 # 抖音课堂：
-<img src="https://gitcode.net/pythoncr/three_body_sim/-/raw/master/images/douyin_x.jpg" width="40%">
+<img src="https://gitcode.net/pythoncr/universe_sim/-/raw/master/images/douyin_x.jpg" width="40%">
 
 # 课程下载
 https://gitcode.net/pythoncr/universe_sim

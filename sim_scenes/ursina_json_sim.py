@@ -9,7 +9,7 @@
 from bodies import Body
 
 from common.consts import SECONDS_PER_WEEK, SECONDS_PER_MONTH, SECONDS_PER_YEAR, AU
-from scenes.func import ursina_run
+from sim_scenes.func import ursina_run
 
 if __name__ == '__main__':
     # TODO: 去掉注释，太阳演示

@@ -31,7 +31,7 @@ class MayaviSimulator(Simulator):
 
 
 if __name__ == '__main__':
-    from scenes.func import mayavi_run
+    from sim_scenes.func import mayavi_run
     from bodies import Sun, Earth
     from common.consts import SECONDS_PER_WEEK
 

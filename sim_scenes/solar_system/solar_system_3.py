@@ -10,7 +10,7 @@ from bodies import Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Ne
 from bodies.body import AU
 from common.consts import SECONDS_PER_WEEK
 from common.func import get_positions_velocitys
-from scenes.func import mayavi_run
+from sim_scenes.func import mayavi_run
 import numpy as np
 
 if __name__ == '__main__':

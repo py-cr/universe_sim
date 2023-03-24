@@ -25,7 +25,7 @@ import datetime
 import math
 import os
 from ursina import EditorCamera, PointLight, SpotLight, AmbientLight, DirectionalLight
-from scenes.func import ursina_run
+from sim_scenes.func import ursina_run
 
 
 class WorldGrid(Entity):

@@ -127,7 +127,7 @@ class MplSimulator(Simulator):
 
 
 if __name__ == '__main__':
-    from scenes.func import mpl_run
+    from sim_scenes.func import mpl_run
     from bodies import Sun, Earth
     from common.consts import SECONDS_PER_WEEK
 

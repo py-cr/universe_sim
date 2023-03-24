@@ -8,7 +8,7 @@
 # ==============================================================================
 from bodies import Earth
 from common.consts import SECONDS_PER_HOUR
-from scenes.func import ursina_run
+from sim_scenes.func import ursina_run
 
 if __name__ == '__main__':
     """

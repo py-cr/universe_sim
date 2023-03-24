@@ -8,7 +8,7 @@
 # ==============================================================================
 from bodies import Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, Moon, Asteroids
 from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, SECONDS_PER_YEAR, AU
-from scenes.func import mayavi_run, ursina_run
+from sim_scenes.func import mayavi_run, ursina_run
 
 if __name__ == '__main__':
     # 八大行星：木星(♃)、土星(♄)、天王星(♅)、海王星(♆)、地球(⊕)、金星(♀)、火星(♂)、水星(☿)

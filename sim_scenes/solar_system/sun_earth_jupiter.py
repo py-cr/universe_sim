@@ -8,7 +8,7 @@
 # ==============================================================================
 from bodies import Sun, Earth, Jupiter
 from common.consts import SECONDS_PER_WEEK, AU
-from scenes.func import mayavi_run, ursina_run
+from sim_scenes.func import mayavi_run, ursina_run
 
 if __name__ == '__main__':
     """

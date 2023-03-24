@@ -9,7 +9,7 @@
 from bodies import Sun, Earth, Sirius, Rigel, Bellatrix, Alcyone, Antares, Arcturus, Aldebaran, Betelgeuse
 from bodies import EtaCarinae, YCanumVenaticorum, VYCanisMajoris, UYScuti, CarinaeV382, Stephenson_2_18
 from common.consts import SECONDS_PER_WEEK, SECONDS_PER_MONTH, SECONDS_PER_YEAR, SECONDS_PER_DAY
-from scenes.func import mayavi_run, mpl_run, ursina_run
+from sim_scenes.func import mayavi_run, mpl_run, ursina_run
 from bodies.body import Body, AU
 
 if __name__ == '__main__':

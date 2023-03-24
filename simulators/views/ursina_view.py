@@ -18,6 +18,7 @@ from bodies import Body
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
 from common.color_utils import adjust_brightness, conv_to_vec4_color, get_inverse_color
+from common.func import find_file
 from simulators.views.body_view import BodyView
 from simulators.views.ursina_mesh import create_sphere, create_torus
 import numpy as np
@@ -364,17 +365,21 @@ class Planet(Entity):
         创建行星环（使用土星贴图）
         :return:
         """
+        rings_texture = 'textures/saturnRings.jpg'
+        rings_texture = find_file(rings_texture)
+
         # 行星环偏移角度
         # self.ring_rotation_x = 80
         # 创建行星环
-        # self.ring = Entity(parent=self.planet, model='circle', texture='../textures/saturnRings.jpg', scale=3.5,
+        # self.ring = Entity(parent=self.planet, model='circle', texture=rings_texture, scale=3.5,
         #                    rotation=(self.ring_rotation_x, 0, 0), double_sided=True)
+
 
         # 行星环偏移角度
         self.ring_rotation_x = 80
         # 创建行星环
         torus = create_torus(0.7, 1.2, 64)
-        self.ring = Entity(parent=self, model=torus, texture='../textures/saturnRings.jpg', scale=1,
+        self.ring = Entity(parent=self, model=torus, texture=rings_texture, scale=1,
                            rotation=(self.ring_rotation_x, 0, 0), double_sided=True)
 
         # 设置行星环不受灯光影响，否则看不清行星环

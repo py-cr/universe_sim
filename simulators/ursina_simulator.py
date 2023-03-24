@@ -20,6 +20,7 @@ from simulators.views.ursina_view import UrsinaView, UrsinaPlayer
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.simulator import Simulator
 from common.system import System
+from common.func import find_file
 import time
 import datetime
 import math
@@ -265,7 +266,9 @@ class UrsinaSimulator(Simulator):
                 # cosmic_bg = '../textures/cosmic1.png'
                 # cosmic_bg = '../textures/cosmic2.jpg'
                 cosmic_bg = '../textures/cosmic3.jpg'
-            import os
+
+            cosmic_bg = find_file(cosmic_bg)
+
             if cosmic_bg is not None and os.path.exists(cosmic_bg):
                 self.cosmic_background(cosmic_bg)
 
@@ -288,6 +291,8 @@ class UrsinaSimulator(Simulator):
             bg_music = kwargs["background_music"]
         else:
             bg_music = None
+
+        bg_music = find_file(bg_music)
 
         if bg_music is None:
             # bg_music = "../sounds/universe_04.mp3"

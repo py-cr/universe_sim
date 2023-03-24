@@ -10,6 +10,7 @@ from PIL import Image
 from common.consts import AU
 import numpy as np
 import random
+import os
 
 
 def get_dominant_colors(infile, resize=(20, 20)):
@@ -35,7 +36,7 @@ def get_dominant_colors(infile, resize=(20, 20)):
 
     colors = list()
 
-    for i in range(min(10,len(color_counts))):
+    for i in range(min(10, len(color_counts))):
         palette_index = color_counts[i][1]
         dominant_color = palette[palette_index * 3: palette_index * 3 + 3]
         colors.append(tuple(dominant_color))
@@ -72,6 +73,28 @@ def get_positions_velocitys(angles, velocity=1, radius=1, radius_offset=None, ve
     return np.round(pxs, 2), np.round(pys, 2), -np.round(vxs, 2), np.round(vys, 2)
 
 
+def find_file(file_path, default_val=None, find_deep=5):
+    """
+    代码可能会放到任意级别的目录下面，该函数能逐级往上级目录进行查找文件
+    @param file_path: 文件路径
+    @param default_val: 没有找到路径的默认值
+    @param find_deep: 查找深度
+    @return:
+    """
+    if file_path is None:
+        return default_val
+
+    if os.path.exists(file_path):
+        return os.path.normpath(file_path)
+
+    for i in range(find_deep):
+        file_path = os.path.join("..", file_path)
+        if os.path.exists(file_path):
+            return os.path.normpath(file_path)
+
+    return default_val
+
+
 def calculate_distance(pos1, pos2=[0, 0, 0]):
     """
     计算两点间的距离
@@ -86,4 +109,5 @@ def calculate_distance(pos1, pos2=[0, 0, 0]):
 
 
 if __name__ == '__main__':
-    print(calculate_distance([6, 8, 0], [3, 4, 0]))
+    # print(calculate_distance([6, 8, 0], [3, 4, 0]))
+    print(find_file("common/func.py"))

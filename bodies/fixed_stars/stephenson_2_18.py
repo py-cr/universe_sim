@@ -62,7 +62,7 @@ class Stephenson_2_18(FixedStar):
                  init_velocity=[0, 0, 0],
                  color=(198, 29, 3),
                  texture="fixed_star.png", size_scale=1.0, distance_scale=1.0,
-                 rotation_speed=0.2, ignore_mass=False):
+                 rotation_speed=0.2, ignore_mass=False, show_name=False):
         params = {
             "name": name,
             "mass": mass,
@@ -75,6 +75,7 @@ class Stephenson_2_18(FixedStar):
             "distance_scale": distance_scale,
             "rotation_speed": rotation_speed,
             "ignore_mass": ignore_mass,
+            "show_name": show_name,
             "texture_bright": 3,
             "texture_contrast": 4
         }

@@ -27,7 +27,7 @@ class Mercury(Body):
                  init_position=[0.4 * AU, 0, 0],
                  init_velocity=[0, 47.87, 0],
                  texture="mercury.jpg", size_scale=1.0, distance_scale=1.0,
-                 rotation_speed=0.2558, ignore_mass=False, trail_color=None):
+                 rotation_speed=0.2558, ignore_mass=False, trail_color=None, show_name=False):
         params = {
             "name": name,
             "mass": mass,
@@ -40,7 +40,8 @@ class Mercury(Body):
             "distance_scale": distance_scale,
             "rotation_speed": rotation_speed,
             "ignore_mass": ignore_mass,
-            "trail_color": trail_color
+            "trail_color": trail_color,
+            "show_name": show_name
         }
         super().__init__(**params)
 

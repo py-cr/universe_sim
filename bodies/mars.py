@@ -26,7 +26,7 @@ class Mars(Body):
                  init_position=[1.5 * AU, 0, 0],
                  init_velocity=[0, 24.13, 0],
                  texture="mars.jpg", size_scale=1.0, distance_scale=1.0,
-                 rotation_speed=14.6223, ignore_mass=False, trail_color=None):
+                 rotation_speed=14.6223, ignore_mass=False, trail_color=None, show_name=False):
         params = {
             "name": name,
             "mass": mass,
@@ -39,7 +39,8 @@ class Mars(Body):
             "distance_scale": distance_scale,
             "rotation_speed": rotation_speed,
             "ignore_mass": ignore_mass,
-            "trail_color": trail_color
+            "trail_color": trail_color,
+            "show_name": show_name
         }
         super().__init__(**params)
 

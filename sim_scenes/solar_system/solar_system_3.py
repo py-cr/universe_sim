@@ -7,10 +7,9 @@
 # python_version  :3.8
 # ==============================================================================
 from bodies import Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, Asteroid
-from bodies.body import AU
-from common.consts import SECONDS_PER_WEEK
 from common.func import get_positions_velocitys
-from sim_scenes.func import mayavi_run
+from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, SECONDS_PER_MONTH, SECONDS_PER_YEAR, AU
+from sim_scenes.func import mayavi_run, ursina_run
 import numpy as np
 
 if __name__ == '__main__':
@@ -46,10 +45,10 @@ if __name__ == '__main__':
     # ]
     # endregion 1 --------------------------
 
-    # region 2.随机构建 60 小行星，注意：太多的小行星会影响电脑性能
-    NUM_OF_ASTEROIDS = 60
+    # region 2.随机构建 10 小行星，注意：太多的小行星会影响电脑性能
+    NUM_OF_ASTEROIDS = 10
     asteroids = []
-    angles = np.linspace(0, 40 * np.pi, NUM_OF_ASTEROIDS)
+    angles = np.linspace(0, 100 * np.pi, NUM_OF_ASTEROIDS)
     pxs, pys, vxs, vys = get_positions_velocitys(angles,
                                                  radius=1.60 * AU,
                                                  velocity=23.37,
@@ -82,4 +81,9 @@ if __name__ == '__main__':
 
     # 使用 mayavi 查看的运行效果
     # mayavi_run(bodies, SECONDS_PER_WEEK, view_azimuth=-45)
-    mayavi_run(bodies, SECONDS_PER_WEEK, view_azimuth=-45, view_distance=3e9, view_focalpoint=[5e2, 5e2, 5e2])
+    # mayavi_run(bodies, SECONDS_PER_WEEK, view_azimuth=-45, view_distance=3e9, view_focalpoint=[5e2, 5e2, 5e2])
+
+    # 使用 ursina 查看的运行效果
+    # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
+    # position = 左-右+、上+下-、前+后-
+    ursina_run(bodies, SECONDS_PER_YEAR, position=(0, 2 * AU, -11 * AU))

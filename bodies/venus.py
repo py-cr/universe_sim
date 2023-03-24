@@ -27,7 +27,7 @@ class Venus(Body):
                  init_position=[0.72 * AU, 0, 0],
                  init_velocity=[0, 35, 0],
                  texture="venus.jpg", size_scale=1.0, distance_scale=1.0,
-                 rotation_speed=-0.0617, ignore_mass=False, trail_color=None):
+                 rotation_speed=-0.0617, ignore_mass=False, trail_color=None, show_name=False):
         params = {
             "name": name,
             "mass": mass,
@@ -40,7 +40,8 @@ class Venus(Body):
             "distance_scale": distance_scale,
             "rotation_speed": rotation_speed,
             "ignore_mass": ignore_mass,
-            "trail_color": trail_color
+            "trail_color": trail_color,
+            "show_name": show_name
         }
         super().__init__(**params)
 

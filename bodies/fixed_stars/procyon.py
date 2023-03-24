@@ -77,7 +77,7 @@ class Procyon(FixedStar):
                  init_velocity=[0, 0, 0],
                  color=(0xF5, 0xE8, 0xD5),
                  texture="fixed_star.png", size_scale=1.0, distance_scale=1.0,
-                 rotation_speed=0.1, ignore_mass=False):
+                 rotation_speed=0.1, ignore_mass=False, show_name=False):
         params = {
             "name": name,
             "mass": mass,
@@ -89,7 +89,8 @@ class Procyon(FixedStar):
             "size_scale": size_scale,
             "distance_scale": distance_scale,
             "rotation_speed": rotation_speed,
-            "ignore_mass": ignore_mass
+            "ignore_mass": ignore_mass,
+            "show_name": show_name
         }
         super().__init__(**params)
 

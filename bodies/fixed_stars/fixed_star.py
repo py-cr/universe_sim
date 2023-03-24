@@ -28,7 +28,7 @@ class FixedStar(Body):
                  color=(0xFF, 0xFF, 0xFF),
                  texture=None, size_scale=1.0, distance_scale=1.0,
                  rotation_speed=0.1, ignore_mass=False, density=1.408e3, trail_color=None,
-                 texture_bright=None, texture_contrast=None):
+                 texture_bright=None, texture_contrast=None, show_name=False):
         if texture is None or texture == "fixed_star.png":
             self.color = color
             # bright=1.1, contrast=3.2
@@ -45,7 +45,8 @@ class FixedStar(Body):
             "distance_scale": distance_scale,
             "rotation_speed": rotation_speed,
             "ignore_mass": ignore_mass,
-            "trail_color": trail_color
+            "trail_color": trail_color,
+            "show_name": show_name
         }
         super().__init__(**params)
         self.light_on = True

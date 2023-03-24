@@ -234,9 +234,9 @@ class UrsinaSimulator(Simulator):
         window.title = '宇宙模拟器'
 
         # 设置 camera 的裁剪面和位置
-        # camera.clip_plane_near = 0.01
-        # camera.fov = 120
-        # camera.clip_plane_far = 1000
+        camera.clip_plane_near = 0.01
+        camera.fov = 60
+        camera.clip_plane_far = 50000
         # camera.position = (0, 10, -20)
         # camera.rotation_x = -30
 

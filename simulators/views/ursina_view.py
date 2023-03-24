@@ -119,7 +119,7 @@ class Planet(Entity):
             color=self.plant_color,
             position=pos,
             rotation=rotation,
-            double_sided=True
+            # double_sided=True
         )
 
         if hasattr(self.body_view.body, "torus_stars") or \

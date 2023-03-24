@@ -7,7 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 from bodies import Sun, Earth
-from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY
+from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, SECONDS_PER_YEAR, AU
 from sim_scenes.func import mayavi_run, ursina_run
 
 if __name__ == '__main__':
@@ -19,16 +19,21 @@ if __name__ == '__main__':
     3、天体质量 mass    
     """
     bodies = [
-        Sun(mass=5e30, init_position=[649597870.700, 0, 0], init_velocity=[0, 5.0, 0],
-            size_scale=5e1, texture="sun1.jpg"),  # 太阳放大 100 倍
-        Sun(mass=4e30, init_position=[0, 0, 249597870.700], init_velocity=[0, -6.0, 0],
-            size_scale=5e1, texture="sun2.jpg"),  # 太阳放大 100 倍
-        Sun(mass=3e30, init_position=[0, -649597870.700, 0], init_velocity=[6.0, 0, 0],
-            size_scale=5e1, texture="sun2.jpg"),  # 太阳放大 100 倍
+        Sun(mass=5e30, init_position=[649597870.700, 0, 0], init_velocity=[0, 15.0, 0],
+            size_scale=5e1, texture="sun1.jpg"),  # 太阳放大 50 倍
+        Sun(mass=4e30, init_position=[0, 0, 249597870.700], init_velocity=[0, -16.0, 0],
+            size_scale=5e1, texture="sun2.jpg"),  # 太阳放大 50 倍
+        Sun(mass=3e30, init_position=[0, -649597870.700, 0], init_velocity=[16.0, 0, 0],
+            size_scale=5e1, texture="sun2.jpg"),  # 太阳放大 50 倍
 
         Earth(init_position=[0, -249597870.700, 0], init_velocity=[15.50, 0, 0],
               size_scale=4e3, distance_scale=1),  # 地球放大 4000 倍，距离保持不变
     ]
 
     # 使用 mayavi 查看的运行效果
-    mayavi_run(bodies, SECONDS_PER_WEEK, view_azimuth=0)
+    # mayavi_run(bodies, SECONDS_PER_WEEK, view_azimuth=0)
+
+    # 使用 ursina 查看的运行效果
+    # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
+    # position = 左-右+、上+下-、前+后-
+    ursina_run(bodies, SECONDS_PER_YEAR, position=(2 * AU, 3 * AU, -20 * AU), show_trail=True)

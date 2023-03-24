@@ -223,9 +223,9 @@ class ControlHandler(EventHandler):
                 self.ui.on_off_switch.value = self.ui.pause_button_text
             self.on_off_switch_changed()
         elif key == '+' or key == "= up":
-            self.slider_increase(self.ui.slider_run_speed_factor)
+            self.slider_increase(self.ui.slider_run_speed_factor, 0.1)
         elif key == '-' or key == "- up":
-            self.slider_decrease(self.ui.slider_run_speed_factor)
+            self.slider_decrease(self.ui.slider_run_speed_factor, 0.1)
         elif key == 'n':
             import math
             # min=0.01, max=20

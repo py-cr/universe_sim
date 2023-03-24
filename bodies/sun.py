@@ -40,6 +40,7 @@ class Sun(FixedStar):
             "show_name": show_name
         }
         super().__init__(**params)
+        self.glows = (12, 1.015, 0.08)
 
     @property
     def is_fixed_star(self):

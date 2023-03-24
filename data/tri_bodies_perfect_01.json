@@ -15,6 +15,11 @@
       ],
       "density": 1408.0,
       "color": [
+        170,
+        98,
+        25
+      ],
+      "trail_color": [
         255,
         0,
         0
@@ -39,6 +44,11 @@
       ],
       "density": 1408.0,
       "color": [
+        170,
+        98,
+        25
+      ],
+      "trail_color": [
         0,
         255,
         0
@@ -63,6 +73,11 @@
       ],
       "density": 1408.0,
       "color": [
+        170,
+        98,
+        25
+      ],
+      "trail_color": [
         0,
         0,
         255
@@ -71,6 +86,29 @@
       "size_scale": 50.0,
       "distance_scale": 1.0,
       "is_fixed_star": true
+    },
+    {
+      "name": "流浪地球",
+      "mass": 5.97237e+24,
+      "init_position": [
+        0.0,
+        86370368.0,
+        747989376.0
+      ],
+      "init_velocity": [
+        0.0,
+        0.0,
+        -10.0
+      ],
+      "density": 5507.85,
+      "color": [
+        1,
+        89,
+        162
+      ],
+      "texture": "earth1.jpg",
+      "size_scale": 4000.0,
+      "distance_scale": 1
     }
   ],
   "params": {

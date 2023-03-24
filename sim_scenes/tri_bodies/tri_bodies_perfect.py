@@ -22,11 +22,11 @@ if __name__ == '__main__':
 
     mass = 2e30
     r = 2 * AU
-    # p = 12  # TODO: 三体转圆形花
-    p = 14.88  # TODO: 三体转圈近似圆形
+    p = 12  # TODO: 三体转圆形花
+    # p = 14.88  # TODO: 三体转圈近似圆形
     # p = 16  # TODO: 三体转圆形花
     # p = 18  # TODO: 三体转圆形花
-    # p = 19  # TODO: 三体转圆形花
+    p = 19  # TODO: 三体转圆形花
     bodies = [
         Sun(name="红轨太阳A", mass=mass,
             init_position=[0, math.sqrt(3) * r, 0],
@@ -53,4 +53,7 @@ if __name__ == '__main__':
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_YEAR, position=(-2 * AU, AU, -5 * AU), show_trail=True)
+    ursina_run(bodies, SECONDS_PER_YEAR,
+               position=(-2 * AU, 1.5 * AU, -8 * AU),
+               # save_as_json="../../data/tri_bodies_perfect_05.json",  # 保存 json 文件到 data 目录
+               show_trail=True)

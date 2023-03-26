@@ -110,7 +110,11 @@ class Planet(Entity):
             rotation = (90, 0, 0)
         else:
             # 创建一个天体
-            model = create_sphere(0.5, 32)
+            subdivisions = 32
+            if self.body_view.body.resolution is not None:
+                subdivisions = self.body_view.body.resolution
+
+            model = create_sphere(0.5, subdivisions)
             rotation = (0, 0, 0)
 
         UrsinaEvent.on_reset_subscription(self.on_reset)
@@ -147,7 +151,7 @@ class Planet(Entity):
         self.name_text = Text(self.body_view.body.name, scale=1, billboard=True, parent=self,
                               font=UrsinaConfig.CN_FONT, background=True,
                               origin=(0, 0))
-        self.name_text.background.color = color.rgba(b_color[0], b_color[1], b_color[2], 0.5)
+        self.name_text.background.color = color.rgba(b_color[0], b_color[1], b_color[2], 0.3)
         # self.name_text.scale = self.scale
         inverse_color = get_inverse_color(b_color)
         self.name_text.color = color.rgba(inverse_color[0], inverse_color[1], inverse_color[2], 1)
@@ -377,7 +381,6 @@ class Planet(Entity):
         # 创建行星环
         # self.ring = Entity(parent=self.planet, model='circle', texture=rings_texture, scale=3.5,
         #                    rotation=(self.ring_rotation_x, 0, 0), double_sided=True)
-
 
         # 行星环偏移角度
         self.ring_rotation_x = 80

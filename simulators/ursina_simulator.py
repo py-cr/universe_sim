@@ -164,7 +164,12 @@ class UrsinaSimulator(Simulator):
         """
         # Add skybox
         from ursina import Sky
-        Sky(texture=texture).scale = 10000
+
+        sky_scale = 50000
+        Sky(texture=texture).scale = sky_scale
+        # 一定要够大，如果小于 Sky(texture=texture).scale = 50000，宇宙背景就会出现黑色方洞
+        if camera.clip_plane_far < sky_scale * 2:
+            camera.clip_plane_far = sky_scale * 2
 
         # texture = load_texture(texture)
         # sky_dome = Entity(model='sky_dome', texture=texture, scale=10000,
@@ -232,11 +237,18 @@ class UrsinaSimulator(Simulator):
     def run(self, dt, **kwargs):
 
         window.title = '宇宙模拟器'
+        view_closely = False
+        if "view_closely" in kwargs:
+            view_closely = kwargs["view_closely"]
 
-        # 设置 camera 的裁剪面和位置
-        camera.clip_plane_near = 0.01
-        camera.fov = 60
-        camera.clip_plane_far = 50000
+        if view_closely:
+            # 设置 camera 的裁剪面和位置
+            camera.clip_plane_near = 0.01
+            camera.fov = 60
+
+        # 一定要够大，如果小于 Sky(texture=texture).scale = 50000，宇宙背景就会出现黑色方洞
+        # camera.clip_plane_far = 100000
+
         # camera.position = (0, 10, -20)
         # camera.rotation_x = -30
 

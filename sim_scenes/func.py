@@ -64,7 +64,8 @@ def ursina_run(bodies,
                show_grid=True,
                show_trail=False,
                show_name=False,
-               save_as_json=None):
+               save_as_json=None,
+               view_closely=False):
     """
 
     :param bodies: 天体
@@ -144,7 +145,12 @@ def ursina_run(bodies,
     sys.modules["__main__"].update = callback_update
     if show_trail:
         UrsinaConfig.show_trail = show_trail
-    simulator.run(dt, light=light, cosmic_bg=cosmic_bg, show_grid=show_grid, bg_music=bg_music)
+    simulator.run(dt,
+                  light=light,
+                  cosmic_bg=cosmic_bg,
+                  show_grid=show_grid,
+                  bg_music=bg_music,
+                  view_closely=view_closely)
 
 
 def mpl_run(bodies, dt=SECONDS_PER_WEEK, gif_file_name=None, gif_max_frame=200):

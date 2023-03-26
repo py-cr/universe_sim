@@ -166,7 +166,9 @@ class UrsinaSimulator(Simulator):
         from ursina import Sky
 
         sky_scale = 50000
-        Sky(texture=texture).scale = sky_scale
+        sky = Sky(texture=texture)
+        sky.scale = sky_scale
+        # sky.set_shader_input('texture_scale', Vec2(20, 20))
         # 一定要够大，如果小于 Sky(texture=texture).scale = 50000，宇宙背景就会出现黑色方洞
         if camera.clip_plane_far < sky_scale * 2:
             camera.clip_plane_far = sky_scale * 2

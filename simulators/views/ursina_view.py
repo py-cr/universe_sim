@@ -95,8 +95,14 @@ class Planet(Entity):
         self.init_scale = scale
         if hasattr(body_view, "texture"):
             texture = load_texture(body_view.texture)
+            # color.white
+            self.plant_color = color.white
         else:
             texture = None
+            b_color = self.body_view.color
+            if len(b_color) == 3:
+                b_color = (b_color[0], b_color[1], b_color[2], 1.0)
+            self.plant_color = color.rgba(*b_color)
 
         if hasattr(self.body_view.body, "torus_stars"):
             # 创建一个星环小天体群（主要模拟小行星群，非一个天体）
@@ -108,9 +114,7 @@ class Planet(Entity):
             rotation = (0, 0, 0)
 
         UrsinaEvent.on_reset_subscription(self.on_reset)
-        # color.white
-        self.plant_color = color.white
-        # self.plant_color = color.rgba(*self.body_view.color)
+
         super().__init__(
             # model="sphere",
             model=model,

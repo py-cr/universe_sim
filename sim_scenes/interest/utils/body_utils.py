@@ -8,7 +8,7 @@
 # ==============================================================================
 
 
-def gen_eye_bodies(pixel_image, params, body_template=None):
+def gen_bodies_from_image(pixel_image, params, body_template=None):
     """
     根据像素图片以及参数，自动生成星球，注意图片像素不能太多，否则会导致电脑运行太慢
     @param pixel_image:
@@ -22,7 +22,8 @@ def gen_eye_bodies(pixel_image, params, body_template=None):
     interval_factor = 20  # 星球间距因子
     if body_template is None:
         body_template = 'Body(name="%s", mass=mass, color=(%d, %d, %d), size_scale=%.4f, ' \
-                        'init_position=get_position([0, %g * D, %g * D], %.4f), init_velocity=[0, 0, 0], ignore_mass=True)'
+                        'init_position=get_position([0, %g * D, %g * D], %.4f), ' \
+                        'init_velocity=[0, 0, 0], ignore_mass=True)'
     bodies_str = "["
 
     # 以图片像素为坐标，对角线的距离
@@ -40,11 +41,11 @@ def gen_eye_bodies(pixel_image, params, body_template=None):
             # print(scale)
             # 获取像素的颜色
             pixel = img.getpixel((w, h))
-            # 对于纯白色的颜色，就忽略，不生成星球（这样像素中纯白色越多，对电脑的压力就越少）
+            # 对于纯白色的颜色，就忽略，不生成星球（这样图片中，纯白色越多，对电脑的压力就越小）
             if pixel[0] >= 255 and pixel[1] >= 255 and pixel[1] >= 255:
                 continue
             body_str = body_template % (f"星球{h}:{w}", pixel[0], pixel[1], pixel[2], scale,
-                                        (width-w) * interval_factor, (height-h) * interval_factor, scale)
+                                        (width - w) * interval_factor, (height - h) * interval_factor, scale)
             bodies_str += body_str + ",\n"
 
     bodies_str += "]"
@@ -67,11 +68,11 @@ if __name__ == '__main__':
         # return pos[0], pos[1], pos[2]
 
 
-    bodies: list = gen_eye_bodies(pixel_image="../images/eye.png",
-                                  params={"D": D,
-                                          "Body": Body,
-                                          "mass": mass,
-                                          "get_position": get_position,
-                                          "camera_pos": camera_pos})
+    bodies: list = gen_bodies_from_image(pixel_image="../images/eye.png",
+                                         params={"D": D,
+                                                 "Body": Body,
+                                                 "mass": mass,
+                                                 "get_position": get_position,
+                                                 "camera_pos": camera_pos})
 
     print(bodies)

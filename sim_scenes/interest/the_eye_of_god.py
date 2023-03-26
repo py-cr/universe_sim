@@ -9,7 +9,7 @@
 from bodies import Sun, Earth, Moon, FixedStar, Body
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY, SECONDS_PER_WEEK
 from sim_scenes.func import mayavi_run, ursina_run
-from sim_scenes.interest.utils.body_utils import gen_eye_bodies
+from sim_scenes.interest.utils.body_utils import gen_bodies_from_image
 import random
 
 
@@ -27,8 +27,8 @@ def show_eye_of_god():
         return pos[0] + (scale - 1.0) * 300 * (random.randint(90, 110)) * D, pos[1], pos[2]
         # return pos[0], pos[1], pos[2]
 
-    bodies: list = gen_eye_bodies(pixel_image="./images/eye.png",
-                                  params={"D": D, "Body": Body, "mass": mass,
+    bodies: list = gen_bodies_from_image(pixel_image="./images/eye.png",
+                                         params={"D": D, "Body": Body, "mass": mass,
                                           "get_position": get_position, "camera_pos": camera_pos})
     face = FixedStar(name="face", texture="fixed_star.png", mass=mass * 3000, color=(0xff, 0xf8, 0xd4),
                      init_position=[2000 * D, 200 * D, 100 * D],  # [ 远+近-  , 左+右-  , 上+下-]

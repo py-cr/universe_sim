@@ -11,7 +11,7 @@ from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DA
 from sim_scenes.func import mayavi_run, ursina_run
 from bodies.body import AU
 import random
-from sim_scenes.interest.utils.body_utils import gen_eye_bodies
+from sim_scenes.interest.utils.body_utils import gen_bodies_from_image
 
 
 def show_text_bodies():
@@ -28,8 +28,8 @@ def show_text_bodies():
         return pos[0] + (scale - 1.0) * 200 * (random.randint(90, 110)) * D, pos[1], pos[2]
         # return pos[0], pos[1], pos[2]
 
-    bodies: list = gen_eye_bodies(pixel_image="./images/python.png",
-                                  params={"D": D, "Body": Body, "mass": mass,
+    bodies: list = gen_bodies_from_image(pixel_image="./images/python.png",
+                                         params={"D": D, "Body": Body, "mass": mass,
                                           "get_position": get_position,
                                           "camera_pos": camera_pos})
     face = FixedStar(name="bg", texture="fixed_star.png", mass=mass * 9000, color=(0xff, 0xf8, 0xd4),

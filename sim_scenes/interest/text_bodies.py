@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-# title           :上帝之眼
-# description     :上帝之眼
+# title           :组成文本的星球群（自定义星球）
+# description     :组成文本的星球群（自定义星球）
 # author          :Python超人
 # date            :2023-03-26
 # link            :https://gitcode.net/pythoncr/
@@ -16,7 +16,7 @@ from sim_scenes.interest.utils.body_utils import gen_eye_bodies
 
 def show_text_bodies():
     """
-    上帝之眼
+    显示文本的星球群
     """
     D = 600
     mass = 0.5e25

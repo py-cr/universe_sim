@@ -30,7 +30,7 @@ def show_eye_of_god():
     bodies: list = gen_eye_bodies(
         {"D": D, "Body": Body, "mass": mass, "get_position": get_position, "camera_pos": camera_pos})
     face = FixedStar(name="face", texture="fixed_star.png", mass=mass * 3000, color=(0xff, 0xf8, 0xd4),
-                     init_position=[2000 * D, 240 * D, -90 * D],  # [ 远+近-  , 左+右-  , 上+下-]
+                     init_position=[2000 * D, 200 * D, 100 * D],  # [ 远+近-  , 左+右-  , 上+下-]
                      ignore_mass=True)
     face.light_on = False
     bodies.append(face)
@@ -75,7 +75,7 @@ def gen_eye_bodies(params):
             if pixel[0] >= 255 and pixel[1] >= 255 and pixel[1] >= 255:
                 continue
             body_str = body_template % (f"星球{h}:{w}", pixel[0], pixel[1], pixel[2], scale,
-                                        w * interval_factor, -h * interval_factor, scale)
+                                        (width-w) * interval_factor, (height-h) * interval_factor, scale)
             bodies_str += body_str + ",\n"
 
     bodies_str += "]"

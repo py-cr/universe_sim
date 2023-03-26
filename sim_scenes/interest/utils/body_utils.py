@@ -44,7 +44,7 @@ def gen_eye_bodies(pixel_image, params, body_template=None):
             if pixel[0] >= 255 and pixel[1] >= 255 and pixel[1] >= 255:
                 continue
             body_str = body_template % (f"星球{h}:{w}", pixel[0], pixel[1], pixel[2], scale,
-                                        w * interval_factor, -h * interval_factor, scale)
+                                        (width-w) * interval_factor, (height-h) * interval_factor, scale)
             bodies_str += body_str + ",\n"
 
     bodies_str += "]"

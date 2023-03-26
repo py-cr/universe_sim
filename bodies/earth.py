@@ -34,7 +34,7 @@ class Earth(Body):
             "init_position": init_position,
             "init_velocity": init_velocity,
             "density": 5507.85,
-            "color": (1, 89, 162),
+            "color": (7, 0, 162),
             "texture": texture,
             "size_scale": size_scale,
             "distance_scale": distance_scale,

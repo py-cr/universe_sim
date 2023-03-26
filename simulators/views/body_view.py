@@ -28,10 +28,12 @@ class BodyView(metaclass=ABCMeta):
             self.color = tuple(np.array(body.color) / 255)
         else:
             self.texture = self.__find_texture(self.body.texture)  # 纹理
+            self.color = tuple(np.array(body.color) / 255)
             if self.texture is None:
-                self.color = tuple(np.array(body.color) / 255)
+                self.texture_color = self.color
             else:
-                self.color = self.__get_texture_main_color(self.texture)
+                # self.color = self.__get_texture_main_color(self.texture)
+                self.texture_color = self.__get_texture_main_color(self.texture)
         self.appear()
         self.position = body.position
         self.name = body.name

@@ -44,7 +44,7 @@ def gen_bodies_from_image(pixel_image, params, body_template=None):
             # 对于纯白色的颜色，就忽略，不生成星球（这样图片中，纯白色越多，对电脑的压力就越小）
             if pixel[0] >= 255 and pixel[1] >= 255 and pixel[1] >= 255:
                 continue
-            body_str = body_template % (f"星球{h}:{w}", pixel[0], pixel[1], pixel[2], scale,
+            body_str = body_template % (f"星球{w}:{h}", pixel[0], pixel[1], pixel[2], scale,
                                         (width - w) * interval_factor, (height - h) * interval_factor, scale)
             bodies_str += body_str + ",\n"
 

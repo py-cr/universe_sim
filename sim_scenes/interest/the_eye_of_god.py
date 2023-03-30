@@ -19,14 +19,14 @@ def show_eye_of_god():
     """
     D = 6000
     # camera_pos = 左-右+、上+下-、前+后-
-    camera_pos = (-100 * D, 0, -6000 * D)
+    camera_pos = (D, D, -7000 * D)
 
-    bodies: list = gen_bodies_from_image(pixel_image="./images/eye.png",
+    bodies: list = gen_bodies_from_image(pixel_image="./images/eye.png", texture="color_body.jpg",
                                          params={"camera_pos": camera_pos})
-    bg = FixedStar(name="bg", texture="fixed_star.png", mass=5e31, color=(0xff, 0xf8, 0xd4),
-                   init_position=[3000 * D, 200 * D, 100 * D],  # [ 远+近-  , 左+右-  , 上+下-]
+    # 放一个恒星作为背景
+    bg = FixedStar(name="bg", texture="fixed_star.png", mass=2e32, color=(0xff, 0xf8, 0xd4),
+                   init_position=[6000 * D, 400 * D, 100 * D],  # [ 远+近-  , 左+右-  , 上+下-]
                    ignore_mass=True)
-    # bg.light_on = False
     bodies.append(bg)
 
     # 使用 ursina 查看的运行效果

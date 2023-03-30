@@ -8,8 +8,25 @@
 # ==============================================================================
 from bodies import ColorBody
 import random
-
+import math
 from PIL import Image
+
+
+def get_scaled_body_pos(camera_pos, body_pos, scale_factor):
+    # 计算天体和摄像机的距离
+    dist = math.sqrt((camera_pos[0] - body_pos[0]) ** 2 +
+                     (camera_pos[1] - body_pos[1]) ** 2 +
+                     (camera_pos[2] - body_pos[2]) ** 2)
+    # 缩放天体的大小
+    scaled_dist = dist * scale_factor
+    # 计算摄像机和天体的连线向量
+    vector = [body_pos[0] - camera_pos[0], body_pos[1] - camera_pos[1], body_pos[2] - camera_pos[2]]
+    # 计算单位向量
+    unit_vector = [vector[0] / dist, vector[1] / dist, vector[2] / dist]
+    # 根据缩放后的距离和单位向量计算天体的新位置
+    new_pos = [camera_pos[0] + unit_vector[0] * scaled_dist, camera_pos[1] + unit_vector[1] * scaled_dist,
+               camera_pos[2] + unit_vector[2] * scaled_dist]
+    return new_pos
 
 
 def gen_bodies_from_image(pixel_image, params, texture="color_body.png"):
@@ -22,9 +39,14 @@ def gen_bodies_from_image(pixel_image, params, texture="color_body.png"):
     D = 6000
     mass = 0.9e25
 
+    camera_pos = params["camera_pos"]
+
     def get_position(pos, scale):
-        # [ 远+近-  , 左+右-  , 上+下-]
-        return pos[0] + (scale - 1.0) * 300 * (random.randint(90, 110)) * D, pos[1], pos[2]
+        # return get_scaled_body_pos((camera_pos[2], camera_pos[0], camera_pos[1]), pos, scale)
+        return get_scaled_body_pos((camera_pos[2], camera_pos[1], camera_pos[0]), pos, scale)
+
+        # # [ 远+近-  , 左+右-  , 上+下-]
+        # return pos[0] + (scale - 1.0) * 300 * (random.randint(90, 110)) * D, pos[1], pos[2]
         # return pos[0], pos[1], pos[2]
 
     params["ColorBody"] = ColorBody
@@ -49,9 +71,10 @@ def gen_bodies_from_image(pixel_image, params, texture="color_body.png"):
             # 以图片像素为坐标，每个像素点到中心的距离
             distance_to_center = pow(pow(w - width / 2, 2) + pow(h - height / 2, 2), 1 / 2)
             # 让 body 从中心开始，离摄像机越远， body 的缩放值越大（scale 就越大，）
-            scale = (distance_to_center / (distance_hw * 10) + 1)  # 中心最近 1.0 ~ 1.05
+            scale = (distance_to_center / (distance_hw * 1.2) + 1)  # 中心最近 1.0 ~ 1.25
+            # scale = scale + (random.randint(100, 200) / 1000)
             # TODO: 队列反向排列（中心最远 1.05 ~ 1.0）
-            # scale = 1.05 - scale + 1.0
+            # scale = 1.25 - scale + 1.0
             # print(scale)
             # 获取像素的颜色
             pixel = img.getpixel((w, h))
@@ -66,10 +89,14 @@ def gen_bodies_from_image(pixel_image, params, texture="color_body.png"):
     return eval(bodies_str, params)
 
 
-if __name__ == '__main__':
-    import random
-    from bodies import Body
+def get_scaled_body_pos_test():
+    camera_pos = [0, 0, 0]
+    body_pos = [1, 2, 3]
+    scale_factor = 2
+    print(get_scaled_body_pos(camera_pos, body_pos, scale_factor))
 
+if __name__ == '__main__':
+    # get_scaled_body_pos_test()
     D = 600
     mass = 0.9e25
     # camera_pos = 左-右+、上+下-、前+后-
@@ -79,14 +106,8 @@ if __name__ == '__main__':
     def get_position(pos, scale):
         # [ 远+近-  , 左+右-  , 上+下-]
         return pos[0] + (scale - 1.0) * 300 * (random.randint(90, 110)) * D, pos[1], pos[2]
-        # return pos[0], pos[1], pos[2]
-
 
     bodies: list = gen_bodies_from_image(pixel_image="../images/eye.png",
-                                         params={"D": D,
-                                                 "Body": Body,
-                                                 "mass": mass,
-                                                 "get_position": get_position,
-                                                 "camera_pos": camera_pos})
+                                         params={"camera_pos": camera_pos})
 
     print(bodies)

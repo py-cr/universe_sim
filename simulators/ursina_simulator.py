@@ -179,80 +179,20 @@ class UrsinaSimulator(Simulator):
         #                   position=(0, 0, 0),
         #                   rotation=(0, 0, 0))
 
-    # def __add_glow(self, entity, intensity=2, light_color=color.white, attenuation=3):
-    #     """
-    #     未用，保留代码
-    #     :param entity:
-    #     :param intensity:
-    #     :param light_color:
-    #     :param attenuation:
-    #     :return:
-    #     """
-    #     lights = []
-    #     import math
-    #     for i in range(5):
-    #         glow_entity = Entity(parent=entity, model='sphere', color=color.rgba(1.0, 0.6, 0.2, 1),
-    #                              scale=math.pow(1.03, i), alpha=0.2)
-    #         lights.append(glow_entity)
-    #     # 创建一个新的 Entity 对象，作为光晕的容器
-    #     # glow_entity = Entity(parent=entity, model='sphere', scale=entity.scale * 1.2)
-    #     # 创建 PointLight 对象，并设置它的属性
-    #     for i in range(2):
-    #         light = PointLight(parent=lights[0], intensity=intensity, color=light_color, attenuation=attenuation)
-    #         lights.append(light)
-    #
-    #     # 把 Entity 对象放到星星的后面，使得光晕看起来像是从星星发出来的
-    #     glow_entity.world_position = entity.world_position
-    #     glow_entity.world_parent = entity.parent
-    #     glow_entity.y += entity.scale_y * 0.1
-    #     glow_entity.depth_test = False
-    #     return lights
-
-    # def create_fixed_star_lights(self, entity):
-    #     """
-    #     创建恒星的发光的效果、并作为灯光源
-    #     :param entity:
-    #     :return:
-    #     """
-    #
-    #     # 如果是恒星（如：太阳），自身会发光，则需要关闭灯光
-    #     entity.set_light_off()
-    #
-    #     lights = []
-    #     # 创建多个新的 Entity 对象，作为光晕的容器
-    #     for i in range(10):
-    #         glow_entity = Entity(parent=entity, model='sphere', color=color.rgba(1.0, 0.6, 0.2, 1),
-    #                              scale=math.pow(1.03, i), alpha=0.1)
-    #
-    #         lights.append(glow_entity)
-    #     for i in range(2):
-    #         # 创建 PointLight 对象，作为恒星的灯光源
-    #         light = PointLight(parent=entity, intensity=10, range=10, color=color.white)
-    #         lights.append(light)
-    #
-    #     # light = DirectionalLight(shadows=True, direction=Vec3(0, 0, 1), color=color.white)
-    #     # light.look_at(Vec3(0, 0, -1))
-    #     # light = SpotLight(parent=entity,shadows=True, direction=Vec3(1,1,1), color=color.white)
-    #
-    #     return lights
-
     def run(self, dt, **kwargs):
 
         window.title = '宇宙模拟器'
+
+        # 默认非近距离查看
         view_closely = False
         if "view_closely" in kwargs:
             view_closely = kwargs["view_closely"]
 
         if view_closely:
+            # 近距离查看
             # 设置 camera 的裁剪面和位置
             camera.clip_plane_near = 0.01
             camera.fov = 60
-
-        # 一定要够大，如果小于 Sky(texture=texture).scale = 50000，宇宙背景就会出现黑色方洞
-        # camera.clip_plane_far = 100000
-
-        # camera.position = (0, 10, -20)
-        # camera.rotation_x = -30
 
         # interval_fator 能让更新天体运行状态（位置、速度）更精确
         # 设定时间间隔为0.01秒
@@ -262,13 +202,6 @@ class UrsinaSimulator(Simulator):
         # interval 和 last_time 用于检查时间间隔是否已过期
         self.interval = datetime.timedelta(seconds=self.interval_fator)
         self.last_time = datetime.datetime.now() - datetime.timedelta(seconds=2)
-
-        if "light" in kwargs:
-            if kwargs["light"]:
-                for v in self.ursina_views:
-                    if v.body.is_fixed_star:
-                        # self.lights = self.create_fixed_star_lights(v.planet)
-                        pass
 
         if "show_grid" in kwargs:
             if kwargs["show_grid"]:
@@ -309,8 +242,8 @@ class UrsinaSimulator(Simulator):
         bg_music = find_file(bg_music)
 
         if bg_music is None:
-            # bg_music = "../sounds/universe_04.mp3"
-            bg_music = "../none"
+            # bg_music = "../sounds/universe_04.mp3"  # 默认背景音乐
+            bg_music = "../none"  # 默认没有背景音乐
 
         if os.path.exists(bg_music):
             audio = Audio(bg_music, pitch=1, loop=True, autoplay=True)

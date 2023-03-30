@@ -57,8 +57,8 @@ def mayavi_run(bodies, dt=SECONDS_PER_WEEK,
 def ursina_run(bodies,
                dt=SECONDS_PER_HALF_DAY,
                position=(0, 0, 0),
-               # view_azimuth=0,
-               light=True,
+               # view_azimuth=0, 摄像头观测方位角，可选，float类型（以度为单位，0-360）
+               # ignore_mass: 忽略所有天体的引力
                cosmic_bg=None,
                bg_music=None,
                show_grid=True,
@@ -67,22 +67,21 @@ def ursina_run(bodies,
                save_as_json=None,
                view_closely=False):
     """
-
-    :param bodies: 天体
-    :param dt: 单位：秒，按时间差进行演变，值越小越精确，但演变速度会慢。
-    :param position: 摄像头位置
-    :param view_azimuth: 摄像头观测方位角，可选，float类型（以度为单位，0-360）
-    :param light: 使用灯光效果
-    :param cosmic_bg: 宇宙背景图片
-    :param show_grid: 是否显示空间网格
-    :param save_as_json: 将所有天体的信息保存为 json 文件
-    :param ignore_mass: 忽略所有天体的引力
-    :return:
+    ursina 模拟器运行天体
+    @param bodies: 天体集合
+    @param dt:  单位：秒，按时间差进行演变，值越小越精确，但演变速度会慢。
+    @param position:  摄像头位置
+    @param cosmic_bg: 宇宙背景图片
+    @param bg_music: 背景音乐
+    @param show_grid: 是否显示空间网格
+    @param show_trail: 是否显示拖尾
+    @param show_name: 是否显示天体名称
+    @param save_as_json: 将所有天体的信息保存为 json 文件
+    @param view_closely: 是否近距离查看天体
+    @return:
     """
 
     from simulators.ursina_simulator import UrsinaSimulator, UrsinaPlayer
-    from ursina import application, Sequence, camera, held_keys, time, clamp, Entity, Text, color
-    from ursina.prefabs.first_person_controller import FirstPersonController
     body_sys = System(bodies)
 
     if show_name:
@@ -101,37 +100,6 @@ def ursina_run(bodies,
     view_azimuth = 0  # 暂时未用
     player = UrsinaPlayer(position, view_azimuth, simulator.ursina_views)
 
-    # # player = FirstPersonController(model='cube', y=-1e20, color=color.orange, origin_y=-5000, speed=8)
-    # # player.on_disable()
-    # # player.position = position
-    #
-    # player = FirstPersonController()
-    # cube = Entity(model='cube', color=color.red, scale=2)
-    # player.parent = cube  # 设置 FirstPersonController 的父实体为 cube
-    # cube.position = position  # 修改父实体的位置，从而间接地修改 FirstPersonController 的位置
-
-    # # 创建一个实体（在屏幕中央）和一个摄像机
-    # TODO: 未使用
-    # entity = Entity(model='cube', position=(0, 0, 5), scale=2)
-    # camera = Camera()
-    #
-    # # 设置初始的 FOV 值（默认值为 90）
-    # camera.fov = 60
-    #
-    # # 创建一个用于显示当前 FOV 值的文本
-    # fov_text = Text(text=f'FOV: {camera.fov}', position=(-0.5, 0.4), scale=2)
-    # # 每一帧更新摄像机 FOV 值
-    # def update():
-    #     # 通过鼠标滚轮来调整 FOV 值
-    #     camera.fov -= held_keys['scroll'] * 10 * time.dt
-    #     # 限制 FOV 值的范围（1 到 120 之间）
-    #     camera.fov = clamp(camera.fov, 1, 120)
-    #     # 更新文本内容
-    #     fov_text.text = f'FOV: {camera.fov:.2f}'  # 保留两位小数
-    #
-    #     # 将摄像机移到实体旁边，并对着它
-    #     camera.position = entity.position + (0, 0, -5)
-    #     camera.look_at(entity.position)
 
     def callback_update():
         UrsinaEvent.on_application_run()
@@ -146,7 +114,6 @@ def ursina_run(bodies,
     if show_trail:
         UrsinaConfig.show_trail = show_trail
     simulator.run(dt,
-                  light=light,
                   cosmic_bg=cosmic_bg,
                   show_grid=show_grid,
                   bg_music=bg_music,

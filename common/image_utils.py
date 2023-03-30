@@ -170,7 +170,21 @@ def rgb_to_hex(rgb):
 
 
 def find_texture_root_path():
-    paths = [os.path.join('.', 'textures'), os.path.join('..', 'textures'), os.path.join('..', '..', 'textures')]
+    """
+    查找纹理图片的目录
+    @return:
+    """
+    paths = [os.path.join('.', 'textures')]
+    # paths = [os.path.join('.', 'textures'), os.path.join('..', 'textures'),
+    #          os.path.join('..', '..', 'textures'), os.path.join('..', '..', '..', 'textures'),
+    #          os.path.join('..', '..', '..', '..', 'textures')]
+    for i in range(1, 5):
+        p = []
+        for j in range(i):
+            p.append("..")
+        p.append('textures')
+        paths.append(os.path.join(*p))
+
     for path in paths:
         if os.path.exists(path):
             return path

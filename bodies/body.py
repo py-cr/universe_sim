@@ -89,10 +89,20 @@ class Body(metaclass=ABCMeta):
         self.light_disable = False
 
     def set_light_disable(self, value):
+        """
+        设置灯光为无效
+        @param value:
+        @return:
+        """
         self.light_disable = value
         return self
 
     def set_resolution(self, value):
+        """
+        设置天体的分辨率
+        @param value:
+        @return:
+        """
         self.resolution = value
         return self
 

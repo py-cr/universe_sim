@@ -130,18 +130,21 @@ class Planet(Entity):
             double_sided=True
         )
 
-        if hasattr(self.body_view.body, "torus_stars") or \
-                hasattr(self.body_view.body, "light_disable"):
+        if hasattr(self.body_view.body, "torus_stars"):
             # 星环小天体群（主要模拟小行星群，非一个天体）
-            # 或者灯光禁用
             self.set_light_off()
             self.double_sided = True
         else:
             # 一个天体
             # 拖尾球体的初始化
             self.trail_init()
-            if self.body_view.body.is_fixed_star:
-                self.create_fixed_star_lights()
+
+        if self.body_view.body.is_fixed_star:
+            # 如果是恒星，开启恒星的发光的效果、并作为灯光源
+            self.create_fixed_star_lights()
+        elif self.body_view.body.light_disable:
+            # 如果是非恒星，并且禁用灯光
+            self.set_light_off()
 
         if self.body_view.body.show_name:
             self.create_name_text()

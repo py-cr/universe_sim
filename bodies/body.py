@@ -86,6 +86,11 @@ class Body(metaclass=ABCMeta):
         self.show_name = show_name
 
         self.resolution = None
+        self.light_disable = False
+
+    def set_light_disable(self, value):
+        self.light_disable = value
+        return self
 
     def set_resolution(self, value):
         self.resolution = value

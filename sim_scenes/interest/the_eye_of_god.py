@@ -17,29 +17,22 @@ def show_eye_of_god():
     """
     上帝之眼
     """
-    D = 600
-    mass = 0.9e25
+    D = 6000
     # camera_pos = 左-右+、上+下-、前+后-
-    camera_pos = (-100 * D, 0, -5000 * D)
-
-    def get_position(pos, scale):
-        # [ 远+近-  , 左+右-  , 上+下-]
-        return pos[0] + (scale - 1.0) * 300 * (random.randint(90, 110)) * D, pos[1], pos[2]
-        # return pos[0], pos[1], pos[2]
+    camera_pos = (-100 * D, 0, -6000 * D)
 
     bodies: list = gen_bodies_from_image(pixel_image="./images/eye.png",
-                                         params={"D": D, "Body": Body, "mass": mass,
-                                          "get_position": get_position, "camera_pos": camera_pos})
-    face = FixedStar(name="face", texture="fixed_star.png", mass=mass * 3000, color=(0xff, 0xf8, 0xd4),
-                     init_position=[2000 * D, 200 * D, 100 * D],  # [ 远+近-  , 左+右-  , 上+下-]
-                     ignore_mass=True)
-    face.light_on = False
-    bodies.append(face)
+                                         params={"camera_pos": camera_pos})
+    bg = FixedStar(name="bg", texture="fixed_star.png", mass=5e31, color=(0xff, 0xf8, 0xd4),
+                   init_position=[3000 * D, 200 * D, 100 * D],  # [ 远+近-  , 左+右-  , 上+下-]
+                   ignore_mass=True)
+    # bg.light_on = False
+    bodies.append(bg)
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_WEEK * 2, position=camera_pos)
+    ursina_run(bodies, SECONDS_PER_WEEK * 2, position=camera_pos, view_closely=True)
 
 
 if __name__ == '__main__':

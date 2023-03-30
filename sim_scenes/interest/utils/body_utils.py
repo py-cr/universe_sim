@@ -6,24 +6,38 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
+from bodies import ColorBody
+import random
+
+from PIL import Image
 
 
-def gen_bodies_from_image(pixel_image, params, body_template=None):
+def gen_bodies_from_image(pixel_image, params, texture="color_body.png"):
     """
     根据像素图片以及参数，自动生成星球，注意图片像素不能太多，否则会导致电脑运行太慢
     @param pixel_image:
     @param params:
     @return:
     """
-    from PIL import Image
+    D = 6000
+    mass = 0.9e25
+
+    def get_position(pos, scale):
+        # [ 远+近-  , 左+右-  , 上+下-]
+        return pos[0] + (scale - 1.0) * 300 * (random.randint(90, 110)) * D, pos[1], pos[2]
+        # return pos[0], pos[1], pos[2]
+
+    params["ColorBody"] = ColorBody
+    params["get_position"] = get_position
+    params["mass"] = mass
+    params["D"] = D
 
     img = Image.open(pixel_image).convert('RGBA')
     width, height = img.size
     interval_factor = 20  # 星球间距因子
-    if body_template is None:
-        body_template = 'Body(name="%s", mass=mass, color=(%d, %d, %d), size_scale=%.4f, ' \
-                        'init_position=get_position([0, %g * D, %g * D], %.4f), ' \
-                        'init_velocity=[0, 0, 0], ignore_mass=True)'
+    body_template = 'ColorBody(name="%s", mass=mass, color=(%d, %d, %d), size_scale=%.4f, ' \
+                    'init_position=get_position([0, %g * D, %g * D], %.4f), ' \
+                    f'init_velocity=[0, 0, 0], ignore_mass=True, texture="{texture}").set_light_disable(True)'
     bodies_str = "["
 
     # 以图片像素为坐标，对角线的距离
@@ -44,7 +58,7 @@ def gen_bodies_from_image(pixel_image, params, body_template=None):
             # 对于纯白色的颜色，就忽略，不生成星球（这样图片中，纯白色越多，对电脑的压力就越小）
             if pixel[0] >= 255 and pixel[1] >= 255 and pixel[1] >= 255:
                 continue
-            body_str = body_template % (f"星球{w}:{h}", pixel[0], pixel[1], pixel[2], scale,
+            body_str = body_template % (f"星球{w}:{h}", pixel[0], pixel[1], pixel[2], scale * 10,
                                         (width - w) * interval_factor, (height - h) * interval_factor, scale)
             bodies_str += body_str + ",\n"
 

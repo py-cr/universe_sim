@@ -33,3 +33,6 @@ from bodies.fixed_stars.uy_scuti import UYScuti
 from bodies.fixed_stars.eta_carinae import EtaCarinae
 from bodies.fixed_stars.y_canum_venaticorum import YCanumVenaticorum
 from bodies.fixed_stars.carinae_v382 import CarinaeV382
+
+#
+from bodies.color_body import ColorBody

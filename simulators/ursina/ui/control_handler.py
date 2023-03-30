@@ -36,6 +36,26 @@ class ControlHandler(EventHandler):
         key_info = Text(text=key_info_str, font=UrsinaConfig.CN_FONT, position=(-1, 0.5), origin=(-1, 1),
                         background=True)
 
+        self.camera_info = Text(text="", scale=0.8, position=(0, -0.45), origin=(0, 1),
+                                background=True)
+
+    def camera_update(self):
+        pos = camera.position  #  WS => [2]
+        w_pos = camera.world_rotation  # 鼠标右键
+        # rot = camera.rotation
+        wt = camera.world_transform  # QE[0,1,2]  AD [0 , 2]   鼠标右键
+        # print(camera.world_transform)
+        # print(camera.origin, camera.world_transform)
+        # LVector3f(-1, 0, 0) Vec3(0, 0, 1) LVector3f(0, 0, -1) Vec3(1, 0, 0) Vec3(1, 1, 1) 1.7777777910232544 LVector3f(0, -1, 0) Vec3(0, 1, 0) Vec3(1, 1, 1) Vec3(0, 0, 0)
+        # print(camera.left,camera.forward,camera.back,camera.right,camera.scale,camera.aspect_ratio,camera.down,camera.up,camera.world_scale,camera.world_rotation)
+        # fw = camera.forward
+        # self.camera_info.text = "pos:[%.2f,%.2f,%.2f] w_pos:[%.2f,%.2f,%.2f] rot:[%.2f,%.2f,%.2f] wt:[%s,%s,%s]" % \
+        self.camera_info.text = "pos:[%.2f,%.2f,%.2f] w_pos:[%.2f,%.2f,%.2f] wt:[%s,%s]" % \
+                                (pos[0], pos[1], pos[2],
+                                 w_pos[0], w_pos[1], w_pos[2],
+                                 # rot[0], rot[1], rot[2],
+                                 wt[0], wt[1])  # , wt[2]
+
     def sec_per_time_switch_changed(self):
         """
         按钮组("默认", "天", "周", "月", "年", "十年", "百年") 点击
@@ -195,6 +215,9 @@ class ControlHandler(EventHandler):
         @return:
         """
         import sys
+
+        self.camera_update()
+
         if key == "escape":
             sys.exit()
         # print(key)
@@ -230,7 +253,7 @@ class ControlHandler(EventHandler):
             import math
             # min=0.01, max=20
             #   # ', up' <  > '. up'   n    m
-            self.ui.slider_control_speed_factor.current_step = self.ui.slider_control_speed_factor.value/2
+            self.ui.slider_control_speed_factor.current_step = self.ui.slider_control_speed_factor.value / 2
             self.slider_decrease(self.ui.slider_control_speed_factor, self.ui.slider_control_speed_factor.current_step)
 
             print(self.ui.slider_control_speed_factor.current_step)

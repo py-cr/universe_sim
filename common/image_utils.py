@@ -194,6 +194,21 @@ def find_texture(texture):
     return ""
 
 
+def gen_color_body_texture(color, save_file, color_body_img="color_body.jpg", bright=None, contrast=None):
+    bright = 1 if bright is None else bright
+    contrast = 1 if contrast is None else contrast
+    color_body_img = find_texture(color_body_img)
+    if color_body_img is None:
+        err_msg = "未找到纹理图片：" % color_body_img
+        raise Exception(err_msg)
+    trans_img = trans_png(color_body_img)
+    bg_img = create_image(trans_img.width, trans_img.height, color)
+    mixed = mix(bg_img, trans_img)
+    mixed = image_enhance(mixed, bright=bright, contrast=contrast)
+    mixed.save(save_file, 'PNG')
+    return mixed
+
+
 def gen_fixed_star_texture(color, save_file, fixed_star_img="fixed_star.png", bright=None, contrast=None):
     bright = 1.1 if bright is None else bright
     contrast = 3.2 if contrast is None else contrast
@@ -250,7 +265,7 @@ if __name__ == '__main__':
     # mono = gray_to_mono(gray_img, (0, 0, 255)).show()
     # image_enhance(mono,bright=1,contrast=2).show()
 
-    gen_fixed_star_texture((198, 29, 3), "xxx.png",bright=2.2,contrast=3).show()
+    gen_fixed_star_texture((198, 29, 3), "xxx.png", bright=2.2, contrast=3).show()
 
     # fixed_star_img = find_texture("sun.png")
     # colorize_color(fixed_star_img,(0,0xff,0xff)).show()

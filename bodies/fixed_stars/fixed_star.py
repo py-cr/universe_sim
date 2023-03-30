@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-# title           :天狼星
-# description     :天狼星
+# title           :恒星
+# description     :恒星
 # author          :Python超人
 # date            :2023-02-11
 # link            :https://gitcode.net/pythoncr/
@@ -49,6 +49,7 @@ class FixedStar(Body):
             "show_name": show_name
         }
         super().__init__(**params)
+        # 恒星属性
         self.light_on = True
         self.glows = (12, 1.009, 0.08)
 
@@ -59,9 +60,15 @@ class FixedStar(Body):
         if texture_path is None:
             err_msg = "未找到纹理图片目录"
             raise Exception(err_msg)
-        save_file = os.path.join(texture_path, "fixed_star_%s.png" % str(self.__class__.__name__).lower())
+
+        temp_dir = os.path.join(texture_path, "temp")
+        if not os.path.exists(temp_dir):
+            os.mkdir(temp_dir)
+
+        save_file = os.path.join(temp_dir, "fixed_star_%s.png" % str(self.__class__.__name__).lower())
         if os.path.exists(save_file):
             return save_file
+
         fixed_star_img = os.path.join(texture_path, texture)
         gen_fixed_star_texture(self.color,
                                bright=texture_bright,

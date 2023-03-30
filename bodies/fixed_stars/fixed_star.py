@@ -65,7 +65,14 @@ class FixedStar(Body):
         if not os.path.exists(temp_dir):
             os.mkdir(temp_dir)
 
-        save_file = os.path.join(temp_dir, "fixed_star_%s.png" % str(self.__class__.__name__).lower())
+        texture_name = os.path.basename(texture). \
+            replace(".", "_").replace("/", "_"). \
+            replace("\\", "_").replace("__", "_")
+
+        # save_file = os.path.join(temp_dir, "%s_%s.png" % (texture_name, "_".join([str(i) for i in list(self.color)])))
+
+        save_file = os.path.join(temp_dir, "%s_%s.png" % (texture_name, str(self.__class__.__name__).lower()))
+        
         if os.path.exists(save_file):
             return save_file
 

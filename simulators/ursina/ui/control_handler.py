@@ -224,7 +224,8 @@ class ControlHandler(EventHandler):
         elif key == 'space':
             self.ui.enabled = not self.ui.enabled
         elif key == 'left mouse down':
-            print(key)
+            # print(key)
+            pass
         elif key == 'y':  # 寻找天体
             if hasattr(self, "search_bodies_button_list"):
                 if self.search_bodies_button_list.enabled:

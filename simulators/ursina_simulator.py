@@ -16,7 +16,8 @@ from simulators.ursina.ursina_event import UrsinaEvent
 from simulators.ursina.ui.control_ui import ControlUI
 from simulators.ursina.ui.control_handler import ControlHandler
 
-from simulators.views.ursina_view import UrsinaView, UrsinaPlayer
+from simulators.views.ursina_view import UrsinaView
+from simulators.ursina.entities.ursina_player import UrsinaPlayer
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.simulator import Simulator
 from common.system import System

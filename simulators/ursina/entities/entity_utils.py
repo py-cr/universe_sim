@@ -240,7 +240,14 @@ def create_trail_info(body, trail):
     velocity = merge_vectors(body.velocity)
     acceleration = merge_vectors(body.acceleration)
     vel_info = "%.2fkm/s" % (velocity[0])
-    acc_info = "%.2fm/s²" % (acceleration[0] * 1000)
+
+    acc_m = acceleration[0] * 1000
+
+    if acc_m >= 0.01:
+        acc_info = "%.2fm/s²" % (acc_m)
+    else:
+        acc_info = "%.2fmm/s²" % (acc_m * 1000)
+
 
     vel_direction = velocity[1]
     vel_direction = np.array(vel_direction) * 5
@@ -265,7 +272,12 @@ def create_trail_text_xxx(body, trail):
     velocity = merge_vectors(body.velocity)
     acceleration = merge_vectors(body.acceleration)
     vel_info = "%.2fkm/s" % (velocity[0])
-    acc_info = "%.2fm/s²" % (acceleration[0] * 1000)
+    acc_m = acceleration[0] * 1000
+
+    if acc_m >= 0.01:
+        acc_info = "%.2fm/s²" % (acc_m)
+    else:
+        acc_info = "%.2fmm/s²" % (acc_m * 1000)
 
     vel_direction = velocity[1]
     vel_direction = np.array(vel_direction) * 5

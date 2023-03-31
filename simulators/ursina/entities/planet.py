@@ -7,15 +7,14 @@
 # python_version  :3.8
 # ==============================================================================
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
-from ursina import Entity, camera, color, Vec2, Vec3, Vec4, Text, load_texture, destroy, PointLight
+from ursina import Entity, camera, color, Vec3, Text, load_texture, destroy, PointLight
 
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
 from common.color_utils import adjust_brightness, conv_to_vec4_color, get_inverse_color
 from common.func import find_file
 from simulators.views.body_view import BodyView
-from simulators.views.ursina_mesh import create_sphere, create_torus
-import numpy as np
+from simulators.ursina.ursina_mesh import create_sphere, create_torus
 import math
 
 

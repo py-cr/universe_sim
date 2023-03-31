@@ -197,6 +197,8 @@ class UrsinaSimulator(Simulator):
         if view_closely:
             # 近距离查看
             if isinstance(view_closely, float):
+                if view_closely < 0.001:
+                    view_closely = 0.001
                 camera.clip_plane_near = view_closely
             else:
                 # 设置 camera 的裁剪面和位置

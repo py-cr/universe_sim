@@ -24,9 +24,7 @@ class UrsinaView(BodyView):
         self.velocity = body.velocity
 
         self.planet = Planet(self)
-        if body.has_rings:
-            # 创建行星环（目前只有土星环）
-            self.planet.create_rings()
+
 
     def update(self):
         """

@@ -9,6 +9,8 @@
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
 from ursina import Entity, camera, color, Vec3, Text, load_texture, destroy, PointLight
 
+from simulators.ursina.entities.entity_utils import create_name_text, create_trails, clear_trails, create_rings, \
+    trail_init, create_fixed_star_lights
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
 from common.color_utils import adjust_brightness, conv_to_vec4_color, get_inverse_color
@@ -20,14 +22,18 @@ import math
 
 class Planet(Entity):
 
+    @property
+    def body(self):
+        return self.body_view.body
+
     def on_reset(self):
         # 删除拖尾
-        self.clear_trails()
-        self.body_view.body.reset()
+        clear_trails(self)
+        self.body.reset()
 
     def __init__(self, body_view: BodyView):
         self.body_view = body_view
-        self.rotation_speed = self.body_view.body.rotation_speed
+        self.rotation_speed = self.body.rotation_speed
         self.rotMode = 'x'  # random.choice(["x", "y", "z"])
         self.name = body_view.name
 
@@ -45,15 +51,15 @@ class Planet(Entity):
                 b_color = (b_color[0], b_color[1], b_color[2], 1.0)
             self.plant_color = color.rgba(*b_color)
 
-        if hasattr(self.body_view.body, "torus_stars"):
+        if hasattr(self.body, "torus_stars"):
             # 创建一个星环小天体群（主要模拟小行星群，非一个天体）
             model = create_torus(0.83, 1.05, 64, 1)
             rotation = (90, 0, 0)
         else:
             # 创建一个天体
             subdivisions = 32
-            if self.body_view.body.resolution is not None:
-                subdivisions = self.body_view.body.resolution
+            if self.body.resolution is not None:
+                subdivisions = self.body.resolution
 
             model = create_sphere(0.5, subdivisions)
             rotation = (0, 0, 0)
@@ -71,129 +77,38 @@ class Planet(Entity):
             double_sided=True
         )
 
-        if hasattr(self.body_view.body, "torus_stars"):
+        if hasattr(self.body, "torus_stars"):
             # 星环小天体群（主要模拟小行星群，非一个天体）
             self.set_light_off()
             self.double_sided = True
         else:
             # 一个天体
             # 拖尾球体的初始化
-            self.trail_init()
+            trail_init(self)
 
-        if self.body_view.body.is_fixed_star:
+        if self.body.is_fixed_star:
             # 如果是恒星，开启恒星的发光的效果、并作为灯光源
-            self.create_fixed_star_lights()
-        elif self.body_view.body.light_disable:
+            create_fixed_star_lights(self)
+        elif self.body.light_disable:
             # 如果是非恒星，并且禁用灯光
             self.set_light_off()
 
-        if self.body_view.body.show_name:
-            self.create_name_text()
+        if self.body.show_name:
+            create_name_text(self)
 
-    def create_name_text(self):
-        b_color = self.body_view.color
-        self.name_text = Text(self.body_view.body.name, scale=1, billboard=True, parent=self,
-                              font=UrsinaConfig.CN_FONT, background=True,
-                              origin=(0, 0))
-        self.name_text.background.color = color.rgba(b_color[0], b_color[1], b_color[2], 0.3)
-        # self.name_text.scale = self.scale
-        inverse_color = get_inverse_color(b_color)
-        self.name_text.color = color.rgba(inverse_color[0], inverse_color[1], inverse_color[2], 1)
-
-    def trail_init(self):
-        """
-        拖尾球体的初始化
-        :return:
-        """
-        # 存放拖尾球体
-        self.trails = {}
-
-        # 根据天体的颜色获取拖尾的颜色
-        trail_color = conv_to_vec4_color(self.body_view.body.trail_color)
-        trail_color = adjust_brightness(trail_color, 0.4)
-        self.trail_color = color.rgba(trail_color[0], trail_color[1], trail_color[2], 0.6)
-        # 拖尾球体的大小为该天体的 1/5
-        self.trail_scale = self.scale_x / 5
-        if self.trail_scale < 1:
-            # 如果太小，则
-            pass
-
-    def distance_between_two_points(self, point_a: Vec3, point_b: Vec3) -> float:
-        # 计算两点在 x、y、z 三个坐标轴上的差值
-        diff_x = point_a.x - point_b.x
-        diff_y = point_a.y - point_b.y
-        diff_z = point_a.z - point_b.z
-
-        # 计算两点之间的距离
-        distance = math.sqrt(diff_x ** 2 + diff_y ** 2 + diff_z ** 2)
-
-        return distance
-
-    def create_trails(self):
-        """
-        创建拖尾
-        :return:
-        """
-        # 当前天体的位置
-        try:
-            pos = self.position
-        except Exception as e:
-            print(self.body_view.body)
-            self.destroy_all()
-            return
-        trails_keys = self.trails.keys()
-        # 如果有拖尾
-        if len(trails_keys) > 0:
-            # 获取最后一个拖尾的位置
-            last_key = list(trails_keys)[-1]
-            last_pos = self.trails[last_key]
-            # 获取拖尾与当前天体的位置
-            last_pos_distance = self.distance_between_two_points(pos, last_pos)
-            self_pos_distance = self.distance_between_two_points(pos, self.position)
-            # # 如果拖尾在天体的内部也不要生成
-            # if self_pos_distance < self.scale_x + (self.trail_scale / 2):
-            #     pass
-            # 如果位置比较近，就不创建拖尾了，保证拖尾间隔一定的距离
-            if last_pos_distance < self.trail_scale * 1.2:  # 间隔距离不小于1.2倍的拖尾球体
-                return
-
-        # 创建拖尾球体，并作为字典的key，存放拖尾球体的位置
-        self.trails[self.create_trail(pos)] = pos
-
-        # 计算拖尾球体超过的数量
-        trail_overflow_count = len(self.trails) - UrsinaConfig.trail_length
-
-        if trail_overflow_count > 0:
-            # 如果拖尾球体超过的数量，就删除之前的拖尾球体
-            for entity, pos in self.trails.items():
-                destroy(entity)
-                trail_overflow_count -= 1
-                if trail_overflow_count <= 0:
-                    break
-
-    def create_trail(self, pos):
-        """
-        在天体当前的位置创建一个拖尾球体
-        :param pos:
-        :return:
-        """
-        # sphere = create_sphere(1,6)  diamond sphere
-        trail = Entity(model='sphere', color=self.trail_color, scale=self.trail_scale, position=pos)
-        trail.set_light_off()
-        # trail.set_color_off()
-        # trail.set_color_scale_off()
-        # trail.enabled = False
-        return trail
+        if self.body.has_rings:
+            # 创建行星环（目前只有土星环）
+            create_rings(self)
 
     def turn(self):
-        if hasattr(self.body_view.body, "torus_stars"):
+        if hasattr(self.body, "torus_stars"):
             # 星环小天体群（主要模拟小行星群，非一个天体）不受 body_size_factor 影响
             self.scale = self.init_scale
         else:
             self.scale = self.init_scale * UrsinaConfig.body_size_factor
 
         pos = self.body_view.position * UrsinaConfig.SCALE_FACTOR
-        if self.body_view.body.parent is None:
+        if self.body.parent is None:
             self.x = -pos[1]
             self.y = pos[2]
             self.z = pos[0]
@@ -201,8 +116,8 @@ class Planet(Entity):
             self.follow_parent()
 
         dt = 0
-        if hasattr(self.body_view.body, "dt"):
-            dt = self.body_view.body.dt
+        if hasattr(self.body, "dt"):
+            dt = self.body.dt
         if self.rotation_speed is None or dt == 0:
             self.rotspeed = 0
             # 旋转速度和大小成反比（未使用真实数据）
@@ -219,7 +134,7 @@ class Planet(Entity):
             # 天体旋转
             self.rotation_y -= self.rotspeed
         except Exception as e:
-            print(self.body_view.body)
+            print(self.body)
             self.destroy_all()
             return
 
@@ -232,10 +147,10 @@ class Planet(Entity):
 
         if UrsinaConfig.show_trail:
             # 有时候第一个位置不正确，所以判断一下有历史记录后在创建
-            if len(self.body_view.body.his_position()) > 1:
-                self.create_trails()
+            if len(self.body.his_position()) > 1:
+                create_trails(self)
         else:
-            self.clear_trails()
+            clear_trails(self)
 
         if hasattr(self, "name_text"):
             d = (camera.world_position - self.name_text.world_position).length()
@@ -256,7 +171,7 @@ class Planet(Entity):
                 return
             sys = self.body_view.bodies_system
             for b in sys.bodies:
-                if self.body_view.body.parent == b:
+                if self.body.parent == b:
                     self.f_parent = b
                     break
         pos = self.f_parent.position * UrsinaConfig.SCALE_FACTOR
@@ -264,95 +179,15 @@ class Planet(Entity):
         self.y = pos[2]
         self.z = pos[0]
 
-    def create_fixed_star_lights(self):
-        """
-        创建恒星的发光的效果、并作为灯光源
-        :param entity:
-        :return:
-        """
-
-        # 如果是恒星（如：太阳），自身会发光，则需要关闭灯光
-        self.set_light_off()
-
-        # lights = []
-        # # 创建多个新的 Entity 对象，作为光晕的容器
-        # _color = color.rgba(1.0, 0.6, 0.2, 1)
-        if hasattr(self.body_view.body, "glows"):
-            # glows = (glow_num:10, glow_scale:1.03 glow_alpha:0.1~1)
-            glows = self.body_view.body.glows
-            if glows is not None:
-                if isinstance(glows, tuple):
-                    if len(glows) == 3:
-                        glow_num, glow_scale, glow_alpha = glows
-                    elif len(glows) == 2:
-                        glow_num, glow_scale = glows
-                        glow_alpha = None
-                else:
-                    glow_num = glows
-                    glow_scale = 1.02
-                    glow_alpha = None
-
-                if glow_num > 0:
-                    glow_alphas = [0, 0.5, 0.4, 0.3, 0.2, 0.1]
-                    if glow_alpha is None:
-                        if glow_num < len(glow_alphas) - 1:
-                            glow_alpha = glow_alphas[glow_num]
-                        else:
-                            glow_alpha = glow_alphas[-1]
-
-                    # _color = color.white
-                    _color = self.body_view.body.color
-                    _color = color.rgba(_color[0] / 255, _color[1] / 255, _color[2] / 255, 1)
-                    for i in range(glow_num):
-                        glow_entity = Entity(parent=self, model='sphere', color=_color,
-                                             scale=math.pow(glow_scale, i + 1), alpha=glow_alpha)
-        if hasattr(self.body_view.body, "light_on"):
-            if self.body_view.body.light_on:
-                for i in range(2):
-                    # 创建 PointLight 对象，作为恒星的灯光源
-                    light = PointLight(parent=self, intensity=10, range=10, color=color.white)
-
-    def create_rings(self):
-        """
-        创建行星环（使用土星贴图）
-        :return:
-        """
-        rings_texture = 'textures/saturnRings.jpg'
-        rings_texture = find_file(rings_texture)
-
-        # 行星环偏移角度
-        # self.ring_rotation_x = 80
-        # 创建行星环
-        # self.ring = Entity(parent=self.planet, model='circle', texture=rings_texture, scale=3.5,
-        #                    rotation=(self.ring_rotation_x, 0, 0), double_sided=True)
-
-        # 行星环偏移角度
-        self.ring_rotation_x = 80
-        # 创建行星环
-        torus = create_torus(0.7, 1.2, 64)
-        self.ring = Entity(parent=self, model=torus, texture=rings_texture, scale=1,
-                           rotation=(self.ring_rotation_x, 0, 0), double_sided=True)
-
-        # 设置行星环不受灯光影响，否则看不清行星环
-        self.ring.set_light_off()
-
-    def clear_trails(self):
-        if not hasattr(self, "trails"):
-            return
-        # 删除拖尾
-        for entity, pos in self.trails.items():
-            destroy(entity)
-        self.trails.clear()
-
     def destroy_all(self):
         # 从天体系统中移除自己（TODO:暂时还不能移除）
-        # self.body_view.bodies_system.bodies.remove(self.body_view.body)
+        # self.body_view.bodies_system.bodies.remove(self.body)
         # 删除拖尾
-        self.clear_trails()
+        clear_trails(self)
         # 如果有行星环，则删除行星环
         if hasattr(self, "ring"):
             destroy(self.ring)
-        self.body_view.body.appeared = False
+        self.body.appeared = False
         self.body_view.appeared = False
         # 最后删除自己
         destroy(self)

@@ -164,9 +164,14 @@ class UrsinaSimulator(Simulator):
         :return:
         """
         # Add skybox
+
+        if camera.clip_plane_near >= 0.01:
+            sky_scale = 50000
+        else:
+            sky_scale = 500000 * camera.clip_plane_near
+
         from ursina import Sky
 
-        sky_scale = 50000
         sky = Sky(texture=texture)
         sky.scale = sky_scale
         # sky.set_shader_input('texture_scale', Vec2(20, 20))
@@ -191,8 +196,11 @@ class UrsinaSimulator(Simulator):
 
         if view_closely:
             # 近距离查看
-            # 设置 camera 的裁剪面和位置
-            camera.clip_plane_near = 0.01
+            if isinstance(view_closely, float):
+                camera.clip_plane_near = view_closely
+            else:
+                # 设置 camera 的裁剪面和位置
+                camera.clip_plane_near = 0.01
             camera.fov = 60
 
         # interval_fator 能让更新天体运行状态（位置、速度）更精确

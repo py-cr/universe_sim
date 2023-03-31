@@ -29,7 +29,7 @@ class UiSlider(Slider):
                          max=max,
                          default=default,
                          color=color.rgba(0.0, 0.0, 0.0, 0.5),
-                         ignore_paused=False,
+                         ignore_paused=True,
                          dynamic=True)
         # self.label.scale *= 8/10
         self.label.font = UrsinaConfig.CN_FONT
@@ -88,5 +88,5 @@ class UiButton(Button):
     def __init__(self, text, on_click):
         super(UiButton, self).__init__(text=text, origin=(0, 0), y=2,
                                        on_click=on_click, color=color.rgba(0.0, 0.0, 0.0, 0.5),
-                                       ignore_paused=False)
+                                       ignore_paused=True)
         self.text_entity.font = UrsinaConfig.CN_FONT

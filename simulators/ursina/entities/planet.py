@@ -109,6 +109,7 @@ class Planet(Entity):
 
         pos = self.body_view.position * UrsinaConfig.SCALE_FACTOR
         if self.body.parent is None:
+            # TODO: ????????
             self.x = -pos[1]
             self.y = pos[2]
             self.z = pos[0]
@@ -175,6 +176,7 @@ class Planet(Entity):
                     self.f_parent = b
                     break
         pos = self.f_parent.position * UrsinaConfig.SCALE_FACTOR
+        # TODO: ????????
         self.x = -pos[1]
         self.y = pos[2]
         self.z = pos[0]

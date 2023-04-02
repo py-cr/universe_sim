@@ -16,7 +16,7 @@ from simulators.ursina.ursina_event import UrsinaEvent
 from common.color_utils import adjust_brightness, conv_to_vec4_color, get_inverse_color
 from common.func import find_file
 from simulators.views.body_view import BodyView
-from simulators.ursina.ursina_mesh import create_sphere, create_torus
+from simulators.ursina.ursina_mesh import create_sphere, create_torus, create_arrow_line
 import math
 
 
@@ -62,7 +62,7 @@ class Planet(Entity):
                 subdivisions = self.body.resolution
 
             model = create_sphere(0.5, subdivisions)
-            rotation = (0, 0, 0)
+            rotation = (0,  self.body.rotate_angle,0)
 
         UrsinaEvent.on_reset_subscription(self.on_reset)
 

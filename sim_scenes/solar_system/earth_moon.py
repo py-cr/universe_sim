@@ -19,7 +19,7 @@ if __name__ == '__main__':
     EARTH_INIT_VELOCITY = 0
     bodies = [
         # sun,
-        Earth(init_position=[0, 0, 0],
+        Earth(init_position=[0, 0, 0], texture="earth_hd.jpg",
               init_velocity=[-EARTH_INIT_VELOCITY, 0, 0], size_scale=0.5e1),  # 地球放大 5 倍，距离保持不变
         Moon(init_position=[0, 0, 363104],  # 距地距离约: 363104 至 405696 km
              init_velocity=[-(EARTH_INIT_VELOCITY + 1.023), 0, 0], size_scale=1e1)  # 月球放大 10 倍，距离保持不变

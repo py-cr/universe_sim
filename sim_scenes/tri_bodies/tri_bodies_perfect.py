@@ -23,11 +23,10 @@ if __name__ == '__main__':
     mass = 2e30
     r = 2 * AU
     # p = 12  # TODO: 三体转圆形花
-    p = 14.88  # TODO: 三体转圈近似圆形
+    p = 14.95  # TODO: 三体转圈近似圆形
     # p = 16  # TODO: 三体转圆形花
     # p = 18  # TODO: 三体转圆形花
     # p = 19  # TODO: 三体转圆形花
-    # [x, y, z]->[-y, z, x]
     bodies = [
         Sun(name="红轨太阳A", mass=mass,
             init_position=[0, math.sqrt(3) * r, 0],
@@ -44,9 +43,9 @@ if __name__ == '__main__':
             init_velocity=[1 / 2 * p, math.sqrt(3) / 2 * p, 0],
             trail_color=(0, 0, 255),
             size_scale=5e1, texture="sun2.jpg"),  # 太阳放大 100 倍
-        # Earth(init_position=[0, -349597870.700, 0],
-        #       init_velocity=[15.50, 0, 0],
-        #       size_scale=4e3, distance_scale=1),  # 地球放大 4000 倍，距离保持不变
+        Earth(init_position=[0, 2 * r / math.sqrt(12), r * 3],
+              init_velocity=[0, 0, 0],
+              size_scale=4e3, distance_scale=1),  # 地球放大 4000 倍，距离保持不变
     ]
     # 使用 mayavi 查看的运行效果
     # mayavi_run(bodies, SECONDS_PER_WEEK, view_azimuth=0)

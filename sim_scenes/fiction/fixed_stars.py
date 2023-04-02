@@ -48,7 +48,6 @@ if __name__ == '__main__':
             d = pow((body.raduis + bodies[idx - 1].raduis) * SIZE_SCALE, 1.0) * 1.1
         # d = (body.diameter + bodies[idx - 1].diameter) * SIZE_SCALE * 1.1 + D
         body.init_velocity = [0, 0, 0]
-        # body.init_position = [body.raduis * SIZE_SCALE, (distance_sum + d), AU]
         body.init_position = [-(distance_sum + d), AU, body.raduis * SIZE_SCALE]
         distance_sum += d
 

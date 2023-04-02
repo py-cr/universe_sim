@@ -23,8 +23,6 @@ class Mars(Body):
     　平均密度: 3.9335 g/cm³ -> 3.9335✕10³ kg/m³
     """
     def __init__(self, name="火星", mass=6.4171e23,
-                 # init_position=[1.5 * AU, 0, 0],
-                 # init_velocity=[0, 24.13, 0],
                  init_position=[0, 0, 1.5 * AU],
                  init_velocity=[-24.13, 0, 0],
                  texture="mars.jpg", size_scale=1.0, distance_scale=1.0,

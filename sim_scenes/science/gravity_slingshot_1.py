@@ -18,11 +18,9 @@ if __name__ == '__main__':
     bodies = [
         Sun(size_scale=2e1),    # 太阳放大 20 倍
         Earth(size_scale=1e3,   # 地球放大 1000 倍
-              # init_position=[0, -3 * AU, 0],  # 地球距离太阳 3 个天文单位
               init_position=[3 * AU, 0, 0],  # 地球距离太阳 3 个天文单位
               # TODO: 尝试调整朝向太阳的速度，取值 33、38、50 或者其他
               # init_velocity=[0, 33, -1],
-              # init_velocity=[0, 38, -1],  # 朝向太阳的速度为 38km/s，-1 km/s 是为了防止地球正面对着太阳冲去
               init_velocity=[-38, -1, 0],  # 朝向太阳的速度为 38km/s，-1 km/s 是为了防止地球正面对着太阳冲去
               # init_velocity=[0, 50, -1],
               ),

@@ -24,8 +24,6 @@ class Neptune(Body):
     """
 
     def __init__(self, name="海王星", mass=1.0241e26,
-                 # init_position=[30 * AU, 0, 0],
-                 # init_velocity=[0, 5.43, 0],
                  init_position=[0, 0, 30 * AU],
                  init_velocity=[-5.43, 0, 0],
                  texture="neptune.png", size_scale=1.0, distance_scale=1.0,

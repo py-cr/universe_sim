@@ -23,8 +23,6 @@ class Moon(Body):
     """
 
     def __init__(self, name="月球", mass=7.342e22,
-                 # init_position=[363104 + 1.12 * AU, 0, 0],
-                 # init_velocity=[0, 29.79 + 1.023, 0],
                  init_position=[0, 0, 363104 + 1.12 * AU],
                  init_velocity=[-(29.79 + 1.023), 0, 0],
                  texture="moon.jpg", size_scale=1.0, distance_scale=1.0,

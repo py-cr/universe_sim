@@ -14,10 +14,6 @@ from bodies.body import AU
 if __name__ == '__main__':
     """
     地球、月球
-init_position=[x, y, z],
-init_position=[-y, z, x],
-init_velocity=[x, y, z],
-init_velocity=[-y, z, x],
     """
     # 地球的Y方向初始速度
     EARTH_INIT_VELOCITY = 0

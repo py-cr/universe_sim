@@ -24,8 +24,6 @@ class Saturn(Body):
     """
 
     def __init__(self, name="土星", mass=5.6834e26,
-                 # init_position=[10 * AU, 0, 0],
-                 # init_velocity=[0, 9.64, 0],
                  init_position=[0, 0, 10 * AU],
                  init_velocity=[-9.64, 0, 0],
                  texture="saturn.jpg", size_scale=1.0, distance_scale=1.0,

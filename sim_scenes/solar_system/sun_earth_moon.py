@@ -18,7 +18,7 @@ if __name__ == '__main__':
     # 地球的Y方向初始速度
     EARTH_INIT_VELOCITY = 0  # 0km/s
     sun = Sun(init_position=[0, 0, AU], size_scale=2e1)  # 太阳放大 20 倍
-    # 忽略质量的引力 [x, y, z]->[-y, z, x]
+    # 忽略质量的引力
     sun.ignore_mass = True
 
     # 观看月相变化的过程：分别是 新月、蛾眉月、上弦月、盈凸、满月、亏凸、下弦月、残月

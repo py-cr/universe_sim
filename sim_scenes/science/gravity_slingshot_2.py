@@ -21,7 +21,6 @@ if __name__ == '__main__':
         Earth(size_scale=3e2,  # 地球放大 300 倍
               init_position=[0, 0, 0],  #
               # init_velocity=[0, 33, -1],
-              # init_velocity=[-1, 10, 0],  # 朝向木星的速度为 38km/s，-1 km/s 是为了防止地球正面对着木星冲去
               init_velocity=[-10, 0, -1],  # 朝向木星的速度为 38km/s，-1 km/s 是为了防止地球正面对着木星冲去
               # init_velocity=[0, 50, -1],
               ),

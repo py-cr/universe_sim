@@ -12,7 +12,7 @@ from sim_scenes.func import mayavi_run, ursina_run
 
 if __name__ == '__main__':
     """
-    太阳、地球 Sirius(size_scale=0.2, init_position=[0, 0, 0]),
+    太阳、地球
     """
     bodies = [
         Sun(size_scale=5e1),                      # 太阳放大 50 倍

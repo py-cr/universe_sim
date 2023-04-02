@@ -23,8 +23,6 @@ class Jupiter(Body):
     　平均密度: 1.326 g/cm³ -> -> 1.326✕10³ kg/m³
     """
     def __init__(self, name="木星", mass=1.8982e27,
-                 # init_position=[5.2 * AU, 0, 0],
-                 # init_velocity=[0, 13.06, 0],
                  init_position=[0, 0, 5.2 * AU],
                  init_velocity=[-13.06, 0, 0],
                  texture="jupiter1.jpg", size_scale=1.0, distance_scale=1.0,

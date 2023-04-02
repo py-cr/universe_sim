@@ -62,7 +62,7 @@ class Planet(Entity):
                 subdivisions = self.body.resolution
 
             model = create_sphere(0.5, subdivisions)
-            rotation = (0,  self.body.rotate_angle,0)
+            rotation = (0, 0, 0)
 
         UrsinaEvent.on_reset_subscription(self.on_reset)
 

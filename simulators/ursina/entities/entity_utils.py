@@ -255,9 +255,6 @@ def create_trail_info(body, trail):
     acc_direction = acceleration[1]
     acc_direction = np.array(acc_direction) * 2
 
-    verts_acc = [(0, 0, 0), tuple(acc_direction)]
-    verts_vel = [(0, 0, 0), tuple(vel_direction)]
-
     vel_position = vel_direction
     vel_position = (vel_position[0], vel_position[1], vel_position[2])
 
@@ -267,57 +264,3 @@ def create_trail_info(body, trail):
     trail.entity_infos = {"velocity": [vel_info, vel_direction, vel_position],
                           "acceleration": [acc_info, acc_direction, acc_position]}
 
-
-def create_trail_text_xxx(body, trail):
-    velocity = merge_vectors(body.velocity)
-    acceleration = merge_vectors(body.acceleration)
-    vel_info = "%.2fkm/s" % (velocity[0])
-    acc_m = acceleration[0] * 1000
-
-    if acc_m >= 0.01:
-        acc_info = "%.2fm/s²" % (acc_m)
-    else:
-        acc_info = "%.2fmm/s²" % (acc_m * 1000)
-
-    vel_direction = velocity[1]
-    vel_direction = np.array(vel_direction) * 5
-
-    acc_direction = acceleration[1]
-    acc_direction = np.array(acc_direction) * 2
-    # acc_direction = np.array(acc_direction)*UrsinaConfig.SCALE_FACTOR
-    # vertsyz = [tuple(body.position),tuple(acc_direction)] #  [(0, 0, 0), (0, 10, 0), (0, 0, 0), (0, 0, 10)]
-    verts_acc = [(0, 0, 0), tuple(acc_direction)]
-    acc_line = Entity(parent=trail, model=Mesh(vertices=verts_acc, mode='line', thickness=3),
-                      color=color.yellow, alpha=0.5)
-    acc_line.set_light_off()
-
-    verts_vel = [(0, 0, 0), tuple(vel_direction)]
-    vel_line = Entity(parent=trail, model=Mesh(vertices=verts_vel, mode='line', thickness=3),
-                      color=color.red, alpha=0.5)
-    vel_line.set_light_off()
-
-    vel_position = vel_direction
-    vel_position = (vel_position[0], vel_position[1], vel_position[2])
-
-    vel_text = Text(vel_info, scale=50, billboard=True, parent=trail,
-                    font=UrsinaConfig.CN_FONT, background=False, color=color.red,
-                    position=vel_position, alpha=0.5)
-    vel_text.set_light_off()
-    acc_position = acc_direction
-    acc_position = (acc_position[0], acc_position[1], acc_position[2])
-
-    acc_text = Text(acc_info, scale=50, billboard=True, parent=trail,
-                    font=UrsinaConfig.CN_FONT, background=False, color=color.yellow,
-                    position=acc_position, alpha=0.5)
-    acc_text.set_light_off()
-    # self.name_text.background.color = color.rgba(b_color[0], b_color[1], b_color[2], 0.3)
-    # # self.name_text.scale = self.scale
-    # inverse_color = get_inverse_color(b_color)
-    # self.name_text.color = color.rgba(inverse_color[0], inverse_color[1], inverse_color[2], 1)
-    # acc_line.enabled = False
-    # vel_line.enabled = False
-    # vel_text.enabled = False
-    # acc_text.enabled = False
-
-    trail.entity_infos = [acc_line, vel_line, vel_text, acc_text]
-    return acc_line, vel_line, vel_text, acc_text

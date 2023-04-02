@@ -37,7 +37,11 @@ class WorldGrid(Entity):
     """
 
     def draw_axises(self):
-        # 坐标轴
+        """
+        画坐标轴
+        @return:
+        """
+
         arrow_x, line_x, text_x = create_arrow_line((0, 0, 0), (10, 0, 0), label="X", color=color.red)
         arrow_y, line_y, text_y = create_arrow_line((0, 0, 0), (0, 10, 0), label="Y", color=color.green)
         arrow_z, line_z, text_z = create_arrow_line((0, 0, 0), (0, 0, 10), label="Z", color=color.yellow)

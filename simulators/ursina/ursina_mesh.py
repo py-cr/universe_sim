@@ -307,7 +307,7 @@ if __name__ == '__main__':
     # arrow = Entity(model=create_arrow(), color=color.yellow)
     # arrow.set_light_off()
 
-    arrow, line = create_arrow_line((0, 0, 0), (10, 0, 0))
+    arrow, line, text = create_arrow_line((0, 0, 0), (10, 0, 0))
 
     EditorCamera()
     app.run()

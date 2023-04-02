@@ -205,6 +205,7 @@ class ControlHandler(EventHandler):
 
     def on_slider_body_size_changed(self):
         UrsinaConfig.body_size_factor = self.ui.slider_body_size_factor.value
+        UrsinaEvent.on_body_size_changed()
 
     def on_slider_run_speed_changed(self):
         UrsinaConfig.run_speed_factor = self.ui.slider_run_speed_factor.value

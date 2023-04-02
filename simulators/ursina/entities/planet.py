@@ -65,6 +65,7 @@ class Planet(Entity):
             rotation = (0, 0, 0)
 
         UrsinaEvent.on_reset_subscription(self.on_reset)
+        UrsinaEvent.on_body_size_changed_subscription(self.change_body_scale)
 
         super().__init__(
             # model="sphere",
@@ -100,16 +101,18 @@ class Planet(Entity):
             # 创建行星环（目前只有土星环）
             create_rings(self)
 
-    def update(self):
+    def change_body_scale(self):
         if hasattr(self.body, "torus_stars"):
             # 星环小天体群（主要模拟小行星群，非一个天体）不受 body_size_factor 影响
             self.scale = self.init_scale
         else:
             self.scale = self.init_scale * UrsinaConfig.body_size_factor
 
+    def update(self):
+        self.change_body_scale()
+
         pos = self.body_view.position * UrsinaConfig.SCALE_FACTOR
         if self.body.parent is None:
-            # TODO: ????????
             # self.x = -pos[1]
             # self.y = pos[2]
             # self.z = pos[0]
@@ -180,7 +183,6 @@ class Planet(Entity):
                     self.f_parent = b
                     break
         pos = self.f_parent.position * UrsinaConfig.SCALE_FACTOR
-        # TODO: ????????
         # self.x = -pos[1]
         # self.y = pos[2]
         # self.z = pos[0]

@@ -33,6 +33,7 @@ class UiSlider(Slider):
                          dynamic=True)
         # self.label.scale *= 8/10
         self.label.font = UrsinaConfig.CN_FONT
+        self.knob.ignore_paused = True
         # self.knob.text_entity.font = ""
         # self.knob.text_entity.scale *= 8/10
         # self.height *= 8/10

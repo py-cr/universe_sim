@@ -24,6 +24,17 @@ class UrsinaEvent:
         UrsinaEvent.on_searching_bodies_funcs = []
         # 应用运行的订阅事件
         UrsinaEvent.on_application_run_callback = []
+        #
+        UrsinaEvent.on_body_size_changed_callback = []
+
+    @staticmethod
+    def on_body_size_changed_subscription(fun):
+        UrsinaEvent.on_body_size_changed_callback.append(fun)
+
+    @staticmethod
+    def on_body_size_changed():
+        for f in UrsinaEvent.on_body_size_changed_callback:
+            f()
 
     @staticmethod
     def on_application_run_callback_subscription(fun):

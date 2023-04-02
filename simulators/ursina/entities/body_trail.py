@@ -51,3 +51,21 @@ class BodyTrail(Entity):
             a_text.parent = self
             a_arrow.enabled = False
             a_line.enabled = False
+
+
+# class BodyTrail(Entity):
+#     def __init__(self, **kwargs):
+#         from_pos = (0, 0, 0)
+#         to_pos = (1, 1, 1)
+#         super().__init__(
+#             # model='line',
+#             model=Mesh(vertices=(from_pos, to_pos), mode='line', thickness=3),
+#             ignore_paused=True,
+#             **kwargs
+#         )
+#
+#     def update(self):
+#         self.look_at(self.parent)
+#     # line = Entity(parent=parent,
+#     #                 model=Mesh(vertices=(from_pos * len_scale, to_pos * len_scale), mode='line', thickness=thickness),
+#     #                 color=color, alpha=alpha)

@@ -92,7 +92,7 @@ def create_arrow(height=0.5, width=0.1):
 
 
 def create_arrow_line(from_pos, to_pos, parent=None, label=None,
-                      set_light_off=True, alpha=1.0,
+                      set_light_off=True, alpha=1.0, len_scale=0.5,
                       color=color.white, thickness=2,
                       arrow_scale=1, text_scale=50):
     """
@@ -103,6 +103,7 @@ def create_arrow_line(from_pos, to_pos, parent=None, label=None,
     @param label: 箭头显示的文字
     @param set_light_off: 是否设置为灯光关闭状态
     @param alpha: 透明度
+    @param len_scale: 长度缩放
     @param color: 箭头线颜色
     @param thickness: 线段粗细
     @param arrow_scale: 箭头缩放
@@ -111,12 +112,13 @@ def create_arrow_line(from_pos, to_pos, parent=None, label=None,
     height = 0.5 * thickness
     width = 0.1 * thickness
     arrow_mesh = create_arrow(height, width)
-    verts = (Vec3(from_pos), Vec3(to_pos))
-    line = Entity(parent=parent, model=Mesh(vertices=verts, mode='line', thickness=thickness),
+    from_pos, to_pos = (Vec3(from_pos), Vec3(to_pos))
+    line = Entity(parent=parent,
+                  model=Mesh(vertices=(from_pos * len_scale, to_pos * len_scale), mode='line', thickness=thickness),
                   color=color, alpha=alpha)
-    arrow = Entity(parent=line, model=arrow_mesh, position=verts[1],
+    arrow = Entity(parent=line, model=arrow_mesh, position=to_pos * len_scale,
                    scale=thickness * arrow_scale, color=color, alpha=alpha)
-    arrow.look_at(Vec3(to_pos) * 100)
+    arrow.look_at(to_pos * 100)
 
     if set_light_off:
         line.set_light_off()

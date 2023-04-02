@@ -31,7 +31,7 @@ class UrsinaView(BodyView):
 
         :return:
         """
-        self.planet.turn()
+        self.planet.update()
 
     def appear(self):
         pass

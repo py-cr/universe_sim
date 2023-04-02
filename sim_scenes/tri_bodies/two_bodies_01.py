@@ -19,9 +19,9 @@ if __name__ == '__main__':
     3、天体质量 mass    
     """
     bodies = [
-        Sun(mass=1.5e30, init_position=[849597870.700, 0, 0], init_velocity=[0, 7.0, 0],
+        Sun(mass=1.5e30, init_position=[849597870, 0, 0], init_velocity=[0, 7.0, 0],trail_color=(255,0,0),
             size_scale=5e1, texture="sun1.jpg"),  # 太阳放大 100 倍
-        Sun(mass=2e30, init_position=[0, 0, 0], init_velocity=[0, -8.0, 0],
+        Sun(mass=1.5e30, init_position=[0, 0, 0], init_velocity=[0, -8.0, 0],
             size_scale=5e1, texture="sun2.jpg"),  # 太阳放大 100 倍
         Earth(init_position=[0, 349597870.700, 0], init_velocity=[10.50, 0, 0],
               size_scale=4e3, distance_scale=1),  # 地球放大 4000 倍，距离保持不变
@@ -33,4 +33,4 @@ if __name__ == '__main__':
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_YEAR, position=(AU, 2 * AU, -7 * AU), show_trail=True)
+    ursina_run(bodies, SECONDS_PER_YEAR, position=(1.5 * AU, 0, -7 * AU), show_trail=True)

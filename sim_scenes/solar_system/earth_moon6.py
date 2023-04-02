@@ -32,4 +32,4 @@ if __name__ == '__main__':
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, 60, position=(0, 0, 0), show_trail=True, view_closely=0.001)
+    ursina_run(bodies, 60, position=(0, 0, -4 * e.diameter), show_trail=True, view_closely=0.001)

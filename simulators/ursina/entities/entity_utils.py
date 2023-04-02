@@ -173,7 +173,7 @@ def clear_trails(self):
     self.trails.clear()
 
 
-def create_fixed_star_lights(parent):
+def create_fixed_star_lights(fixed_star):
     """
     创建恒星的发光的效果、并作为灯光源
     :param entity:
@@ -181,14 +181,14 @@ def create_fixed_star_lights(parent):
     """
 
     # 如果是恒星（如：太阳），自身会发光，则需要关闭灯光
-    parent.set_light_off()
+    fixed_star.set_light_off()
 
     # lights = []
     # # 创建多个新的 Entity 对象，作为光晕的容器
     # _color = color.rgba(1.0, 0.6, 0.2, 1)
-    if hasattr(parent.body_view.body, "glows"):
+    if hasattr(fixed_star.body_view.body, "glows"):
         # glows = (glow_num:10, glow_scale:1.03 glow_alpha:0.1~1)
-        glows = parent.body_view.body.glows
+        glows = fixed_star.body_view.body.glows
         if glows is not None:
             if isinstance(glows, tuple):
                 if len(glows) == 3:
@@ -210,16 +210,16 @@ def create_fixed_star_lights(parent):
                         glow_alpha = glow_alphas[-1]
 
                 # _color = color.white
-                _color = parent.body_view.body.color
+                _color = fixed_star.body_view.body.color
                 _color = color.rgba(_color[0] / 255, _color[1] / 255, _color[2] / 255, 1)
                 for i in range(glow_num):
-                    glow_entity = Entity(parent=parent, model='sphere', color=_color,
+                    glow_entity = Entity(parent=fixed_star, model='sphere', color=_color,
                                          scale=math.pow(glow_scale, i + 1), alpha=glow_alpha)
-    if hasattr(parent.body_view.body, "light_on"):
-        if parent.body_view.body.light_on:
+    if hasattr(fixed_star.body_view.body, "light_on"):
+        if fixed_star.body_view.body.light_on:
             for i in range(2):
                 # 创建 PointLight 对象，作为恒星的灯光源
-                light = PointLight(parent=parent, intensity=10, range=10, color=color.white)
+                light = PointLight(parent=fixed_star, intensity=10, range=10, color=color.white)
 
 
 def merge_vectors(vectors):
@@ -229,11 +229,11 @@ def merge_vectors(vectors):
     # 计算速度的方向
     direction = (x / value, y / value, z / value)
     # 返回速度大小和速度方向
-    # return value, direction
+    return value, direction
 
     # return value,  (direction[1], direction[0], direction[2])
     # return value, (direction[1], direction[2], direction[0])
-    return value, (-direction[1], direction[2], direction[0])
+    # return value, (-direction[1], direction[2], direction[0])
 
 
 def create_trail_info(body, trail):
@@ -256,10 +256,10 @@ def create_trail_info(body, trail):
     acc_direction = np.array(acc_direction) * 2
 
     vel_position = vel_direction
-    vel_position = (vel_position[0], vel_position[1], vel_position[2])
+    # vel_position = (vel_position[0], vel_position[1], vel_position[2])
 
     acc_position = acc_direction
-    acc_position = (acc_position[0], acc_position[1], acc_position[2])
+    # acc_position = (acc_position[0], acc_position[1], acc_position[2])
 
     trail.entity_infos = {"velocity": [vel_info, vel_direction, vel_position],
                           "acceleration": [acc_info, acc_direction, acc_position]}

@@ -49,16 +49,16 @@ if __name__ == '__main__':
     NUM_OF_ASTEROIDS = 10
     asteroids = []
     angles = np.linspace(0, 100 * np.pi, NUM_OF_ASTEROIDS)
-    pxs, pys, vxs, vys = get_positions_velocitys(angles,
+    pxs, pzs, vxs, vzs = get_positions_velocitys(angles,
                                                  radius=1.60 * AU,
                                                  velocity=23.37,
                                                  radius_offset=0.1 * AU,
                                                  velocity_offset=0.2)
     for i, px in enumerate(pxs):
-        py, fx, fy = pys[i], vxs[i], vys[i]
+        pz, fx, fz = pzs[i], vxs[i], vzs[i]
         asteroids.append(Asteroid(size_scale=3e9,  # 小行星放大 5000000000 倍，距离放大 1.4 倍
-                                  init_position=[px, py, 0],
-                                  init_velocity=[fx, fy, 0],
+                                  init_position=[px, 0, pz],
+                                  init_velocity=[fx, 0, fz],
                                   distance_scale=1.4))
     # endregion 2
 

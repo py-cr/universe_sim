@@ -4,14 +4,14 @@
       "name": "红轨太阳A",
       "mass": 2e+30,
       "init_position": [
+        -518222240.0,
         0.0,
-        518222240.0,
         0.0
       ],
       "init_velocity": [
-        -14.890000343322754,
+        -0.0,
         0.0,
-        0.0
+        -14.890000343322754
       ],
       "density": 1408.0,
       "color": [
@@ -19,28 +19,30 @@
         98,
         25
       ],
+      "texture": "sun2.jpg",
+      "size_scale": 50.0,
+      "distance_scale": 1.0,
+      "rotation_speed": 0.1,
+      "ignore_mass": false,
+      "is_fixed_star": true,
       "trail_color": [
         255,
         0,
         0
-      ],
-      "texture": "sun2.jpg",
-      "size_scale": 50.0,
-      "distance_scale": 1.0,
-      "is_fixed_star": true
+      ]
     },
     {
       "name": "绿轨太阳B",
       "mass": 2e+30,
       "init_position": [
-        -299195744.0,
+        -0.0,
         0.0,
-        0.0
+        -299195744.0
       ],
       "init_velocity": [
-        7.445000171661377,
-        -12.895118713378906,
-        0.0
+        12.895118713378906,
+        0.0,
+        7.445000171661377
       ],
       "density": 1408.0,
       "color": [
@@ -48,28 +50,30 @@
         98,
         25
       ],
+      "texture": "sun2.jpg",
+      "size_scale": 50.0,
+      "distance_scale": 1.0,
+      "rotation_speed": 0.1,
+      "ignore_mass": false,
+      "is_fixed_star": true,
       "trail_color": [
         0,
         255,
         0
-      ],
-      "texture": "sun2.jpg",
-      "size_scale": 50.0,
-      "distance_scale": 1.0,
-      "is_fixed_star": true
+      ]
     },
     {
       "name": "蓝轨太阳C",
       "mass": 2e+30,
       "init_position": [
-        299195744.0,
+        -0.0,
         0.0,
-        0.0
+        299195744.0
       ],
       "init_velocity": [
-        7.445000171661377,
-        12.895118713378906,
-        0.0
+        -12.895118713378906,
+        0.0,
+        7.445000171661377
       ],
       "density": 1408.0,
       "color": [
@@ -77,28 +81,30 @@
         98,
         25
       ],
+      "texture": "sun2.jpg",
+      "size_scale": 50.0,
+      "distance_scale": 1.0,
+      "rotation_speed": 0.1,
+      "ignore_mass": false,
+      "is_fixed_star": true,
       "trail_color": [
         0,
         0,
         255
-      ],
-      "texture": "sun2.jpg",
-      "size_scale": 50.0,
-      "distance_scale": 1.0,
-      "is_fixed_star": true
+      ]
     },
     {
       "name": "流浪地球",
       "mass": 5.97237e+24,
       "init_position": [
-        0.0,
-        86370368.0,
-        747989376.0
+        -86370368.0,
+        747989376.0,
+        0.0
       ],
       "init_velocity": [
-        0.0,
-        0.0,
-        -10.0
+        -0.0,
+        -10.0,
+        0.0
       ],
       "density": 5507.85,
       "color": [
@@ -108,7 +114,15 @@
       ],
       "texture": "earth1.jpg",
       "size_scale": 4000.0,
-      "distance_scale": 1
+      "distance_scale": 1,
+      "rotation_speed": null,
+      "ignore_mass": false,
+      "is_fixed_star": false,
+      "trail_color": [
+        1,
+        89,
+        162
+      ]
     }
   ],
   "params": {

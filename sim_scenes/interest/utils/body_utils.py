@@ -43,7 +43,11 @@ def gen_bodies_from_image(pixel_image, params, texture="color_body.png"):
 
     def get_position(pos, scale):
         # return get_scaled_body_pos((camera_pos[2], camera_pos[0], camera_pos[1]), pos, scale)
-        return get_scaled_body_pos((camera_pos[2], camera_pos[1], camera_pos[0]), pos, scale)
+        # return get_scaled_body_pos((camera_pos[2], camera_pos[1], camera_pos[0]), pos, scale)
+        return get_scaled_body_pos((camera_pos[0], camera_pos[1], camera_pos[2]), pos, scale)
+
+        # # body.init_position = [body.raduis * SIZE_SCALE, (distance_sum + d), AU]
+        # body.init_position = [-(distance_sum + d), AU, body.raduis * SIZE_SCALE]
 
         # # [ 远+近-  , 左+右-  , 上+下-]
         # return pos[0] + (scale - 1.0) * 300 * (random.randint(90, 110)) * D, pos[1], pos[2]
@@ -58,7 +62,7 @@ def gen_bodies_from_image(pixel_image, params, texture="color_body.png"):
     width, height = img.size
     interval_factor = 20  # 星球间距因子
     body_template = 'ColorBody(name="%s", mass=mass, color=(%d, %d, %d), size_scale=%.4f, ' \
-                    'init_position=get_position([0, %g * D, %g * D], %.4f), ' \
+                    'init_position=get_position([-%g * D, %g * D, 0], %.4f), ' \
                     f'init_velocity=[0, 0, 0], ignore_mass=True, texture="{texture}").set_light_disable(True)'
     bodies_str = "["
 

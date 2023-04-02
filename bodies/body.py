@@ -403,6 +403,9 @@ class Body(metaclass=ABCMeta):
                     body = FixedStar(**body_data)
                 else:
                     body = Body(**body_data)
+                # [x, y, z]->[-y, z, x]
+                # body.init_velocity = [-body.init_velocity[1],body.init_velocity[2],body.init_velocity[0]]
+                # body.init_position = [-body.init_position[1],body.init_position[2],body.init_position[0]]
                 bodies.append(body)
             if "params" in json_data:
                 params = json_data["params"]

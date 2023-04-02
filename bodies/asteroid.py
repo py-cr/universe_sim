@@ -27,8 +27,10 @@ class Asteroid(Body):
     """
 
     def __init__(self, name="小行星", mass=4.1e10,
-                 init_position=[1.6 * AU, 0, 0],
-                 init_velocity=[0, 25.37, 0],
+                 # init_position=[1.6 * AU, 0, 0],
+                 # init_velocity=[0, 25.37, 0],
+                 init_position=[0, 0, 1.6 * AU],
+                 init_velocity=[-25.37, 0, 0],
                  texture="", size_scale=1.0, distance_scale=1.0):
         params = {
             "name": name,
@@ -42,6 +44,10 @@ class Asteroid(Body):
             "distance_scale": distance_scale
         }
         super().__init__(**params)
+
+    @property
+    def show_trail(self):
+        return False
 
     def ignore_gravity(self, body):
         """

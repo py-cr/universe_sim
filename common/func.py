@@ -64,13 +64,13 @@ def get_positions_velocitys(angles, velocity=1, radius=1, radius_offset=None, ve
         velocity = velocity + np.random.rand(len(angles)) * velocity_offset
 
     pxs = radius * np.cos(angles)
-    pys = radius * np.sin(angles)
+    pzs = radius * np.sin(angles)
 
-    vys = velocity * np.cos(angles)
+    vzs = velocity * np.cos(angles)
     vxs = velocity * np.sin(angles)
 
-    # return pxs, pys, fxs, fys
-    return np.round(pxs, 2), np.round(pys, 2), -np.round(vxs, 2), np.round(vys, 2)
+    # return pxs, pzs, vxs, vzs
+    return np.round(pxs, 2), np.round(pzs, 2), -np.round(vxs, 2), np.round(vzs, 2)
 
 
 def find_file(file_path, default_val=None, find_deep=5):

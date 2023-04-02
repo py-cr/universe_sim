@@ -17,18 +17,18 @@ if __name__ == '__main__':
     """
     # 地球的Y方向初始速度
     EARTH_INIT_VELOCITY = 0  # 0km/s
-    sun = Sun(init_position=[AU, 0, 0], size_scale=2e1)  # 太阳放大 20 倍
-    # 忽略质量的引力
+    sun = Sun(init_position=[0, 0, AU], size_scale=2e1)  # 太阳放大 20 倍
+    # 忽略质量的引力 [x, y, z]->[-y, z, x]
     sun.ignore_mass = True
 
     # 观看月相变化的过程：分别是 新月、蛾眉月、上弦月、盈凸、满月、亏凸、下弦月、残月
     # 参考：images/moon/月相变化过程.jpeg
     # TODO: 月球在摄像机的前方（从 “新月” 开始）
-    moon_pos, moon_vel = [384400, 0, 0], [0, EARTH_INIT_VELOCITY + 1.023, 0]
-    # TODO: 月球在摄像机的右方（从 “下弦月” 开始），将会出现
-    # moon_pos, moon_vel = [0, -384400, 0], [1.023, EARTH_INIT_VELOCITY, 0]
-    # TODO: 月月球在摄像机的左方（从 “上弦月” 开始）
-    # moon_pos, moon_vel = [0, 384400, 0], [-1.023, EARTH_INIT_VELOCITY, 0]
+    # moon_pos, moon_vel = [0, 0, 384400], [-(EARTH_INIT_VELOCITY + 1.023), 0, 0]
+    # TODO: 月球在摄像机的右方（从 “下弦月” 开始），将会从右方出现
+    # moon_pos, moon_vel = [384400, 0, 0], [-EARTH_INIT_VELOCITY, 0, 1.023]
+    # TODO: 月球在摄像机的左方（从 “上弦月” 开始）
+    moon_pos, moon_vel = [-384400, 0, 0], [EARTH_INIT_VELOCITY, 0, -1.023]
 
     bodies = [
         sun,

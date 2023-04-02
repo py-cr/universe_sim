@@ -22,10 +22,11 @@ class Earth(Body):
     　天体质量: 5.97237✕10²⁴ kg
     　平均密度: 5507.85 kg/m³
     """
-
     def __init__(self, name="地球", mass=5.97237e24,rotate_angle=0,
-                 init_position=[1.12 * AU, 0, 0],
-                 init_velocity=[0, 29.79, 0],
+                 # init_position=[1.12 * AU, 0, 0],
+                 # init_velocity=[0, 29.79, 0],
+                 init_position=[0, 0, 1.12 * AU],
+                 init_velocity=[-29.79, 0, 0],
                  texture="earth1.jpg", size_scale=1.0, distance_scale=1.0,
                  rotation_speed=15, ignore_mass=False, trail_color=None, show_name=False):
         params = {

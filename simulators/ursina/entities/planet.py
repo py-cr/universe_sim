@@ -100,7 +100,7 @@ class Planet(Entity):
             # 创建行星环（目前只有土星环）
             create_rings(self)
 
-    def turn(self):
+    def update(self):
         if hasattr(self.body, "torus_stars"):
             # 星环小天体群（主要模拟小行星群，非一个天体）不受 body_size_factor 影响
             self.scale = self.init_scale
@@ -110,9 +110,12 @@ class Planet(Entity):
         pos = self.body_view.position * UrsinaConfig.SCALE_FACTOR
         if self.body.parent is None:
             # TODO: ????????
-            self.x = -pos[1]
-            self.y = pos[2]
-            self.z = pos[0]
+            # self.x = -pos[1]
+            # self.y = pos[2]
+            # self.z = pos[0]
+            self.x = pos[0]
+            self.y = pos[1]
+            self.z = pos[2]
         else:
             self.follow_parent()
 
@@ -146,12 +149,13 @@ class Planet(Entity):
                                        self.rotation_y,
                                        self.rotation_z)
 
-        if UrsinaConfig.show_trail:
-            # 有时候第一个位置不正确，所以判断一下有历史记录后在创建
-            if len(self.body.his_position()) > 1:
-                create_trails(self)
-        else:
-            clear_trails(self)
+        if not hasattr(self.body, "show_trail") or self.body.show_trail:
+            if UrsinaConfig.show_trail:
+                # 有时候第一个位置不正确，所以判断一下有历史记录后在创建
+                if len(self.body.his_position()) > 1:
+                    create_trails(self)
+            else:
+                clear_trails(self)
 
         if hasattr(self, "name_text"):
             d = (camera.world_position - self.name_text.world_position).length()
@@ -177,9 +181,12 @@ class Planet(Entity):
                     break
         pos = self.f_parent.position * UrsinaConfig.SCALE_FACTOR
         # TODO: ????????
-        self.x = -pos[1]
-        self.y = pos[2]
-        self.z = pos[0]
+        # self.x = -pos[1]
+        # self.y = pos[2]
+        # self.z = pos[0]
+        self.x = pos[0]
+        self.y = pos[1]
+        self.z = pos[2]
 
     def destroy_all(self):
         # 从天体系统中移除自己（TODO:暂时还不能移除）

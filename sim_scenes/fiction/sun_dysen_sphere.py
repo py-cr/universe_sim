@@ -15,7 +15,7 @@ if __name__ == '__main__':
     太阳、戴森球
     """
 
-    sun = Sun(size_scale=5e1, init_velocity=[0, 2, 0])  # 太阳放大 50 倍
+    sun = Sun(size_scale=5e1, init_velocity=[-2, 0, 0])  # 太阳放大 50 倍
     bodies = [
         sun,
         DysenSphere(size_scale=5e1, parent=sun),  # 戴森球放大 50 倍
@@ -28,4 +28,4 @@ if __name__ == '__main__':
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
     ursina_run(bodies, SECONDS_PER_WEEK, position=(0, AU / 4, -3 * AU),
-               bg_music="sounds/universe_02.mp3")
+               bg_music="sounds/interstellar.mp3")

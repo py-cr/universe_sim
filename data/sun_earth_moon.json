@@ -4,12 +4,12 @@
       "name": "太阳",
       "mass": 1.9891e+30,
       "init_position": [
-        149597872.0,
+        -0.0,
         0.0,
-        0.0
+        149597872.0
       ],
       "init_velocity": [
-        0.0,
+        -0.0,
         0.0,
         0.0
       ],
@@ -24,18 +24,23 @@
       "distance_scale": 1.0,
       "rotation_speed": 0.613,
       "ignore_mass": true,
-      "is_fixed_star": true
+      "is_fixed_star": true,
+      "trail_color": [
+        170,
+        98,
+        25
+      ]
     },
     {
       "name": "地球",
       "mass": 5.97237e+24,
       "init_position": [
-        0.0,
+        -0.0,
         0.0,
         0.0
       ],
       "init_velocity": [
-        0.0,
+        -0.0,
         0.0,
         0.0
       ],
@@ -50,19 +55,24 @@
       "distance_scale": 1.0,
       "rotation_speed": 15,
       "ignore_mass": false,
-      "is_fixed_star": false
+      "is_fixed_star": false,
+      "trail_color": [
+        1,
+        89,
+        162
+      ]
     },
     {
       "name": "月球",
       "mass": 7.342e+22,
       "init_position": [
-        384400.0,
+        -0.0,
         0.0,
-        0.0
+        384400.0
       ],
       "init_velocity": [
+        -1.0230000019073486,
         0.0,
-        1.0230000019073486,
         0.0
       ],
       "density": 3344.0,
@@ -76,7 +86,12 @@
       "distance_scale": 1.0,
       "rotation_speed": 0.5487,
       "ignore_mass": false,
-      "is_fixed_star": false
+      "is_fixed_star": false,
+      "trail_color": [
+        162,
+        162,
+        162
+      ]
     }
   ],
   "params": {
@@ -85,6 +100,8 @@
       0,
       0,
       0
-    ]
+    ],
+    "show_trail": false,
+    "show_name": false
   }
 }

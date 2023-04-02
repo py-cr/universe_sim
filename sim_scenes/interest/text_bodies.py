@@ -26,8 +26,10 @@ def show_text_bodies():
                                          params={"camera_pos": camera_pos})
     # 放一个恒星作为背景
     bg = FixedStar(name="bg", texture="fixed_star.png", mass=2e32, color=(0xff, 0xf8, 0xd4),
-                   init_position=[6000 * D, 450 * D, 100 * D],  # [ 远+近-  , 左+右-  , 上+下-]
+                   # init_position=[6000 * D, 450 * D, 100 * D],  # [ 远+近-  , 左+右-  , 上+下-]
+                   init_position=[-450 * D, 100 * D, 6000 * D],  # [ 远+近-  , 左+右-  , 上+下-]
                    ignore_mass=True)
+
     bodies.append(bg)
 
     # 使用 ursina 查看的运行效果

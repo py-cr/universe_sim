@@ -40,5 +40,14 @@ class BodyTrail(Entity):
 
         v_arrow, v_line, v_text = create_arrow_line((0, 0, 0), tuple(vel_direction), parent=self,
                                                     label=vel_info, color=color.red, alpha=0.8, arrow_scale=0.5)
+        if str(vel_info).startswith("0.00"):
+            v_text.parent = self
+            v_arrow.enabled = False
+            v_line.enabled = False
+
         a_arrow, a_line, a_text = create_arrow_line((0, 0, 0), tuple(acc_direction), parent=self,
                                                     label=acc_info, color=color.yellow, alpha=0.8, arrow_scale=0.5)
+        if str(acc_info).startswith("0.00"):
+            a_text.parent = self
+            a_arrow.enabled = False
+            a_line.enabled = False

@@ -17,13 +17,14 @@ if __name__ == '__main__':
     https://www.nasa.gov/mission_pages/NPP/news/earth-at-night.html
     https://www.nasa.gov/sites/default/files/images/712130main_8246931247_e60f3c09fb_o.jpg
     """
-    resolution = 500
+    resolution = 50
+    # resolution = 500
     bodies = [
         Earth(texture="earth_at_night_hd.jpg",
               init_position=[0, 0, 0], init_velocity=[0, 0, 0],
               size_scale=100, ignore_mass=True).set_resolution(resolution),
         Earth(texture="earth_hd.jpg",
-              init_position=[0, 10, 0], init_velocity=[0, 0, 0],
+              init_position=[-10, 0, 0], init_velocity=[0, 0, 0],
               size_scale=100, ignore_mass=True).set_resolution(resolution)
     ]
     # 使用 ursina 查看的运行效果

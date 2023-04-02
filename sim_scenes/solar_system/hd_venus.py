@@ -17,11 +17,11 @@ if __name__ == '__main__':
     bodies = [
         Venus(texture="venus_hd.jpg",
               init_position=[0, 0, 0], init_velocity=[0, 0, 0],
-              size_scale=100, show_name=True)
+              size_scale=1, show_name=True)
     ]
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_DAY, position=(0, 30000, -1500000),
+    ursina_run(bodies, SECONDS_PER_DAY, position=(0, 0, -20000),
                # cosmic_bg="textures/cosmic1.jpg",
-               view_closely=True)
+               view_closely=0.001)

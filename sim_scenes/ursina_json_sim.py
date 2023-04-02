@@ -29,7 +29,7 @@ if __name__ == '__main__':
     # TODO: 去掉注释，完美数据的三体模型的演示05（画大花）
     # bodies, params = Body.build_bodies_from_json('../data/tri_bodies_perfect_05.json')
     # TODO: 去掉注释，引力弹弓的演示
-    # bodies, params = Body.build_bodies_from_json('../data/gravity_slingshot.json')
+    bodies, params = Body.build_bodies_from_json('../data/gravity_slingshot.json')
 
     dt = params["dt"] if "dt" in params else SECONDS_PER_YEAR
     position = params["position"] if "position" in params else (0, 0, 0)

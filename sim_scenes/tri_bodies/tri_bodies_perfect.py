@@ -27,6 +27,7 @@ if __name__ == '__main__':
     # p = 16  # TODO: 三体转圆形花
     # p = 18  # TODO: 三体转圆形花
     # p = 19  # TODO: 三体转圆形花
+    # [x, y, z]->[-y, z, x]
     bodies = [
         Sun(name="红轨太阳A", mass=mass,
             init_position=[0, math.sqrt(3) * r, 0],

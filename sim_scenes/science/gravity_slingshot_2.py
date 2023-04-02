@@ -16,12 +16,13 @@ if __name__ == '__main__':
     模拟流浪地球经过木星、土星加速
     """
     bodies = [
-        Jupiter(size_scale=1e2, init_position=[0, AU / 4, 0], init_velocity=[0, 0, 0]),  # 木星放大 100 倍
-        Saturn(size_scale=1e2, init_position=[AU/1.5, 1.5 * AU, 0], init_velocity=[0, 0, 0]),  # 土星放大 100 倍
+        Jupiter(size_scale=1e2, init_position=[-AU / 4, 0, 0], init_velocity=[0, 0, 0]),  # 木星放大 100 倍
+        Saturn(size_scale=1e2, init_position=[-1.5 * AU, 0, AU / 1.5], init_velocity=[0, 0, 0]),  # 土星放大 100 倍
         Earth(size_scale=3e2,  # 地球放大 300 倍
               init_position=[0, 0, 0],  #
               # init_velocity=[0, 33, -1],
-              init_velocity=[-1, 10, 0],  # 朝向木星的速度为 38km/s，-1 km/s 是为了防止地球正面对着木星冲去
+              # init_velocity=[-1, 10, 0],  # 朝向木星的速度为 38km/s，-1 km/s 是为了防止地球正面对着木星冲去
+              init_velocity=[-10, 0, -1],  # 朝向木星的速度为 38km/s，-1 km/s 是为了防止地球正面对着木星冲去
               # init_velocity=[0, 50, -1],
               ),
     ]

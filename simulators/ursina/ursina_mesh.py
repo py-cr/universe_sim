@@ -7,10 +7,12 @@
 # python_version  :3.8
 # ==============================================================================
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
-from ursina import Ursina, window, Entity, Mesh, EditorCamera, color, mouse, Vec2, Vec3, load_texture, Texture
+from ursina import Ursina, window, Entity, Mesh, EditorCamera, color, mouse, Vec2, Vec3, load_texture, Texture, Text
 from math import pi, sin, cos
 import numpy as np
 import math
+
+from simulators.ursina.ursina_config import UrsinaConfig
 
 
 def create_sphere(radius, subdivisions):
@@ -59,6 +61,105 @@ def create_sphere(radius, subdivisions):
     #     normals[i] = -normals[i]
 
     return Mesh(vertices=verts, triangles=tris, normals=normals, uvs=uvs, mode='triangle')
+
+
+def create_arrow(height=0.5, width=0.1):
+    # 创建金字塔的顶点
+    r = width / 2
+    verts = [
+        (0, height, 0),  # 顶点
+        (-r, 0, -r),  # 左后底点
+        (r, 0, -r),  # 右后底点
+        (r, 0, r),  # 右前底点
+        (-r, 0, r),  # 左前底点
+    ]
+    # 修改指向
+    verts = [(z, x, y) for x, y, z in verts]
+
+    # 定义金字塔的面
+    faces = [
+        (0, 1, 2),  # 底面1
+        (0, 2, 3),  # 底面2
+        (0, 3, 4),  # 底面3
+        (0, 4, 1),  # 底面4
+        (4, 2, 1),  # 侧面1
+        (4, 3, 2),  # 侧面1
+    ]
+
+    # 创建一个金字塔的Mesh对象
+    arrow_mesh = Mesh(vertices=verts, triangles=faces, mode='triangle')
+    return arrow_mesh
+
+
+def create_arrow_line(from_pos, to_pos, parent=None, label=None,
+                      set_light_off=True, alpha=1.0,
+                      color=color.white, thickness=2,
+                      arrow_scale=1, text_scale=50):
+    """
+    创建箭头和箭头线段
+    @param from_pos: 箭头线段开始位置
+    @param to_pos: 箭头线段结束位置
+    @param parent:
+    @param label: 箭头显示的文字
+    @param set_light_off: 是否设置为灯光关闭状态
+    @param alpha: 透明度
+    @param color: 箭头线颜色
+    @param thickness: 线段粗细
+    @param arrow_scale: 箭头缩放
+    @return:
+    """
+    height = 0.5 * thickness
+    width = 0.1 * thickness
+    arrow_mesh = create_arrow(height, width)
+    verts = (Vec3(from_pos), Vec3(to_pos))
+    line = Entity(parent=parent, model=Mesh(vertices=verts, mode='line', thickness=thickness),
+                  color=color, alpha=alpha)
+    arrow = Entity(parent=line, model=arrow_mesh, position=verts[1],
+                   scale=thickness * arrow_scale, color=color, alpha=alpha)
+    arrow.look_at(Vec3(to_pos) * 100)
+
+    if set_light_off:
+        line.set_light_off()
+        arrow.set_light_off()
+
+    if label is not None:
+        text = Text(label, parent=line, scale=text_scale, billboard=True, color=color,
+                    position=Vec3(to_pos) + Vec3(1, 1, 1), alpha=alpha,
+                    font=UrsinaConfig.CN_FONT, background=False)
+        if set_light_off:
+            text.set_light_off()
+    else:
+        text = None
+
+    return arrow, line, text
+
+
+def create_pyramid():
+    # 创建金字塔的顶点
+    verts = [
+        (0, 2, 0),  # 顶点
+        (-1, 0, -1),  # 左后底点
+        (1, 0, -1),  # 右后底点
+        (1, 0, 1),  # 右前底点
+        (-1, 0, 1),  # 左前底点
+    ]
+
+    # 定义金字塔的面
+    faces = [
+        (0, 1, 2),  # 底面1
+        (0, 2, 3),  # 底面2
+        (0, 3, 4),  # 底面3
+        (0, 4, 1),  # 底面4
+        (4, 2, 1),  # 侧面1
+        (4, 3, 2),  # 侧面1
+    ]
+
+    # 创建一个金字塔的Mesh对象
+    # verts = [(0, 1, 0), (1, 0, 1), (1, 0, -1), (-1, 0, -1), (-1, 0, 1)]
+    # faces = [(0, 1, 2), (0, 2, 3), (0, 3, 4), (0, 4, 1), (1, 3, 2)]
+    pyramid_mesh = Mesh(vertices=verts, triangles=faces, mode='triangle')
+
+    return pyramid_mesh
 
 
 def create_body_torus(inner_radius, outer_radius, subdivisions):
@@ -195,9 +296,18 @@ if __name__ == '__main__':
     # torus = create_torus(1.5, 3, 64)
     # entity = Entity(model=torus, texture=textureRings, rotation=(85, 0, 0), double_sided=True)
 
-    body_torus = create_torus(9, 10, 64)
-    entities = Entity(model=body_torus, texture=textureAsteroids, rotation=(85, 0, 0), double_sided=True)
-    entities.set_light_off()
+    # body_torus = create_torus(9, 10, 64)
+    # entities = Entity(model=body_torus, texture=textureAsteroids, rotation=(85, 0, 0), double_sided=True)
+    # entities.set_light_off()
+
+    # 创建金字塔的实体对象
+    # pyramid = Entity(model=create_pyramid(), texture='brick', color=color.yellow)
+    # pyramid.set_light_off()
+
+    # arrow = Entity(model=create_arrow(), color=color.yellow)
+    # arrow.set_light_off()
+
+    arrow, line = create_arrow_line((0, 0, 0), (10, 0, 0))
 
     EditorCamera()
     app.run()

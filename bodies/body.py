@@ -19,7 +19,7 @@ class Body(metaclass=ABCMeta):
     天体基类
     """
 
-    def __init__(self, name, mass, init_position, init_velocity,
+    def __init__(self, name, mass, init_position, init_velocity, rotate_angle=0,
                  density=5e3, color=(125 / 255, 125 / 255, 125 / 255),
                  texture=None, size_scale=1.0, distance_scale=1.0,
                  rotation_speed=None, parent=None, ignore_mass=False,
@@ -59,6 +59,8 @@ class Body(metaclass=ABCMeta):
 
         self.init_position = np.array(init_position, dtype='float32')
         self.init_velocity = np.array(init_velocity, dtype='float32')
+
+        self.rotate_angle = rotate_angle
 
         # self.__position = copy.deepcopy(self.init_position)
         # self.__velocity = copy.deepcopy(self.init_velocity)

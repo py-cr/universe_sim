@@ -15,6 +15,7 @@ from simulators.ursina.ursina_event import UrsinaEvent
 # from simulators.ursina.ursina_ui import UrsinaUI
 from simulators.ursina.ui.control_ui import ControlUI
 from simulators.ursina.ui.control_handler import ControlHandler
+from simulators.ursina.ursina_mesh import create_arrow_line
 
 from simulators.views.ursina_view import UrsinaView
 from simulators.ursina.entities.ursina_player import UrsinaPlayer
@@ -35,6 +36,12 @@ class WorldGrid(Entity):
     创建一个宇宙网格对象
     """
 
+    def draw_axises(self):
+        # 坐标轴
+        arrow_x, line_x, text_x = create_arrow_line((0, 0, 0), (10, 0, 0), label="X", color=color.red)
+        arrow_y, line_y, text_y = create_arrow_line((0, 0, 0), (0, 10, 0), label="Y", color=color.green)
+        arrow_z, line_z, text_z = create_arrow_line((0, 0, 0), (0, 0, 10), label="Z", color=color.yellow)
+
     def __init__(self):
         super().__init__()
         s = 100
@@ -42,15 +49,8 @@ class WorldGrid(Entity):
                       position=(0, -80, 0))
         grid.set_light_off()
 
-        # 坐标轴
-        # vertsx = ((0, 0, 0), (10, 0, 0))
-        # Entity(model=Mesh(vertices=vertsx, mode='line', thickness=3), color=color.red).set_light_off()
-        #
-        # vertsy = [(0, 0, 0), (0, 10, 0)]
-        # Entity(model=Mesh(vertices=vertsy, mode='line', thickness=3), color=color.green).set_light_off()
-        #
-        # vertsz = [(0, 0, 0), (0, 0, 10)]
-        # Entity(model=Mesh(vertices=vertsz, mode='line', thickness=3), color=color.blue).set_light_off()
+        # self.draw_axises()
+
 
 class UrsinaSimulator(Simulator):
     """

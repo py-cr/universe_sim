@@ -10,6 +10,7 @@
 from ursina import Entity, Mesh, Text, color, destroy, Vec3
 
 from simulators.ursina.ursina_config import UrsinaConfig
+from simulators.ursina.ursina_mesh import create_arrow_line
 
 
 class BodyTrail(Entity):
@@ -44,51 +45,55 @@ class BodyTrail(Entity):
         #                       "acceleration": [acc_info, acc_direction, acc_position]}
         vel_info, vel_direction, vel_position = self.entity_infos["velocity"]
         acc_info, acc_direction, acc_position = self.entity_infos["acceleration"]
-
-        verts_acc = [(0, 0, 0), tuple(acc_direction)]
-        verts_vel = [(0, 0, 0), tuple(vel_direction)]
+        #
+        # verts_acc = [(0, 0, 0), tuple(acc_direction)]
+        # verts_vel = [(0, 0, 0), tuple(vel_direction)]
 
         # acc_arrow = Arrow(parent=self,from_pos=Vec3((0, 0, 0)), to_pos=Vec3(tuple(acc_direction)),color=color.yellow, alpha=0.5)
         # acc_arrow.set_light_off()
-        
-        acc_line = Entity(parent=self, model=Mesh(vertices=verts_acc, mode='line', thickness=3),
-                          color=color.yellow, alpha=0.5)
-        acc_line.set_light_off()
 
-        # vel_arrow = Arrow(parent=self,from_pos=Vec3((0, 0, 0)), to_pos=Vec3(tuple(vel_direction)),color=color.red, alpha=0.5)
-        # vel_arrow.set_light_off()
+        v_arrow, v_line, v_text = create_arrow_line((0, 0, 0), tuple(vel_direction), parent=self,
+                                                    label=vel_info, color=color.red, alpha=0.8, arrow_scale=0.5)
+        a_arrow, a_line, a_text = create_arrow_line((0, 0, 0), tuple(acc_direction), parent=self,
+                                                    label=acc_info, color=color.yellow, alpha=0.8, arrow_scale=0.5)
 
-        vel_line = Entity(parent=self, model=Mesh(vertices=verts_vel, mode='line', thickness=3),
-                          color=color.red, alpha=0.5)
-        vel_line.set_light_off()
-
-        vel_text = Text(vel_info, scale=50, billboard=True, parent=self,
-                        font=UrsinaConfig.CN_FONT, background=False, color=color.red,
-                        position=vel_position, alpha=0.5)
-        vel_text.set_light_off()
-
-        acc_text = Text(acc_info, scale=50, billboard=True, parent=self,
-                        font=UrsinaConfig.CN_FONT, background=False, color=color.yellow,
-                        position=acc_position, alpha=0.5)
-        acc_text.set_light_off()
-
+        # acc_line = Entity(parent=self, model=Mesh(vertices=verts_acc, mode='line', thickness=3),
+        #                   color=color.yellow, alpha=0.5)
+        # acc_line.set_light_off()
+        #
+        # # vel_arrow = Arrow(parent=self,from_pos=Vec3((0, 0, 0)), to_pos=Vec3(tuple(vel_direction)),color=color.red, alpha=0.5)
+        # # vel_arrow.set_light_off()
+        #
+        # vel_line = Entity(parent=self, model=Mesh(vertices=verts_vel, mode='line', thickness=3),
+        #                   color=color.red, alpha=0.5)
+        # vel_line.set_light_off()
+        #
+        # vel_text = Text(vel_info, scale=50, billboard=True, parent=self,
+        #                 font=UrsinaConfig.CN_FONT, background=False, color=color.red,
+        #                 position=vel_position, alpha=0.5)
+        # vel_text.set_light_off()
+        #
+        # acc_text = Text(acc_info, scale=50, billboard=True, parent=self,
+        #                 font=UrsinaConfig.CN_FONT, background=False, color=color.yellow,
+        #                 position=acc_position, alpha=0.5)
+        # acc_text.set_light_off()
 
 
 class Arrow(Entity):
     def __init__(self, parent, from_pos=(0, 0, 0), to_pos=(1, 0, 0), **kwargs):
-        from_pos=to_pos/2
+        from_pos = to_pos / 2
         super().__init__(parent=parent, model='arrow', position=from_pos, **kwargs)
         # self.x = -pos[1]
         # self.y = pos[2]
         # self.z = pos[0]
-        to_pos=1000*to_pos
+        to_pos = 1000 * to_pos
         # to_pos = -to_pos[2],-to_pos[1],to_pos[0]
         # to_pos = -to_pos[2],-to_pos[0],to_pos[1]
         # to_pos = to_pos[0],to_pos[2],to_pos[1]
         # to_pos = -to_pos[0],to_pos[1],to_pos[2]
         # to_pos = to_pos[1], -to_pos[0], -to_pos[2]
         # to_pos = to_pos[1], -to_pos[0], -to_pos[2]
-        self.rotation=(0,0,0)
+        self.rotation = (0, 0, 0)
         self.look_at(to_pos)
         print(self.rotation)
         # self.model = Mesh(vertices=[
@@ -104,13 +109,11 @@ class Arrow(Entity):
         # self.look_at(to_pos)
         # self.scale_z = (to_pos - from_pos).length()
 
-
 # class Arrow(Entity):
 #     def __init__(self,parent, from_pos, to_pos, **kwargs):
 #         super().__init__(parent=parent, model='arrow', **kwargs)
 #         self.position = from_pos
 #         self.look_at(to_pos)
-
 
 
 # import numpy as np

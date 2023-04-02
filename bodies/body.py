@@ -90,6 +90,8 @@ class Body(metaclass=ABCMeta):
         self.resolution = None
         self.light_disable = False
 
+        self.__has_rings = False
+
     def set_light_disable(self, value):
         """
         设置灯光为无效
@@ -150,7 +152,11 @@ class Body(metaclass=ABCMeta):
         是否为带光环的天体（土星为 True）
         :return:
         """
-        return False
+        return self.__has_rings
+
+    @has_rings.setter
+    def has_rings(self, value):
+        self.__has_rings = value
 
     @property
     def is_fixed_star(self):
@@ -402,7 +408,17 @@ class Body(metaclass=ABCMeta):
                     body_data.pop("is_fixed_star")
                     body = FixedStar(**body_data)
                 else:
+                    has_rings = False
+                    if "has_rings" in body_data:
+                        if body_data["has_rings"]:
+                            has_rings = True
+                            body_data.pop("has_rings")
+
                     body = Body(**body_data)
+
+                    if has_rings:
+                        body.has_rings = True
+
                 # [x, y, z]->[-y, z, x]
                 # body.init_velocity = [-body.init_velocity[1],body.init_velocity[2],body.init_velocity[0]]
                 # body.init_position = [-body.init_position[1],body.init_position[2],body.init_position[0]]

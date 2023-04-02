@@ -94,7 +94,7 @@ def ursina_run(bodies,
                                                  "show_trail": show_trail, "show_name": show_name})
             print(f"{save_as_json} 文件生成成功！")
         except Exception as e:
-            print(f"{save_as_json} 文件生成失败！" + str(e))
+            raise Exception(f"{save_as_json} 文件生成失败！" + str(e))
         return
     simulator = UrsinaSimulator(body_sys)
     view_azimuth = 0  # 暂时未用

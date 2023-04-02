@@ -1,0 +1,108 @@
+{
+  "bodies": [
+    {
+      "name": "木星",
+      "mass": 1.8982e+27,
+      "init_position": [
+        -37399468.0,
+        0.0,
+        0.0
+      ],
+      "init_velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "density": 1326.0,
+      "color": [
+        173,
+        121,
+        92
+      ],
+      "texture": "jupiter1.jpg",
+      "size_scale": 100.0,
+      "distance_scale": 1.0,
+      "rotation_speed": 36.2537,
+      "ignore_mass": false,
+      "is_fixed_star": false,
+      "trail_color": [
+        173,
+        121,
+        92
+      ]
+    },
+    {
+      "name": "土星",
+      "mass": 5.6834e+26,
+      "init_position": [
+        -183577232.0,
+        0.0,
+        99731912.0
+      ],
+      "init_velocity": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "density": 687.0,
+      "color": [
+        219,
+        189,
+        159
+      ],
+      "has_rings": true,
+      "texture": "saturn.jpg",
+      "size_scale": 100.0,
+      "distance_scale": 1.0,
+      "rotation_speed": 33.7711,
+      "ignore_mass": false,
+      "is_fixed_star": false,
+      "trail_color": [
+        219,
+        189,
+        159
+      ]
+    },
+    {
+      "name": "地球",
+      "mass": 5.97237e+24,
+      "init_position": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "init_velocity": [
+        -38.0,
+        0.0,
+        -0.20000000298023224
+      ],
+      "density": 5507.85,
+      "color": [
+        7,
+        0,
+        162
+      ],
+      "texture": "earth1.jpg",
+      "size_scale": 300.0,
+      "distance_scale": 1.0,
+      "rotation_speed": 15,
+      "ignore_mass": false,
+      "is_fixed_star": false,
+      "trail_color": [
+        7,
+        0,
+        162
+      ]
+    }
+  ],
+  "params": {
+    "dt": 604800,
+    "position": [
+      -80000000.0,
+      29919574.139999997,
+      -224396806.04999998
+    ],
+    "show_trail": true,
+    "show_name": false
+  }
+}

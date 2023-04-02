@@ -23,9 +23,9 @@ if __name__ == '__main__':
         Earth(texture="earth_at_night_hd.jpg",
               init_position=[0, 0, 0], init_velocity=[0, 0, 0],
               size_scale=100, ignore_mass=True).set_resolution(resolution),
-        Earth(texture="earth_hd.jpg",
-              init_position=[-10, 0, 0], init_velocity=[0, 0, 0],
-              size_scale=100, ignore_mass=True).set_resolution(resolution)
+        # Earth(texture="earth_hd.jpg",
+        #       init_position=[-10, 0, 0], init_velocity=[0, 0, 0],
+        #       size_scale=100, ignore_mass=True).set_resolution(resolution)
     ]
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹

@@ -27,14 +27,16 @@ def create_name_text(parent):
     @return:
     """
     b_color = parent.body_view.color
-    parent.name_text = Text(parent.body_view.body.name, scale=1, billboard=True, parent=parent,
+    name_text = Text(parent.body_view.body.name, scale=1, billboard=True, parent=parent,
                             font=UrsinaConfig.CN_FONT, background=True,
                             origin=(0, 0))
-    parent.name_text.background.color = color.rgba(b_color[0], b_color[1], b_color[2], 0.3)
+    name_text.background.color = color.rgba(b_color[0], b_color[1], b_color[2], 0.3)
+    name_text.resolution = 24
     # self.name_text.scale = self.scale
     inverse_color = get_inverse_color(b_color)
-    parent.name_text.color = color.rgba(inverse_color[0], inverse_color[1], inverse_color[2], 1)
-    return parent.name_text
+    name_text.color = color.rgba(inverse_color[0], inverse_color[1], inverse_color[2], 1)
+    parent.name_text = name_text
+    return name_text
 
 
 def trail_init(parent):

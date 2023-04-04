@@ -11,6 +11,7 @@ from common.consts import AU
 import numpy as np
 import random
 import os
+import math
 
 
 def get_dominant_colors(infile, resize=(20, 20)):
@@ -107,7 +108,45 @@ def calculate_distance(pos1, pos2=[0, 0, 0]):
             pow(np.array(pos1[2]) - np.array(pos2[2]), 2), 1 / 2)
     return d
 
+G = 6.67408e-11
+# AU = 149597870700.0
+
+def calculate_velocity(mass, semimajor_axis, eccentricity):
+    """
+    计算天体在椭圆轨道上的速度。
+
+    参数：
+        - mass: 天体质量，单位 kg
+        - semimajor_axis: 轨道半长轴，单位 m
+        - eccentricity: 轨道离心率
+
+    返回值：
+        天体在轨道上的速度，单位 m/s。
+    """
+    # 计算轨道的半短轴和半焦距
+    semiminor_axis = semimajor_axis * math.sqrt(1 - eccentricity ** 2)
+    focus_distance = semimajor_axis * eccentricity
+
+    # 计算轨道的第一和第二离心率角
+    theta = math.atan2(focus_distance, semiminor_axis)
+    psi = math.atan2(math.sqrt(1 - eccentricity ** 2) * math.sin(theta), eccentricity + math.cos(theta))
+
+    # 计算轨道的速率
+    v = math.sqrt(G * mass * (2 / semimajor_axis - 1 / semiminor_axis))
+
+    # 计算天体在轨道上的速度，注意要考虑太阳的质量
+    return v * math.sqrt(1 + (2 * mass) / (v ** 2 * AU)) * math.sin(psi)
+
 
 if __name__ == '__main__':
     # print(calculate_distance([6, 8, 0], [3, 4, 0]))
-    print(find_file("common/func.py"))
+    # print(find_file("common/func.py"))
+
+    # 使用地球数据测试
+    mass_earth = 5.972e24
+    semimajor_axis_earth = AU
+    eccentricity_earth = 0.0167
+
+    velocity_earth = calculate_velocity(mass_earth, semimajor_axis_earth, eccentricity_earth)
+
+    print("地球在轨道上的速度是：{:.2f} km/s".format(velocity_earth / 1000))

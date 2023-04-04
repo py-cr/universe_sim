@@ -9,17 +9,30 @@
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
 from ursina import Entity, Mesh, Text, color, destroy, Vec3
 
+from common.color_utils import get_inverse_color
 from simulators.ursina.ursina_mesh import create_arrow_line
 
 
 class BodyTrail(Entity):
     def __init__(self, **kwargs):
+        if "last_pos" in kwargs:
+            from_pos = kwargs["last_pos"]
+        else:
+            from_pos = (0, 0, 0)
+
+        if "to_pos" in kwargs:
+            to_pos = kwargs["to_pos"]
+        else:
+            to_pos = (1, 1, 1)
+
         super().__init__(
             model='sphere',
             collider='sphere',
             ignore_paused=True,
             **kwargs
         )
+
+        self.set_light_off()
 
     def input(self, key):
         if self.hovered:
@@ -29,11 +42,18 @@ class BodyTrail(Entity):
                     self.show_infos()
 
     def show_infos(self):
+        if not hasattr(self, "origin_alpha"):
+            self.origin_color = self.color
+            self.origin_alpha = self.alpha
 
         if len(self.children) > 0:
             for c in self.children:
                 destroy(c)
+            # self.color = self.origin_color
+            self.alpha = self.origin_alpha
             return
+        self.alpha = 0.2
+        # self.color = get_inverse_color(self.origin_color)
 
         vel_info, vel_direction, vel_position = self.entity_infos["velocity"]
         acc_info, acc_direction, acc_position = self.entity_infos["acceleration"]
@@ -53,19 +73,35 @@ class BodyTrail(Entity):
             a_line.enabled = False
 
 
-# class BodyTrail(Entity):
-#     def __init__(self, **kwargs):
-#         from_pos = (0, 0, 0)
-#         to_pos = (1, 1, 1)
-#         super().__init__(
-#             # model='line',
-#             model=Mesh(vertices=(from_pos, to_pos), mode='line', thickness=3),
-#             ignore_paused=True,
-#             **kwargs
-#         )
-#
-#     def update(self):
-#         self.look_at(self.parent)
-#     # line = Entity(parent=parent,
-#     #                 model=Mesh(vertices=(from_pos * len_scale, to_pos * len_scale), mode='line', thickness=thickness),
-#     #                 color=color, alpha=alpha)
+class BodyTrailLine_OK(Entity):
+    def __init__(self, **kwargs):
+        if "last_pos" in kwargs:
+            from_pos = kwargs["last_pos"]
+        else:
+            from_pos = (0, 0, 0)
+
+        if "to_pos" in kwargs:
+            to_pos = kwargs["to_pos"]
+        else:
+            to_pos = (1, 1, 1)
+        super().__init__(
+            # model='line',
+            model=Mesh(vertices=(from_pos, to_pos), mode='line', thickness=3),
+            ignore_paused=True,
+            **kwargs
+        )
+
+
+class BodyTrailLine(Entity):
+    def __init__(self, **kwargs):
+        if "direction" in kwargs:
+            direction = kwargs["direction"]
+        else:
+            direction = (0, 0, 0)
+
+        super().__init__(
+            # model='line',
+            model=Mesh(vertices=((0, 0, 0), direction), mode='line', thickness=2),
+            ignore_paused=True,
+            **kwargs
+        )

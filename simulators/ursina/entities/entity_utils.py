@@ -11,7 +11,7 @@ from ursina import Ursina, window, Entity, Mesh, SmoothFollow, Texture, clamp, t
     camera, color, mouse, Vec2, Vec3, Vec4, Text, \
     load_texture, held_keys, destroy, PointLight
 
-from simulators.ursina.entities.body_trail import BodyTrail
+from simulators.ursina.entities.body_trail import BodyTrail, BodyTrailLine
 from simulators.ursina.ursina_config import UrsinaConfig
 from common.color_utils import adjust_brightness, conv_to_vec4_color, get_inverse_color
 from simulators.ursina.ursina_mesh import create_torus
@@ -28,8 +28,8 @@ def create_name_text(parent):
     """
     b_color = parent.body_view.color
     name_text = Text(parent.body_view.body.name, scale=1, billboard=True, parent=parent,
-                            font=UrsinaConfig.CN_FONT, background=True,
-                            origin=(0, 0))
+                     font=UrsinaConfig.CN_FONT, background=True,
+                     origin=(0, 0))
     name_text.background.color = color.rgba(b_color[0], b_color[1], b_color[2], 0.3)
     name_text.resolution = 24
     # self.name_text.scale = self.scale
@@ -89,6 +89,7 @@ def create_trails(parent):
         parent.destroy_all()
         return
     trails_keys = parent.trails.keys()
+    trail_int_scale = 1.2
     # 如果有拖尾
     if len(trails_keys) > 0:
         # 获取最后一个拖尾的位置
@@ -101,11 +102,15 @@ def create_trails(parent):
         # if self_pos_distance < self.scale_x + (self.trail_scale / 2):
         #     pass
         # 如果位置比较近，就不创建拖尾了，保证拖尾间隔一定的距离
-        if last_pos_distance < parent.trail_scale * 1.2:  # 间隔距离不小于1.2倍的拖尾球体
+        if last_pos_distance < parent.trail_scale * trail_int_scale:  # 间隔距离不小于1.2倍的拖尾球体
             return
 
-    trail = create_trail(parent, pos)
-    create_trail_info(parent.body, trail)
+    # trail = create_trail_line(parent, pos)
+    trail = create_trail_sphere(parent, pos)
+
+    if trail is not None:
+        create_trail_info(parent.body, trail)
+
     # 创建拖尾球体，并作为字典的key，存放拖尾球体的位置
     parent.trails[trail] = pos
 
@@ -121,7 +126,7 @@ def create_trails(parent):
                 break
 
 
-def create_trail(parent, pos):
+def create_trail_sphere(parent, pos):
     """
     在天体当前的位置创建一个拖尾球体
     :param pos:
@@ -129,10 +134,40 @@ def create_trail(parent, pos):
     """
     # sphere = create_sphere(1,6)  diamond sphere
     trail = BodyTrail(color=parent.trail_color, scale=parent.trail_scale, position=pos)
-    trail.set_light_off()
+
     # trail.set_color_off()
     # trail.set_color_scale_off()
     # trail.enabled = False
+    return trail
+
+
+def merge_vectors(vectors):
+    # 计算速度的大小
+    x, y, z = vectors[0], vectors[1], vectors[2]
+    value = math.sqrt(x ** 2 + y ** 2 + z ** 2)
+    # 计算速度的方向
+    direction = (x / value, y / value, z / value)
+    # 返回速度大小和速度方向
+    return value, direction
+
+
+def create_trail_line(parent, pos):
+    """
+    在天体当前的位置创建一个拖尾球体
+    :param pos:
+    :return:
+    """
+    if hasattr(parent, "trail_last_pos"):
+        trail_last_pos = parent.trail_last_pos
+        value, direction = merge_vectors(pos - trail_last_pos)
+        trail = BodyTrailLine(color=parent.trail_color, scale=parent.trail_scale, position=trail_last_pos,
+                              direction=Vec3(direction))
+        trail.set_light_off()
+        parent.last_trail = trail
+
+    else:
+        trail = None
+    parent.trail_last_pos = pos
     return trail
 
 
@@ -250,7 +285,6 @@ def create_trail_info(body, trail):
     else:
         acc_info = "%.2fmm/s²" % (acc_m * 1000)
 
-
     vel_direction = velocity[1]
     vel_direction = np.array(vel_direction) * 5
 
@@ -262,7 +296,6 @@ def create_trail_info(body, trail):
 
     acc_position = acc_direction
     # acc_position = (acc_position[0], acc_position[1], acc_position[2])
-
-    trail.entity_infos = {"velocity": [vel_info, vel_direction, vel_position],
-                          "acceleration": [acc_info, acc_direction, acc_position]}
-
+    if trail is not None:
+        trail.entity_infos = {"velocity": [vel_info, vel_direction, vel_position],
+                              "acceleration": [acc_info, acc_direction, acc_position]}

@@ -38,12 +38,13 @@ class BodyTrail(Entity):
         if self.hovered:
             if key == 'left mouse down':
                 # print(key, self)
-                if hasattr(self, "entity_infos"):
-                    self.show_infos()
+                self.show_infos()
 
     def show_infos(self):
+        if not hasattr(self, "entity_infos"):
+            return
         if not hasattr(self, "origin_alpha"):
-            self.origin_color = self.color
+            # self.origin_color = self.color
             self.origin_alpha = self.alpha
 
         if len(self.children) > 0:
@@ -52,7 +53,7 @@ class BodyTrail(Entity):
             # self.color = self.origin_color
             self.alpha = self.origin_alpha
             return
-        self.alpha = 0.2
+        self.alpha = 0.3
         # self.color = get_inverse_color(self.origin_color)
 
         vel_info, vel_direction, vel_position = self.entity_infos["velocity"]
@@ -66,7 +67,7 @@ class BodyTrail(Entity):
             v_line.enabled = False
 
         a_arrow, a_line, a_text = create_arrow_line((0, 0, 0), tuple(acc_direction), parent=self,
-                                                    label=acc_info, color=color.yellow, alpha=0.8, arrow_scale=0.5)
+                                                    label=acc_info, color=color.green, alpha=0.8, arrow_scale=0.5)
         if str(acc_info).startswith("0.00"):
             a_text.parent = self
             a_arrow.enabled = False

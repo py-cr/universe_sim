@@ -105,8 +105,8 @@ def create_trails(parent):
         if last_pos_distance < parent.trail_scale * trail_int_scale:  # 间隔距离不小于1.2倍的拖尾球体
             return
 
-    # trail = create_trail_line(parent, pos)
-    trail = create_trail_sphere(parent, pos)
+    # trail = create_trail_line(parent, pos)  # 拖尾为线条
+    trail = create_trail_sphere(parent, pos)  # 拖尾为球体
 
     if trail is not None:
         create_trail_info(parent.body, trail)

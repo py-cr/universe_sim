@@ -276,14 +276,8 @@ def merge_vectors(vectors):
 def create_trail_info(body, trail):
     velocity = merge_vectors(body.velocity)
     acceleration = merge_vectors(body.acceleration)
-    vel_info = "%.2fkm/s" % (velocity[0])
-
-    acc_m = acceleration[0] * 1000
-
-    if acc_m >= 0.01:
-        acc_info = "%.2fm/s²" % (acc_m)
-    else:
-        acc_info = "%.2fmm/s²" % (acc_m * 1000)
+    vel_value = velocity[0]  # km/s
+    acc_value = acceleration[0]  # km/s²
 
     vel_direction = velocity[1]
     vel_direction = np.array(vel_direction) * 5
@@ -297,5 +291,6 @@ def create_trail_info(body, trail):
     acc_position = acc_direction
     # acc_position = (acc_position[0], acc_position[1], acc_position[2])
     if trail is not None:
-        trail.entity_infos = {"velocity": [vel_info, vel_direction, vel_position],
-                              "acceleration": [acc_info, acc_direction, acc_position]}
+        trail.entity_infos = {"velocity": [vel_value, vel_direction, vel_position],
+                              "acceleration": [acc_value, acc_direction, acc_position]}
+

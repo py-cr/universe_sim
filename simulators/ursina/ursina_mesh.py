@@ -91,6 +91,13 @@ def create_arrow(height=0.5, width=0.1):
     return arrow_mesh
 
 
+def create_label(parent, label, pos, color, scale=50, alpha=1.0):
+    text = Text(label, parent=parent, scale=scale, billboard=True, color=color,
+                position=Vec3(pos) + Vec3(1, 1, 1), alpha=alpha,
+                font=UrsinaConfig.CN_FONT, background=False)
+    return text
+
+
 def create_arrow_line(from_pos, to_pos, parent=None, label=None,
                       set_light_off=True, alpha=1.0, len_scale=0.5,
                       color=color.white, thickness=2,
@@ -125,9 +132,8 @@ def create_arrow_line(from_pos, to_pos, parent=None, label=None,
         arrow.set_light_off()
 
     if label is not None:
-        text = Text(label, parent=line, scale=text_scale, billboard=True, color=color,
-                    position=Vec3(to_pos) + Vec3(1, 1, 1), alpha=alpha,
-                    font=UrsinaConfig.CN_FONT, background=False)
+        text = create_label(parent=line, label=label, pos=Vec3(to_pos) * len_scale * 1.2,
+                            color=color, scale=text_scale, alpha=alpha)
         if set_light_off:
             text.set_light_off()
     else:

@@ -10,6 +10,7 @@
 from ursina import Entity, Mesh, Text, color, destroy, Vec3
 
 from common.color_utils import get_inverse_color
+from simulators.ursina.ursina_mesh import create_label
 from simulators.ursina.ursina_mesh import create_arrow_line
 
 
@@ -56,22 +57,46 @@ class BodyTrail(Entity):
         self.alpha = 0.3
         # self.color = get_inverse_color(self.origin_color)
 
-        vel_info, vel_direction, vel_position = self.entity_infos["velocity"]
-        acc_info, acc_direction, acc_position = self.entity_infos["acceleration"]
+        vel_value, vel_direction, vel_position = self.entity_infos["velocity"]
+        acc_value, acc_direction, acc_position = self.entity_infos["acceleration"]
 
-        v_arrow, v_line, v_text = create_arrow_line((0, 0, 0), tuple(vel_direction), parent=self,
-                                                    label=vel_info, color=color.red, alpha=0.8, arrow_scale=0.5)
-        if str(vel_info).startswith("0.00"):
-            v_text.parent = self
-            v_arrow.enabled = False
-            v_line.enabled = False
+        if vel_value >= 0.01:
+            vel_info = "%.2fkm/s" % (vel_value)
+        elif vel_value >= 0.00001:
+            vel_info = "%.2fm/s" % (vel_value * 1000)
+        elif vel_value >= 0.00000001:
+            vel_info = "%.2fmm/s" % (vel_value * 1000 * 1000)
+        else:
+            vel_info = "0m/s"
 
-        a_arrow, a_line, a_text = create_arrow_line((0, 0, 0), tuple(acc_direction), parent=self,
-                                                    label=acc_info, color=color.green, alpha=0.8, arrow_scale=0.5)
-        if str(acc_info).startswith("0.00"):
-            a_text.parent = self
-            a_arrow.enabled = False
-            a_line.enabled = False
+        acc_m = acc_value * 1000
+
+        if acc_m >= 0.01:
+            acc_info = "%.2fm/s²" % (acc_m)
+        elif acc_m >= 0.00001:
+            acc_info = "%.2fmm/s²" % (acc_m * 1000)
+        # elif acc_m >= 0.00000001:
+        #     acc_info = "%.2fμm/s²" % (acc_m * 1000 * 1000)
+        else:
+            acc_info = "0m/s²"
+
+        if vel_value < 0.00000001:
+            create_label(parent=self, label=vel_info, pos=Vec3(-0.5, -0.5, -0.5), color=color.red).set_light_off()
+            # v_text.parent = self
+            # # v_arrow.enabled = False
+            # # v_line.enabled = False
+        else:
+            v_arrow, v_line, v_text = create_arrow_line((0, 0, 0), tuple(vel_direction), parent=self,
+                                                        label=vel_info, color=color.red, alpha=0.8, arrow_scale=0.5)
+
+        if acc_m < 0.00001:
+            create_label(parent=self, label=acc_info, pos=Vec3(0.5, 0.5, 0.5), color=color.green).set_light_off()
+            # a_text.parent = self
+            # a_arrow.enabled = False
+            # a_line.enabled = False
+        else:
+            a_arrow, a_line, a_text = create_arrow_line((0, 0, 0), tuple(acc_direction), parent=self,
+                                                        label=acc_info, color=color.green, alpha=0.8, arrow_scale=0.5)
 
 
 class BodyTrailLine_OK(Entity):

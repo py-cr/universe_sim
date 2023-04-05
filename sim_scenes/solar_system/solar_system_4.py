@@ -44,7 +44,7 @@ if __name__ == '__main__':
     #  以下展示的效果为太阳系真实的距离
     #  由于宇宙空间尺度非常大，如果按照实际的天体大小，则无法看到天体，因此需要对天体的尺寸进行放大
     sun = Sun(name="太阳", size_scale=1.4e2)  # 太阳放大 80 倍，距离保持不变
-    sun.init_velocity = [0, 2, 0]  # 太阳带着其他行星一起跑
+    sun.init_velocity = [0, 2, 0]  # 太阳以2km/s的速度带着其他行星一起跑
     bodies = [
         sun,
         Mercury(name="水星", size_scale=4e3),  # 水星放大 4000 倍，距离保持不变
@@ -60,22 +60,23 @@ if __name__ == '__main__':
         Pluto(name="冥王星", size_scale=10e3),  # 冥王星放大 10000 倍，距离保持不变(从太阳系的行星中排除)
     ]
 
-    # 使用 mayavi 查看的运行效果
-    # mayavi_run(bodies, SECONDS_PER_WEEK, view_azimuth=-45)
-
     # 真实距离
-    # body_real_distances = [0.4 * AU, 0.72 * AU, AU, 1.5 * AU, 5.2 * AU, 10 * AU, 19 * AU, 30 * AU, 40 * AU]
-    # velocity_factors = [1, 1, 1, 1, 2, 2, 2, 2, 2]
-    # 调整距离
-    body_distances = [1 * AU, 1.5 * AU, 1.8 * AU, 2.3 * AU, 3.6 * AU, 4.2 * AU, 5.3 * AU, 6 * AU, 7 * AU]
+    # body_real_distances = [0.4 * AU, 0.72 * AU, AU, 1.5 * AU,
+    #                        5.2 * AU, 10 * AU, 19 * AU, 30 * AU, 40 * AU]
+
+    # 调整距离方便演示
+    body_distances = [1 * AU, 1.5 * AU, 1.8 * AU, 2.3 * AU, 3.6 * AU,
+                      4.2 * AU, 5.3 * AU, 6 * AU, 7 * AU]
     body_index = 0
     # 设置为行星距离
     for idx, body in enumerate(bodies):
+        # 对于太阳和小行星群保持原来的距离
         if body.is_fixed_star or hasattr(body, "torus_stars"):
             continue
         body_real_distance = body.init_position[2]  # 格式：body.init_position=[0, 0, 1.12 * AU]
         body_real_velocity = body.init_velocity[0]  # 格式：body.init_velocity=body.[-29.79, 0, 0]
         body.init_position = [0, 0, body_distances[body_index]]
+        # 距离变化，将要重新设置速度
         init_velocity = get_velocity(body.mass, body_real_distance, body_real_velocity, body_distances[body_index])
         body.init_velocity = init_velocity
         body_index += 1
@@ -83,4 +84,6 @@ if __name__ == '__main__':
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_YEAR, position=(0, 2 * AU, -11 * AU), bg_music="sounds/interstellar.mp3")
+    ursina_run(bodies, SECONDS_PER_YEAR, position=(0, 2 * AU, -11 * AU),
+               show_trail=True,  # 运行轨迹拖尾效果（通过快捷键 I 控制开关）
+               bg_music="sounds/interstellar.mp3")

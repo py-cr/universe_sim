@@ -79,10 +79,6 @@ if __name__ == '__main__':
     bodies += asteroids
     # endregion 3
 
-    # 使用 mayavi 查看的运行效果
-    # mayavi_run(bodies, SECONDS_PER_WEEK, view_azimuth=-45)
-    # mayavi_run(bodies, SECONDS_PER_WEEK, view_azimuth=-45, view_distance=3e9, view_focalpoint=[5e2, 5e2, 5e2])
-
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-

@@ -191,10 +191,10 @@ class UrsinaSimulator(Simulator):
         else:
             sky_scale = 500000 * camera.clip_plane_near
 
-        # from ursina import Sky
-        # sky = Sky(texture=texture, scale=sky_scale)
+        from ursina import Sky
+        sky = Sky(texture=texture, scale=sky_scale)
 
-        sky = MySky(texture=texture, scale=sky_scale)
+        # sky = MySky(texture=texture, scale=sky_scale)
         sky.scale = sky_scale
         # sky.set_shader_input('texture_scale', Vec2(20, 20))
         # 一定要够大，如果小于 Sky(texture=texture).scale = 50000，宇宙背景就会出现黑色方洞
@@ -230,6 +230,9 @@ class UrsinaSimulator(Simulator):
                 # 设置 camera 的裁剪面和位置
                 camera.clip_plane_near = 0.01
         camera.fov = 60
+
+        window.fps_counter.enabled = False
+        window.editor_ui.enabled = True
 
         # UrsinaConfig.SCALE_FACTOR = UrsinaConfig.SCALE_FACTOR * math.ceil(0.01 / pow(camera.clip_plane_near,2))
 

@@ -210,6 +210,24 @@ class ControlHandler(EventHandler):
     def on_slider_run_speed_changed(self):
         UrsinaConfig.run_speed_factor = self.ui.slider_run_speed_factor.value
 
+    def shift_key_handle(self, key):
+        """
+        用于判断是否按下 shift 键盘
+        @param key:
+        @return:
+        """
+        if not hasattr(self, "shift_keys"):
+            self.shift_keys = {"right": False, "left": False}
+        if key in ["right shift hold", "left shift hold"]:
+            kv = key.split(" ")
+            self.shift_keys[kv[0]] = True
+        elif key in ["right shift up", "left shift up"]:
+            kv = key.split(" ")
+            self.shift_keys[kv[0]] = False
+
+        print(self.shift_keys)
+        return self.shift_keys['left'] or self.shift_keys['right']
+
     def settings_handler_input(self, key):
         """
 
@@ -218,10 +236,13 @@ class ControlHandler(EventHandler):
         """
         import sys
 
-        self.camera_update()
+        self.shift_key_handle(key)
 
+        self.camera_update()
+        print(key)
         if key == "escape":
-            sys.exit()
+            if self.shift_keys['left'] or self.shift_keys['right']:
+                sys.exit()
         # print(key)
         elif key == 'space':
             self.ui.enabled = not self.ui.enabled

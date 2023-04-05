@@ -30,6 +30,7 @@ class BodyTrail(Entity):
             model='sphere',
             collider='sphere',
             ignore_paused=True,
+            # highlight_color=color.red,  # Button 有效
             **kwargs
         )
 

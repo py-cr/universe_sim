@@ -232,7 +232,11 @@ class UrsinaSimulator(Simulator):
         camera.fov = 60
 
         window.fps_counter.enabled = False
-        window.editor_ui.enabled = True
+        window.editor_ui.enabled = False
+
+        # # 场景加入雾的效果
+        # scene.fog_color = color.orange
+        # scene.fog_density = 800 * UrsinaConfig.SCALE_FACTOR
 
         # UrsinaConfig.SCALE_FACTOR = UrsinaConfig.SCALE_FACTOR * math.ceil(0.01 / pow(camera.clip_plane_near,2))
 

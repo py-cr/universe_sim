@@ -208,10 +208,16 @@ class UrsinaSimulator(Simulator):
                 if view_closely < 0.001:
                     view_closely = 0.001
                 camera.clip_plane_near = view_closely
+                if view_closely < 0.01:
+                    # camera.fov = 60-0.01/view_closely
+                    # camera.fov = 40
+                    pass
             else:
                 # 设置 camera 的裁剪面和位置
                 camera.clip_plane_near = 0.01
-            camera.fov = 60
+        camera.fov = 60
+
+        # UrsinaConfig.SCALE_FACTOR = UrsinaConfig.SCALE_FACTOR * math.ceil(0.01 / pow(camera.clip_plane_near,2))
 
         # interval_fator 能让更新天体运行状态（位置、速度）更精确
         # 设定时间间隔为0.01秒

@@ -16,16 +16,18 @@ from sim_scenes.interest.utils.body_utils import gen_bodies_from_image
 
 def show_text_bodies():
     """
-    显示文本的星球群
+    显示图片文本的星球群
     """
-    D = 6000
-    # camera_pos = 左-右+、上+下-、前+后-
+    D = 6000   # 基本距离单位:km（随意赋值）
+    # 观看摄像机的位置
+    # camera_pos = (左-右+, 上+下-, 前+后-)
     camera_pos = (D, D, -7000 * D)
-
-    bodies: list = gen_bodies_from_image(pixel_image="./images/python.png", texture="color_body.png",
+    # 根据 pixel_image 指定图片（图片的像素不要太多）
+    bodies = gen_bodies_from_image(pixel_image="./images/python.png",
+                                         texture="color_body.png",
                                          params={"camera_pos": camera_pos})
     # 放一个恒星作为背景
-    bg = FixedStar(name="bg", texture="fixed_star.png", mass=2e32, color=(0xff, 0xf8, 0xd4),
+    bg = FixedStar(name="背景恒星", texture="fixed_star.png", mass=2e32, color=(0xff, 0xf8, 0xd4),
                    init_position=[-450 * D, 100 * D, 6000 * D],  # [ 左-右+, 上+下-, 远+近- ]
                    ignore_mass=True)
 
@@ -33,7 +35,7 @@ def show_text_bodies():
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
-    # position = 左-右+、上+下-、前+后-
+    # position = camera_pos = (左-右+, 上+下-, 前+后-)
     ursina_run(bodies, SECONDS_PER_WEEK * 2, position=camera_pos, view_closely=True)
 
 

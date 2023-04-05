@@ -29,7 +29,8 @@ class ColorBody(Body):
         self.color = color
         texture = self.gen_texture(texture, texture_bright, texture_contrast)
         if rotation_speed is None:
-            rotation_speed = random.randint(10, 100) / 50
+            # 旋转方向随机
+            rotation_speed = random.randint(10, 100) / 50 - 1
         params = {
             "name": name,
             "mass": mass,

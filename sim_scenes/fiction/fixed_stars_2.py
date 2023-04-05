@@ -55,6 +55,7 @@ if __name__ == '__main__':
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
+    #             M：摄像机移动加速  N:摄像机移动减速
     # position = (左-右+、上+下-、前+后-)
     ursina_run(bodies, SECONDS_PER_WEEK,
                position=(0, 100000, -AU / 500),

@@ -8,7 +8,7 @@
 # ==============================================================================
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
 from ursina import Ursina, window, Entity, Grid, Mesh, camera, Text, application, color, mouse, Vec2, Vec3, \
-    load_texture, held_keys, distance, Audio
+    load_texture, held_keys, distance, Audio, scene
 from ursina.prefabs.first_person_controller import FirstPersonController
 import itertools
 from simulators.ursina.ursina_event import UrsinaEvent
@@ -54,6 +54,19 @@ class WorldGrid(Entity):
         grid.set_light_off()
 
         # self.draw_axises()
+
+
+class MySky(Entity):
+
+    def __init__(self, **kwargs):
+        # from ursina.shaders import unlit_shader
+        super().__init__(name='sky', model='sphere', texture='sky_default', scale=1000, double_sided=True)
+        self.set_light_off()
+        for key, value in kwargs.items():
+            setattr(self, key, value)
+
+    def update(self):
+        self.world_position = camera.world_position
 
 
 class UrsinaSimulator(Simulator):
@@ -178,9 +191,10 @@ class UrsinaSimulator(Simulator):
         else:
             sky_scale = 500000 * camera.clip_plane_near
 
-        from ursina import Sky
+        # from ursina import Sky
+        # sky = Sky(texture=texture, scale=sky_scale)
 
-        sky = Sky(texture=texture)
+        sky = MySky(texture=texture, scale=sky_scale)
         sky.scale = sky_scale
         # sky.set_shader_input('texture_scale', Vec2(20, 20))
         # 一定要够大，如果小于 Sky(texture=texture).scale = 50000，宇宙背景就会出现黑色方洞

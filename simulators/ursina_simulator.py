@@ -172,7 +172,7 @@ class UrsinaSimulator(Simulator):
                 # 配置中，每年、月、天等等有多少秒
                 evolve_dt = UrsinaConfig.seconds_per * run_speed_factor
 
-            UrsinaEvent.on_timer_changed(evolve_dt)
+            UrsinaEvent.on_evolving(evolve_dt)
             # interval_fator 能让更新天体运行状态（位置、速度）更精确
             evolve_dt = evolve_dt * self.interval_fator
             super().evolve(evolve_dt)

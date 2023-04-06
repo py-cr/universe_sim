@@ -13,7 +13,7 @@ class Timer(Text):
         # 用来计时的变量
         # self.start_time = time.time()
         self.reset()
-        UrsinaEvent.on_timer_changed_subscription(self.update)
+        UrsinaEvent.on_evolving_subscription(self.update)
         UrsinaEvent.on_reset_subscription(self.reset)
         UrsinaEvent.on_pause_subscription(self.pause)
         UrsinaEvent.on_start_subscription(self.start)
@@ -58,6 +58,8 @@ class Timer(Text):
                 self.text = f'{days}天 {hours:02d}:{minutes:02d}:{seconds:02d}'
         else:
             self.text = f'{hours:02d}:{minutes:02d}:{seconds:02d}'
+
+        UrsinaEvent.on_timer_changed(self.text, (years, days, hours, minutes, seconds))
 
 
 if __name__ == '__main__':

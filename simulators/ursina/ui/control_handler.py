@@ -227,7 +227,7 @@ class ControlHandler(EventHandler):
             kv = key.split(" ")
             self.shift_keys[kv[0]] = False
 
-        print(self.shift_keys)
+        # print(self.shift_keys)
         return self.shift_keys['left'] or self.shift_keys['right']
 
     def settings_handler_input(self, key):
@@ -241,7 +241,7 @@ class ControlHandler(EventHandler):
         self.shift_key_handle(key)
 
         self.camera_update()
-        print(key)
+        # print(key)
         if key == "escape":
             if self.shift_keys['left'] or self.shift_keys['right']:
                 sys.exit()

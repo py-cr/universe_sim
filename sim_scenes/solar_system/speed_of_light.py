@@ -9,6 +9,8 @@
 from bodies import Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, Moon, Asteroids, Body
 from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, SECONDS_PER_YEAR, AU
 from sim_scenes.func import mayavi_run, ursina_run
+from simulators.ursina.ursina_config import UrsinaConfig
+from simulators.ursina.ursina_event import UrsinaEvent
 
 if __name__ == '__main__':
     # 八大行星：木星(♃)、土星(♄)、天王星(♅)、海王星(♆)、地球(⊕)、金星(♀)、火星(♂)、水星(☿)
@@ -46,12 +48,34 @@ if __name__ == '__main__':
                       init_velocity=[0, 0, 299792.458]).set_light_disable(True)  # 1 光速=299792.458 千米/秒(km/秒)
 
     bodies.append(light_body)
+
+    arrived_bodies = []
+
+    def on_reset():
+        arrived_bodies.clear()
+
+    def on_timer_changed(time_text, time_data):
+        years, days, hours, minutes, seconds = time_data
+        # UrsinaEvent.on_timer_changed(self.text, (years, days, hours, minutes, seconds))
+        # 光到达地球8.3分钟，
+        # 光到达冥王星平均用时要20000秒,333.3分钟 也就是约5.56小时
+
+        for body in bodies:
+            if body is light_body or isinstance(body, Sun) \
+                    or body in arrived_bodies or isinstance(body, Asteroids):
+                continue
+            if light_body.position[2] >= body.position[2]:
+                arrived_bodies.append(body)
+                print(f"[{time_text}] 已经到达 [{body.name}]")
+            # print(light_body.planet)
+
+
+    UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
+    UrsinaEvent.on_reset_subscription(on_reset)
+
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
     ursina_run(bodies, 60, position=(0, 2 * AU, -11 * AU),
                show_trail=True, show_timer=True,
                bg_music="sounds/interstellar.mp3")
-
-    # 光到达地球8.3分钟，
-    # 光到达冥王星平均用时要20000秒,333.3分钟 也就是约5.56小时

@@ -24,7 +24,7 @@ class UrsinaView(BodyView):
         self.velocity = body.velocity
 
         self.planet = Planet(self)
-
+        body.planet = self.planet
 
     def update(self):
         """

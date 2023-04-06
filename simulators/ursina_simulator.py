@@ -242,7 +242,8 @@ class UrsinaSimulator(Simulator):
         camera.fov = 60
 
         window.fps_counter.enabled = False
-        window.editor_ui.enabled = False
+        # window.exit_button.enabled = False
+        # window.editor_ui.enabled = True
 
         # # 场景加入雾的效果
         # scene.fog_color = color.orange
@@ -275,8 +276,6 @@ class UrsinaSimulator(Simulator):
             if cosmic_bg is not None and os.path.exists(cosmic_bg):
                 self.cosmic_background(cosmic_bg)
 
-
-
         # ui = UrsinaUI()
         ctl = ControlUI(ControlHandler(), position=(0.6, 0.5))
         if show_timer:
@@ -308,6 +307,11 @@ class UrsinaSimulator(Simulator):
         if os.path.exists(bg_music):
             audio = Audio(bg_music, pitch=1, loop=True, autoplay=True)
             audio.volume = 0.3
+
+        if show_timer:
+            UrsinaEvent.on_reset()
+
+        UrsinaEvent.on_ready()
 
         self.app.run()
 

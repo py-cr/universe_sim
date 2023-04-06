@@ -24,6 +24,8 @@ class UrsinaEvent:
         UrsinaEvent.on_pause_funcs = []
         # 启动运行的订阅事件
         UrsinaEvent.on_start_funcs = []
+        # 运行准备的订阅事件
+        UrsinaEvent.on_ready_funcs = []
 
         # 搜索天体的订阅事件
         UrsinaEvent.on_searching_bodies_funcs = []
@@ -78,6 +80,15 @@ class UrsinaEvent:
     @staticmethod
     def on_reset():
         for f in UrsinaEvent.on_reset_funcs:
+            f()
+
+    @staticmethod
+    def on_ready_subscription(fun):
+        UrsinaEvent.on_ready_funcs.append(fun)
+
+    @staticmethod
+    def on_ready():
+        for f in UrsinaEvent.on_ready_funcs:
             f()
 
     @staticmethod

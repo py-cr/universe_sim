@@ -39,8 +39,8 @@ class Timer(Text):
         # self.text = f'{minutes:02d}:{seconds:02d}'
         time_scale = UrsinaConfig.get_app_time_scale()
         current_time = datetime.datetime.now()
-        # 0.653 是对测试太阳系时间的纠正
-        self.elapsed_time += (current_time - self.last_time) * evolve_dt * time_scale * 0.653
+        # 0.6 是对测试太阳系时间的纠正
+        self.elapsed_time += (current_time - self.last_time) * evolve_dt * time_scale * 0.6
         # datetime.timedelta(microseconds=1)  0:00:00.000001
         # datetime.timedelta(milliseconds=1)  0:00:00.001000
         # self.elapsed_time += self.elapsed_time_offset  # 按区域取值

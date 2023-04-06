@@ -1,17 +1,16 @@
 # -*- coding:utf-8 -*-
-# title           :太阳系场景模拟1
-# description     :太阳系场景模拟（展示的效果为太阳系真实的距离）
+# title           :在太阳系中以光速运行
+# description     :在太阳系中以光速运行
 # author          :Python超人
-# date            :2023-02-11
+# date            :2023-04-05
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
-from bodies import Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, Moon, Asteroids, Body
+from bodies import Sun, Asteroids, Body
 from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, SECONDS_PER_YEAR, AU
-from sim_scenes.func import mayavi_run, ursina_run, create_solar_system_bodies, create_text_panel, create_light
-from simulators.ursina.ursina_config import UrsinaConfig
+from sim_scenes.func import ursina_run, create_solar_system_bodies, create_text_panel, create_light
 from simulators.ursina.ursina_event import UrsinaEvent
-from ursina import Text, Panel, color, camera, Vec3
+from ursina import camera
 
 # 已到达天体列表
 arrived_bodies = []
@@ -19,6 +18,8 @@ text_panel = None
 arrived_info = ""
 
 CAMERA_FOLLOW_LIGHT = None  # 不跟随光
+
+
 # CAMERA_FOLLOW_LIGHT = 'ForwardView'  # 向前看
 # CAMERA_FOLLOW_LIGHT = 'SideView'  # 侧面看
 
@@ -30,8 +31,6 @@ def on_reset():
     if text_panel is not None:
         text_panel.text = arrived_info
 
-
-on_reset()
 
 # 订阅重新开始事件
 UrsinaEvent.on_reset_subscription(on_reset)

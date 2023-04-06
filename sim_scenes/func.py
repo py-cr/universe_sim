@@ -173,9 +173,9 @@ def create_solar_system_bodies(ignore_mass=False, init_velocity=None):
         Mars(name="火星", size_scale=2e3),  # 火星放大 2000 倍，距离保持不变
         # Asteroids(name="小行星群", size_scale=3.2e2,
         #           parent=sun),  # 小行星群模拟(仅 ursina 模拟器支持)
-        Jupiter(name="木星", size_scale=0.6e3),  # 木星放大 600 倍，距离保持不变
-        Saturn(name="土星", size_scale=0.6e3),  # 土星放大 600 倍，距离保持不变
-        Uranus(name="天王星", size_scale=0.7e3),  # 天王星放大 700 倍，距离保持不变
+        Jupiter(name="木星", size_scale=0.5e3),  # 木星放大 500 倍，距离保持不变
+        Saturn(name="土星", size_scale=0.5e3),  # 土星放大 500 倍，距离保持不变
+        Uranus(name="天王星", size_scale=0.6e3),  # 天王星放大 600 倍，距离保持不变
         Neptune(name="海王星", size_scale=1e3),  # 海王星放大 1000 倍，距离保持不变
         Pluto(name="冥王星", size_scale=10e3),  # 冥王星放大 10000 倍，距离保持不变(从太阳系的行星中排除)
     ]

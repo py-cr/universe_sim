@@ -11,7 +11,7 @@ from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, SECONDS_PER_YEAR, A
 from sim_scenes.func import mayavi_run, ursina_run
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
-from ursina import Text, Panel, color, camera
+from ursina import Text, Panel, color, camera, Vec3
 
 
 def create_bodies():
@@ -26,15 +26,15 @@ def create_bodies():
     sun = Sun(name="太阳", size_scale=0.6e2)  # 太阳放大 60 倍，距离保持不变
     bodies = [
         sun,
-        Mercury(name="水星", size_scale=3e3),  # 水星放大 3000 倍，距离保持不变
-        Venus(name="金星", size_scale=4e3),  # 金星放大 4000 倍，距离保持不变
-        Earth(name="地球", size_scale=4e3),  # 地球放大 4000 倍，距离保持不变
-        Mars(name="火星", size_scale=4e3),  # 火星放大 4000 倍，距离保持不变
-        Asteroids(name="小行星群", size_scale=3.2e2,
-                  parent=sun),  # 小行星群模拟(仅 ursina 模拟器支持)
-        Jupiter(name="木星", size_scale=0.7e3),  # 木星放大 600 倍，距离保持不变
-        Saturn(name="土星", size_scale=0.7e3),  # 土星放大 600 倍，距离保持不变
-        Uranus(name="天王星", size_scale=0.7e3),  # 天王星放大 600 倍，距离保持不变
+        Mercury(name="水星", size_scale=2e3),  # 水星放大 2000 倍，距离保持不变
+        Venus(name="金星", size_scale=2e3),  # 金星放大 2000 倍，距离保持不变
+        Earth(name="地球", size_scale=2e3),  # 地球放大 2000 倍，距离保持不变
+        Mars(name="火星", size_scale=2e3),  # 火星放大 2000 倍，距离保持不变
+        # Asteroids(name="小行星群", size_scale=3.2e2,
+        #           parent=sun),  # 小行星群模拟(仅 ursina 模拟器支持)
+        Jupiter(name="木星", size_scale=0.6e3),  # 木星放大 600 倍，距离保持不变
+        Saturn(name="土星", size_scale=0.6e3),  # 土星放大 600 倍，距离保持不变
+        Uranus(name="天王星", size_scale=0.7e3),  # 天王星放大 700 倍，距离保持不变
         Neptune(name="海王星", size_scale=1e3),  # 海王星放大 1000 倍，距离保持不变
         Pluto(name="冥王星", size_scale=10e3),  # 冥王星放大 10000 倍，距离保持不变(从太阳系的行星中排除)
     ]
@@ -46,13 +46,14 @@ def create_bodies():
     return bodies
 
 
-def create_light():
+def create_light(size_scale=1e4):
     """
     用天体模拟一个光子
     @return:
     """
-    return Body(name='光速', mass=0, size_scale=1e4, color=(255, 255, 0),
-                init_position=[AU / 2, 0, 0],
+    return Body(name='光速', mass=0, size_scale=size_scale, color=(255, 255, 0),
+                # init_position=[AU / 3, 0, 0],
+                init_position=[AU / 12, 0, 0],
                 init_velocity=[0, 0, 299792.458]).set_light_disable(True)  # 1光速=299792.458 千米/秒(km/秒)
 
 
@@ -87,6 +88,10 @@ arrived_bodies = []
 text_panel = None
 arrived_info = ""
 
+CAMERA_FOLLOW_LIGHT = None  # 不跟随光
+CAMERA_FOLLOW_LIGHT = 'ForwardView'  # 向前看
+# CAMERA_FOLLOW_LIGHT = 'SideView'  # 侧面看
+
 
 def on_reset():
     global arrived_info
@@ -99,6 +104,14 @@ def on_reset():
 def on_ready():
     global text_panel
     text_panel = create_text_panel()
+
+    if CAMERA_FOLLOW_LIGHT == "SideView":
+        camera.parent = light_body.planet
+        camera.rotation_y = -85
+    elif CAMERA_FOLLOW_LIGHT == "ForwardView":
+        camera.parent = light_body.planet
+        light_body.planet.enabled = False
+        camera.rotation_y = -15
 
 
 def on_timer_changed(time_text, time_data):
@@ -125,16 +138,31 @@ UrsinaEvent.on_reset_subscription(on_reset)
 
 UrsinaEvent.on_ready_subscription(on_ready)
 
+if CAMERA_FOLLOW_LIGHT == "SideView":
+    position = (2 * AU, 0, -AU / 8)
+    show_trail = True
+    light_size_scale = 1e3
+elif CAMERA_FOLLOW_LIGHT == "ForwardView":
+    position = (0, AU / 10, -AU)
+    show_trail = False
+    light_size_scale = 1e2
+else:
+    position = (0, 2 * AU, -11 * AU)
+    show_trail = True
+    light_size_scale = 5e3
+
 # 创建太阳系天体（忽略质量，引力无效，初速度全部为0）
 bodies = create_bodies()
 # 创建一个以光速前进的天体（模拟一个光子，质量为0才能达到光速）
-light_body = create_light()
+light_body = create_light(size_scale=light_size_scale)
 
 bodies.append(light_body)
 
 # 使用 ursina 查看的运行效果
 # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
 # position = 左-右+、上+下-、前+后-
-ursina_run(bodies, 60, position=(0, 2 * AU, -11 * AU),
-           show_trail=True, show_timer=True,
+ursina_run(bodies, 60,
+           position=position,
+           show_trail=show_trail, show_timer=True,
+           # view_closely=True,
            bg_music="sounds/interstellar.mp3")

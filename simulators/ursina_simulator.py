@@ -7,9 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
-from ursina import Ursina, window, Entity, Grid, Mesh, camera, Text, application, color, mouse, Vec2, Vec3, \
-    load_texture, held_keys, distance, Audio, scene
-from ursina.prefabs.first_person_controller import FirstPersonController
+from ursina import Ursina, window, Entity, Grid, camera, application, color, distance, Audio
 import itertools
 from simulators.ursina.ursina_event import UrsinaEvent
 # from simulators.ursina.ursina_ui import UrsinaUI
@@ -18,16 +16,13 @@ from simulators.ursina.ui.control_handler import ControlHandler
 from simulators.ursina.ursina_mesh import create_arrow_line
 
 from simulators.views.ursina_view import UrsinaView
-from simulators.ursina.entities.ursina_player import UrsinaPlayer
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.simulator import Simulator
 from common.system import System
 from common.func import find_file
-import time
 import datetime
-import math
 import os
-from ursina import EditorCamera, PointLight, SpotLight, AmbientLight, DirectionalLight
+from ursina import EditorCamera
 from sim_scenes.func import ursina_run
 
 
@@ -141,8 +136,10 @@ class UrsinaSimulator(Simulator):
         time_scale = round(pow(max_distance, 1 / 4), 2)
         if time_scale < 0.01:
             time_scale = 0.01
-
+        # camera.scale
+        # sence
         application.time_scale = time_scale
+        UrsinaConfig.time_scale_offset = 1 / application.time_scale
         # UrsinaConfig.auto_scale_factor = 1.0e-9
 
     def on_searching_bodies(self, **kwargs):
@@ -174,9 +171,18 @@ class UrsinaSimulator(Simulator):
             else:
                 # 配置中，每年、月、天等等有多少秒
                 evolve_dt = UrsinaConfig.seconds_per * run_speed_factor
+
+            UrsinaEvent.on_timer_changed(evolve_dt)
             # interval_fator 能让更新天体运行状态（位置、速度）更精确
             evolve_dt = evolve_dt * self.interval_fator
             super().evolve(evolve_dt)
+
+
+    def create_timer(self):
+        from simulators.ursina.entities.timer import Timer
+        # 创建一个文本对象来显示计时器的时间
+        self.timer = Timer()
+        return self.timer
 
     def cosmic_background(self, texture='../textures/cosmic2.jpg'):
         """
@@ -215,6 +221,10 @@ class UrsinaSimulator(Simulator):
         view_closely = False
         if "view_closely" in kwargs:
             view_closely = kwargs["view_closely"]
+
+        show_timer = False
+        if "show_timer" in kwargs:
+            show_timer = kwargs["show_timer"]
 
         if view_closely:
             # 近距离查看
@@ -265,8 +275,12 @@ class UrsinaSimulator(Simulator):
             if cosmic_bg is not None and os.path.exists(cosmic_bg):
                 self.cosmic_background(cosmic_bg)
 
+
+
         # ui = UrsinaUI()
         ctl = ControlUI(ControlHandler(), position=(0.6, 0.5))
+        if show_timer:
+            self.create_timer()
 
         EditorCamera(ignore_paused=True)
         # 防止打开中文输入法
@@ -301,7 +315,7 @@ class UrsinaSimulator(Simulator):
 if __name__ == '__main__':
     from bodies import Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, Moon
     from bodies.body import AU
-    from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, SECONDS_PER_HALF_DAY
+    from common.consts import SECONDS_PER_DAY
 
     """
     3个太阳、1个地球

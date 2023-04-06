@@ -20,12 +20,19 @@ class UrsinaEvent:
             return
         # 重启运行的订阅事件
         UrsinaEvent.on_reset_funcs = []
+        # 暂停运行的订阅事件
+        UrsinaEvent.on_pause_funcs = []
+        # 启动运行的订阅事件
+        UrsinaEvent.on_start_funcs = []
+
         # 搜索天体的订阅事件
         UrsinaEvent.on_searching_bodies_funcs = []
         # 应用运行的订阅事件
         UrsinaEvent.on_application_run_callback = []
-        #
+        # 天体大小发生变化的订阅事件
         UrsinaEvent.on_body_size_changed_callback = []
+        # 计时器触发的订阅事件
+        UrsinaEvent.on_timer_changed_callback = []
 
     @staticmethod
     def on_body_size_changed_subscription(fun):
@@ -35,6 +42,15 @@ class UrsinaEvent:
     def on_body_size_changed():
         for f in UrsinaEvent.on_body_size_changed_callback:
             f()
+
+    @staticmethod
+    def on_timer_changed_subscription(fun):
+        UrsinaEvent.on_timer_changed_callback.append(fun)
+
+    @staticmethod
+    def on_timer_changed(evolve_dt):
+        for f in UrsinaEvent.on_timer_changed_callback:
+            f(evolve_dt)
 
     @staticmethod
     def on_application_run_callback_subscription(fun):
@@ -52,6 +68,25 @@ class UrsinaEvent:
     def on_reset():
         for f in UrsinaEvent.on_reset_funcs:
             f()
+
+    @staticmethod
+    def on_start_subscription(fun):
+        UrsinaEvent.on_start_funcs.append(fun)
+
+    @staticmethod
+    def on_start():
+        for f in UrsinaEvent.on_start_funcs:
+            f()
+
+    @staticmethod
+    def on_pause_subscription(fun):
+        UrsinaEvent.on_pause_funcs.append(fun)
+
+    @staticmethod
+    def on_pause():
+        for f in UrsinaEvent.on_pause_funcs:
+            f()
+
 
     @staticmethod
     def on_application_run():

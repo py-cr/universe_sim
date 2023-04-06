@@ -64,6 +64,7 @@ def ursina_run(bodies,
                show_grid=True,
                show_trail=False,
                show_name=False,
+               show_timer=False,
                save_as_json=None,
                view_closely=False):
     """
@@ -76,12 +77,14 @@ def ursina_run(bodies,
     @param show_grid: 是否显示空间网格
     @param show_trail: 是否显示拖尾
     @param show_name: 是否显示天体名称
+    @param show_timer: 是否显示计时器
     @param save_as_json: 将所有天体的信息保存为 json 文件
     @param view_closely: 是否近距离查看天体
     @return:
     """
 
-    from simulators.ursina_simulator import UrsinaSimulator, UrsinaPlayer
+    from simulators.ursina_simulator import UrsinaSimulator
+    from simulators.ursina.entities.ursina_player import UrsinaPlayer
     body_sys = System(bodies)
 
     if show_name:
@@ -100,7 +103,6 @@ def ursina_run(bodies,
     view_azimuth = 0  # 暂时未用
     player = UrsinaPlayer(position, view_azimuth, simulator.ursina_views)
 
-
     def callback_update():
         UrsinaEvent.on_application_run()
         for ursina_view in simulator.ursina_views:
@@ -116,6 +118,7 @@ def ursina_run(bodies,
     simulator.run(dt,
                   cosmic_bg=cosmic_bg,
                   show_grid=show_grid,
+                  show_timer=show_timer,
                   bg_music=bg_music,
                   view_closely=view_closely)
 

@@ -182,6 +182,7 @@ class ControlHandler(EventHandler):
         if self.ui.on_off_switch.value == self.ui.pause_button_text:
             self.ui.on_off_switch.selected_color = color.green
             application.paused = True
+            UrsinaEvent.on_pause()
             for c in self.ui.children:
                 if not c.ignore_paused:
                     # c.enabled = True
@@ -189,6 +190,7 @@ class ControlHandler(EventHandler):
         else:
             self.ui.on_off_switch.selected_color = color.red
             application.paused = False
+            UrsinaEvent.on_start()
             for c in self.ui.children:
                 if not c.ignore_paused:
                     # c.enabled = True

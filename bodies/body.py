@@ -45,14 +45,18 @@ class Body(metaclass=ABCMeta):
         self.__his_vel = []
         self.__his_acc = []
         self.__his_reserved_num = 200
-        # 是否忽略质量（如果为True，则不计算引力）
-        self.ignore_mass = ignore_mass
 
         if name is None:
             name = getattr(self.__class__, '__name__')
 
         self.name = name
         self.__mass = mass
+
+        if self.__mass <= 0:  # 质量小于等于0就忽略
+            self.ignore_mass = True
+        else:
+            # 是否忽略质量（如果为True，则不计算引力）
+            self.ignore_mass = ignore_mass
 
         self.__init_position = None
         self.__init_velocity = None
@@ -92,7 +96,19 @@ class Body(metaclass=ABCMeta):
 
         self.__has_rings = False
 
-    def set_light_disable(self, value):
+    def set_ignore_mass(self, value=True):
+        """
+        设置忽略质量，True为引力失效
+        @param value:
+        @return:
+        """
+        if self.__mass <= 0:  # 质量小于等于0就忽略
+            self.ignore_mass = True
+        else:
+            self.ignore_mass = value
+        return self
+
+    def set_light_disable(self, value=True):
         """
         设置灯光为无效
         @param value:
@@ -311,6 +327,9 @@ class Body(metaclass=ABCMeta):
         """
         天体的体积（单位：km³）
         """
+        if self.mass <= 0:
+            # 质量为0或者负数，就给一个虚拟体积数
+            return 1e10
         # v = m/ρ
         # 体积(m³) = 质量(kg) / 密度(kg/m³)
         # 体积(km³) = 体积(m³)  / 1e9

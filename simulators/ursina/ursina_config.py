@@ -7,6 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
+from ursina import application
 
 
 class UrsinaConfig:
@@ -51,6 +52,11 @@ class UrsinaConfig:
         cls.body_size_factor = 1.0
         # 天体缩放的因子（不能太大，否则无法容得下大数量级的天体）调整 5e-7 最佳
         cls.SCALE_FACTOR = 5e-7
+        cls.time_scale_offset = 1.0
+
+    @classmethod
+    def get_app_time_scale(cls):
+        return cls.time_scale_offset * application.time_scale
 
     @property
     @classmethod

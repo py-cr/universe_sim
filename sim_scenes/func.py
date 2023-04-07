@@ -109,7 +109,6 @@ def ursina_run(bodies,
             simulator.check_and_evolve()
             if ursina_view.appeared:
                 ursina_view.update()
-        # print('....')
 
     import sys
     sys.modules["__main__"].update = callback_update

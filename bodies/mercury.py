@@ -24,7 +24,7 @@ class Mercury(Body):
     """
 
     def __init__(self, name="水星", mass=3.3011e23,
-                 init_position=[0, 0, 0.4 * AU],
+                 init_position=[0, 0, 0.384 * AU],
                  init_velocity=[-47.87, 0, 0],
                  texture="mercury.jpg", size_scale=1.0, distance_scale=1.0,
                  rotation_speed=0.2558, ignore_mass=False, trail_color=None, show_name=False):

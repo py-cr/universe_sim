@@ -24,7 +24,7 @@ class Venus(Body):
     """
 
     def __init__(self, name="金星", mass=4.8675e24,
-                 init_position=[0, 0, 0.72 * AU],
+                 init_position=[0, 0, 0.721 * AU],
                  init_velocity=[-35, 0, 0],
                  texture="venus.jpg", size_scale=1.0, distance_scale=1.0,
                  rotation_speed=-0.0617, ignore_mass=False, trail_color=None, show_name=False):

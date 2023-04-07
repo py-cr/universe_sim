@@ -14,7 +14,7 @@ from simulators.ursina.ursina_event import UrsinaEvent
 from simulators.ursina.ui.control_ui import ControlUI
 from simulators.ursina.ui.control_handler import ControlHandler
 from simulators.ursina.ursina_mesh import create_arrow_line
-
+from simulators.ursina.entities.body_timer import BodyTimer
 from simulators.views.ursina_view import UrsinaView
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.simulator import Simulator
@@ -177,12 +177,16 @@ class UrsinaSimulator(Simulator):
             evolve_dt = evolve_dt * self.interval_fator
             super().evolve(evolve_dt)
 
+            if self.show_timer:
+                timer = BodyTimer()
+                timer.calc_time(evolve_dt)
 
-    def create_timer(self):
-        from simulators.ursina.entities.timer import Timer
-        # 创建一个文本对象来显示计时器的时间
-        self.timer = Timer()
-        return self.timer
+
+    # def create_timer(self):
+    #     from simulators.ursina.entities.timer import Timer
+    #     # 创建一个文本对象来显示计时器的时间
+    #     self.timer = Timer()
+    #     return self.timer
 
     def cosmic_background(self, texture='../textures/cosmic2.jpg'):
         """
@@ -222,9 +226,9 @@ class UrsinaSimulator(Simulator):
         if "view_closely" in kwargs:
             view_closely = kwargs["view_closely"]
 
-        show_timer = False
+        self.show_timer = False
         if "show_timer" in kwargs:
-            show_timer = kwargs["show_timer"]
+            self.show_timer = kwargs["show_timer"]
 
         if view_closely:
             # 近距离查看
@@ -278,8 +282,8 @@ class UrsinaSimulator(Simulator):
 
         # ui = UrsinaUI()
         ctl = ControlUI(ControlHandler(), position=(0.6, 0.5))
-        if show_timer:
-            self.create_timer()
+        # if show_timer:
+        #     self.create_timer()
 
         EditorCamera(ignore_paused=True)
         # 防止打开中文输入法
@@ -308,7 +312,7 @@ class UrsinaSimulator(Simulator):
             audio = Audio(bg_music, pitch=1, loop=True, autoplay=True)
             audio.volume = 0.3
 
-        if show_timer:
+        if self.show_timer:
             UrsinaEvent.on_reset()
 
         UrsinaEvent.on_ready()

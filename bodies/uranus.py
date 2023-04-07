@@ -24,7 +24,7 @@ class Uranus(Body):
     """
 
     def __init__(self, name="天王星", mass=8.681e25,
-                 init_position=[0, 0, 19 * AU],
+                 init_position=[0, 0, 19.2 * AU],
                  init_velocity=[-6.81, 0, 0],
                  texture="uranus.png", size_scale=1.0, distance_scale=1.0,
                  rotation_speed=-20.8816, ignore_mass=False, trail_color=None, show_name=False):

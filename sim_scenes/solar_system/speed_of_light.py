@@ -20,8 +20,8 @@ arrived_info = ""
 CAMERA_FOLLOW_LIGHT = None  # 不跟随光
 
 
-# CAMERA_FOLLOW_LIGHT = 'ForwardView'  # 向前看
-# CAMERA_FOLLOW_LIGHT = 'SideView'  # 侧面看
+CAMERA_FOLLOW_LIGHT = 'ForwardView'  # 向前看
+CAMERA_FOLLOW_LIGHT = 'SideView'  # 侧面看
 
 
 def on_reset():

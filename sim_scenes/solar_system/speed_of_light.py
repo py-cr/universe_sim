@@ -18,10 +18,8 @@ text_panel = None
 arrived_info = ""
 
 CAMERA_FOLLOW_LIGHT = None  # 不跟随光
-
-
-CAMERA_FOLLOW_LIGHT = 'ForwardView'  # 向前看
-CAMERA_FOLLOW_LIGHT = 'SideView'  # 侧面看
+# CAMERA_FOLLOW_LIGHT = 'ForwardView'  # 向前看
+# CAMERA_FOLLOW_LIGHT = 'SideView'  # 侧面看
 
 
 def on_reset():
@@ -74,17 +72,20 @@ def on_timer_changed(time_text, time_data):
 UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
 
 if CAMERA_FOLLOW_LIGHT == "SideView":
-    position = (2 * AU, 0, -AU / 8)
+    # 摄像机位置 = 前-后+、上+下-、左-右+、
+    position = (AU, 0, 0)
     show_trail = True
     light_size_scale = 1e3
     light_init_position = [AU / 3, 0, 0]
 elif CAMERA_FOLLOW_LIGHT == "ForwardView":
+    # 摄像机位置 = 左-右+、上+下-、前+后-
     position = (0, AU / 10, -AU)
     show_trail = False
     light_size_scale = 1e2
     light_init_position = [AU / 12, 0, 0]
 else:
-    position = (0, 2 * AU, -11 * AU)
+    # 摄像机位置 = 左-右+、上+下-、前+后-
+    position = (0, AU, -6 * AU)
     show_trail = True
     light_size_scale = 5e3
     light_init_position = [AU / 3, 0, 0]

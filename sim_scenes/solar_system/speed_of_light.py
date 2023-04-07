@@ -18,8 +18,8 @@ text_panel = None
 arrived_info = ""
 
 CAMERA_FOLLOW_LIGHT = None  # 不跟随光
-# CAMERA_FOLLOW_LIGHT = 'ForwardView'  # 向前看
-# CAMERA_FOLLOW_LIGHT = 'SideView'  # 侧面看
+CAMERA_FOLLOW_LIGHT = 'ForwardView'  # 向前看
+CAMERA_FOLLOW_LIGHT = 'SideView'  # 侧面看
 
 
 def on_reset():
@@ -87,7 +87,7 @@ else:
     # 摄像机位置 = 左-右+、上+下-、前+后-
     position = (0, AU, -6 * AU)
     show_trail = True
-    light_size_scale = 5e3
+    light_size_scale = 2e3
     light_init_position = [AU / 3, 0, 0]
 
 # 创建太阳系天体（忽略质量，引力无效，初速度全部为0）

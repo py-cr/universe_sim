@@ -163,18 +163,18 @@ def create_solar_system_bodies(ignore_mass=False, init_velocity=None):
     @return:
     """
     from bodies import Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto
-    sun = Sun(name="太阳", size_scale=0.6e2)  # 太阳放大 60 倍，距离保持不变
+    sun = Sun(name="太阳", size_scale=0.5e2)  # 太阳放大 50 倍，距离保持不变
     bodies = [
         sun,
-        Mercury(name="水星", size_scale=2e3),  # 水星放大 2000 倍，距离保持不变
-        Venus(name="金星", size_scale=2e3),  # 金星放大 2000 倍，距离保持不变
-        Earth(name="地球", size_scale=2e3),  # 地球放大 2000 倍，距离保持不变
-        Mars(name="火星", size_scale=2e3),  # 火星放大 2000 倍，距离保持不变
+        Mercury(name="水星", size_scale=1e3),  # 水星放大 1000 倍，距离保持不变
+        Venus(name="金星", size_scale=1e3),  # 金星放大 1000 倍，距离保持不变
+        Earth(name="地球", size_scale=1e3),  # 地球放大 1000 倍，距离保持不变
+        Mars(name="火星", size_scale=1e3),  # 火星放大 1000 倍，距离保持不变
         # Asteroids(name="小行星群", size_scale=3.2e2,
         #           parent=sun),  # 小行星群模拟(仅 ursina 模拟器支持)
-        Jupiter(name="木星", size_scale=0.5e3),  # 木星放大 500 倍，距离保持不变
-        Saturn(name="土星", size_scale=0.5e3),  # 土星放大 500 倍，距离保持不变
-        Uranus(name="天王星", size_scale=0.6e3),  # 天王星放大 600 倍，距离保持不变
+        Jupiter(name="木星", size_scale=0.3e3),  # 木星放大 300 倍，距离保持不变
+        Saturn(name="土星", size_scale=0.3e3),  # 土星放大 300 倍，距离保持不变
+        Uranus(name="天王星", size_scale=0.4e3),  # 天王星放大 400 倍，距离保持不变
         Neptune(name="海王星", size_scale=1e3),  # 海王星放大 1000 倍，距离保持不变
         Pluto(name="冥王星", size_scale=10e3),  # 冥王星放大 10000 倍，距离保持不变(从太阳系的行星中排除)
     ]
@@ -205,18 +205,18 @@ def create_text_panel(width=0.35, height=.5):
         parent=None,
         model='quad',
         # texture='white_cube',
-        color=color.gray,
-        origin=(-.48, .48),
+        color=color.black,
+        origin=(-.48, .48, -.48),
         scale=(width, height),
         position=(-.88, 0.3, 0),
-        alpha=0.2
+        alpha=0.5
     )
 
     # 创建一个 Text 组件用于显示消息
     text = Text(
         parent=panel,
         text='',
-        origin=(-.5, .5),
+        origin=(-.5, .5, -.5),
         scale=(height * 5, width * 5),
         font=UrsinaConfig.CN_FONT,
         # background=True,

@@ -8,25 +8,35 @@
 # ==============================================================================
 from bodies import Sun, Earth, Moon
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
-from sim_scenes.func import mayavi_run, ursina_run
+from sim_scenes.func import mayavi_run, ursina_run, camera_look_at
 from bodies.body import AU
+from simulators.ursina.ursina_event import UrsinaEvent
 
 if __name__ == '__main__':
     """
     地球、月球
     """
-    # 地球的Y方向初始速度
-    EARTH_INIT_VELOCITY = 0
+    OFFSETTING = 0
+    # TODO: 抵消月球带动地球的力
+    # OFFSETTING = 0.01265
     bodies = [
         # sun,
         Earth(init_position=[0, 0, 0], texture="earth_hd.jpg",
-              init_velocity=[-EARTH_INIT_VELOCITY, 0, 0], size_scale=0.5e1),  # 地球放大 5 倍，距离保持不变
+              init_velocity=[OFFSETTING, 0, 0], size_scale=0.5e1),  # 地球放大 5 倍，距离保持不变
         Moon(init_position=[0, 0, 363104],  # 距地距离约: 363104 至 405696 km
-             init_velocity=[-(EARTH_INIT_VELOCITY + 1.023), 0, 0], size_scale=1e1)  # 月球放大 10 倍，距离保持不变
+             init_velocity=[-1.03, 0, 0], size_scale=1e1)  # 月球放大 10 倍，距离保持不变
     ]
-    # mayavi_run(bodies, SECONDS_PER_HALF_DAY / 2, view_azimuth=-45)
+
+    def on_ready():
+        earth = bodies[0]
+        camera_look_at(earth)
+
+    UrsinaEvent.on_ready_subscription(on_ready)
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_MONTH, position=(-300000, 200000, -1300000), show_trail=True)
+    ursina_run(bodies, SECONDS_PER_MONTH,
+               position=(-300000, 1500000, -1000),
+               show_timer=True,
+               show_trail=True)

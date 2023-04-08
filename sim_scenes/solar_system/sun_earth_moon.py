@@ -8,7 +8,7 @@
 # ==============================================================================
 from bodies import Sun, Earth, Moon
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
-from sim_scenes.func import mayavi_run, ursina_run
+from sim_scenes.func import mayavi_run, ursina_run, camera_look_at
 from bodies.body import AU
 from simulators.ursina.ursina_event import UrsinaEvent
 
@@ -41,17 +41,16 @@ if __name__ == '__main__':
         moon
     ]
 
+
     def on_timer_changed(time_data):
-        from ursina import camera,Vec3
+        camera_look_at(moon, rotation_z=0)
 
-        camera.look_at(moon.planet)
-        camera.rotation_z = 0
 
-    # 订阅计时器事件（记录已到达天体列表）
+    # 订阅计时器事件（定时触发）
     UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
     # position=(0, 0, 0) 的位置是站在地球视角，可以观看月相变化的过程
-    ursina_run(bodies, SECONDS_PER_DAY, position=(0, 0, 0),show_timer=True)
+    ursina_run(bodies, SECONDS_PER_DAY, position=(0, 0, 0), show_timer=True)

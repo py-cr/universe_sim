@@ -56,6 +56,25 @@ def mayavi_run(bodies, dt=SECONDS_PER_WEEK,
     mlab.show()
 
 
+def camera_look_at(body, rotation_x=None, rotation_y=None, rotation_z=None):
+    """
+    让摄像机看向指定天体
+    @param body: 天体
+    @param rotation_x: x轴旋转角度（None表示不旋转）
+    @param rotation_y: y轴旋转角度（None表示不旋转）
+    @param rotation_z: z轴旋转角度（None表示不旋转）
+    @return:
+    """
+    from ursina import camera
+    camera.look_at(body.planet)
+    if rotation_x is not None:
+        camera.rotation_x = rotation_x
+    if rotation_y is not None:
+        camera.rotation_y = rotation_y
+    if rotation_z is not None:
+        camera.rotation_z = rotation_z
+
+
 def ursina_run(bodies,
                dt=SECONDS_PER_HALF_DAY,
                position=(0, 0, 0),

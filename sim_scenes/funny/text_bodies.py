@@ -21,9 +21,12 @@ def show_text_bodies():
     # camera_pos = (左-右+, 上+下-, 前+后-)
     camera_pos = (D, D, -7000 * D)
     # 根据 pixel_image 指定图片生成有色星球（注意：图片的像素不要太多）
-    bodies = gen_bodies_from_image(pixel_image="./images/python.png",
-                                   texture="color_body.png",
-                                   params={"camera_pos": camera_pos})
+    bodies = gen_bodies_from_image(
+        # pixel_image="./images/python.png",
+        # pixel_image="./images/iloveu.png",
+        pixel_image="./images/china.png",
+        texture="color_body.png",
+        params={"camera_pos": camera_pos})
     # 放一个恒星作为背景
     bg = FixedStar(name="背景恒星", texture="fixed_star.png",
                    mass=2e32, color=(0xff, 0xf8, 0xd4),

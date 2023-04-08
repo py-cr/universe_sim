@@ -30,6 +30,10 @@ AU: float = 149597870.700
 G: float = 6.67e-11
 
 """
+一分钟多少秒
+"""
+SECONDS_PER_MINUTE = 60
+"""
 一小时多少秒
 """
 SECONDS_PER_HOUR = 60 * 60

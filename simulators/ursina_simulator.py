@@ -19,49 +19,13 @@ from simulators.views.ursina_view import UrsinaView
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.simulator import Simulator
 from common.system import System
+from simulators.ursina.entities.world_grid import WorldGrid
+from simulators.ursina.entities.sphere_sky import SphereSky
 from common.func import find_file
 import datetime
 import os
 from ursina import EditorCamera
 from sim_scenes.func import ursina_run
-
-
-class WorldGrid(Entity):
-    """
-    创建一个宇宙网格对象
-    """
-
-    def draw_axises(self):
-        """
-        画坐标轴
-        @return:
-        """
-
-        arrow_x, line_x, text_x = create_arrow_line((0, 0, 0), (10, 0, 0), label="X", color=color.red)
-        arrow_y, line_y, text_y = create_arrow_line((0, 0, 0), (0, 10, 0), label="Y", color=color.green)
-        arrow_z, line_z, text_z = create_arrow_line((0, 0, 0), (0, 0, 10), label="Z", color=color.yellow)
-
-    def __init__(self):
-        super().__init__()
-        s = 100
-        grid = Entity(model=Grid(s, s), scale=s * 20, color=color.rgba(255, 255, 255, 20), rotation_x=90,
-                      position=(0, -80, 0))
-        grid.set_light_off()
-
-        # self.draw_axises()
-
-
-class MySky(Entity):
-
-    def __init__(self, **kwargs):
-        # from ursina.shaders import unlit_shader
-        super().__init__(name='sky', model='sphere', texture='sky_default', scale=1000, double_sided=True)
-        self.set_light_off()
-        for key, value in kwargs.items():
-            setattr(self, key, value)
-
-    def update(self):
-        self.world_position = camera.world_position
 
 
 class UrsinaSimulator(Simulator):
@@ -181,12 +145,11 @@ class UrsinaSimulator(Simulator):
                 timer = BodyTimer()
                 timer.calc_time(evolve_dt)
 
-
-    # def create_timer(self):
-    #     from simulators.ursina.entities.timer import Timer
-    #     # 创建一个文本对象来显示计时器的时间
-    #     self.timer = Timer()
-    #     return self.timer
+    def create_timer(self):
+        from simulators.ursina.entities.timer import Timer
+        # 创建一个文本对象来显示计时器的时间
+        self.timer = Timer()
+        return self.timer
 
     def cosmic_background(self, texture='../textures/cosmic2.jpg'):
         """
@@ -204,7 +167,7 @@ class UrsinaSimulator(Simulator):
         from ursina import Sky
         sky = Sky(texture=texture, scale=sky_scale)
 
-        # sky = MySky(texture=texture, scale=sky_scale)
+        # sky = SphereSky(texture=texture, scale=sky_scale)
         sky.scale = sky_scale
         # sky.set_shader_input('texture_scale', Vec2(20, 20))
         # 一定要够大，如果小于 Sky(texture=texture).scale = 50000，宇宙背景就会出现黑色方洞
@@ -282,8 +245,8 @@ class UrsinaSimulator(Simulator):
 
         # ui = UrsinaUI()
         ctl = ControlUI(ControlHandler(), position=(0.6, 0.5))
-        # if show_timer:
-        #     self.create_timer()
+        if self.show_timer:
+            self.create_timer()
 
         EditorCamera(ignore_paused=True)
         # 防止打开中文输入法

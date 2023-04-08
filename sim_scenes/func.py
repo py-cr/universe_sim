@@ -11,6 +11,7 @@ from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, SECONDS_PER_HALF_DA
 from common.system import System
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
+from common.consts import LIGHT_SPEED
 
 
 def mayavi_run(bodies, dt=SECONDS_PER_WEEK,
@@ -187,15 +188,18 @@ def create_solar_system_bodies(ignore_mass=False, init_velocity=None):
     return bodies
 
 
-def create_light(size_scale, init_position):
+def create_light_body(size_scale, init_position, speed=LIGHT_SPEED):
     """
     用天体模拟一个光子
+    @param size_scale: 光体的大小
+    @param init_position: 光体的初始位置
+    @param speed: 光体的速度->1光速=299792.458 千米/秒(km/秒)
     @return:
     """
     from bodies import Body
-    return Body(name='光速', mass=0, size_scale=size_scale, color=(255, 255, 0),
+    return Body(name='光速', mass=0, texture='metal.jpg', size_scale=size_scale, color=(255, 255, 0),
                 init_position=init_position,
-                init_velocity=[0, 0, 299792.458]).set_light_disable(True)  # 1光速=299792.458 千米/秒(km/秒)
+                init_velocity=[0, 0, speed]).set_light_disable(True)
 
 
 def create_text_panel(width=0.35, height=.5):

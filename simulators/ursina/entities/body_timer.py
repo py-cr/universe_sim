@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-# title           :计时器天体
-# description     :计时器天体
+# title           :天体计时器
+# description     :天体计时器
 # author          :Python超人
 # date            :2023-02-11
 # link            :https://gitcode.net/pythoncr/

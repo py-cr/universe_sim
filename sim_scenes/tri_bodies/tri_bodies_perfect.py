@@ -54,6 +54,6 @@ if __name__ == '__main__':
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
     ursina_run(bodies, SECONDS_PER_YEAR,
-               position=(-2 * AU, 1.5 * AU, -9 * AU),
+               position=(-1 * AU, 1.5 * AU, -9 * AU),
                # save_as_json="../../data/tri_bodies_perfect_05.json",  # 保存 json 文件到 data 目录
                show_trail=True)

@@ -34,31 +34,44 @@ class SpeedOfLightInit:
 
         if self.__camera_follow_light == "SideView":
             # 摄像机位置 = 前-后+、上+下-、左-右+、
-            self.position = (AU, 0, 0)
+            self.camera_position = (AU, 0, 0)
             self.show_trail = True
             self.light_size_scale = 1e3
             self.light_init_position = [AU / 3, 0, 0]
         elif self.__camera_follow_light == "ForwardView":
             # 摄像机位置 = 左-右+、上+下-、前+后-
-            self.position = (0, AU / 10, -AU)
-            self.show_trail = False
+            self.camera_position = (0, AU / 10, -AU)
+            self.show_trail = True
             self.light_size_scale = 1e2
             self.light_init_position = [AU / 12, 0, 0]
         else:
             # 摄像机位置 = 左-右+、上+下-、前+后-
-            self.position = (0, AU, -6 * AU)
+            self.camera_position = (0, AU, -6 * AU)
             self.show_trail = True
             self.light_size_scale = 2e3
             self.light_init_position = [AU / 3, 0, 0]
 
-    # 点击了重置按钮
     def on_reset(self):
+        """
+        点击了重置按钮触发
+        @return:
+        """
         self.arrived_bodies.clear()  # 重置存放记录光体已到达天体列表
         self.arrived_info = "[00:00:00]\t从 [太阳] 出发\n\n"
         if self.text_panel is not None:
             self.text_panel.text = self.arrived_info
 
     def event_subscription(self):
+        """
+        订阅事件
+        @return:
+        """
+        if self.light_body is None:
+            raise Exception("请指定 SpeedOfLightInit.light_body")
+
+        if self.bodies is None:
+            raise Exception("请指定 SpeedOfLightInit.bodies")
+
         # 订阅重新开始事件
         UrsinaEvent.on_reset_subscription(self.on_reset)
         UrsinaEvent.on_ready_subscription(self.on_ready)
@@ -66,6 +79,10 @@ class SpeedOfLightInit:
         UrsinaEvent.on_timer_changed_subscription(self.on_timer_changed)
 
     def on_ready(self):
+        """
+        模拟器开始运行前触发
+        @return:
+        """
         self.text_panel = create_text_panel()
         self.text_panel.text = self.arrived_info
 
@@ -73,12 +90,17 @@ class SpeedOfLightInit:
             camera.parent = self.light_body.planet
             camera.rotation_y = -85
         elif self.__camera_follow_light == "ForwardView":
-            self.light_body.planet.enabled = False
+            # self.light_body.planet.enabled = False
             camera.parent = self.light_body.planet
             camera.rotation_y = -15
 
     def on_timer_changed(self, time_text, time_data):
-        global arrived_info
+        """
+        计时器触发
+        @param time_text: 计时器时间文本
+        @param time_data: 计时器时间数据
+        @return:
+        """
         years, days, hours, minutes, seconds = time_data
         for body in self.bodies:
             if body is self.light_body or isinstance(body, Sun) \

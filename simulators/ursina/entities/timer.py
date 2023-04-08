@@ -17,11 +17,16 @@ class Timer(Text):
 
     def __init__(self):
         # 创建一个文本对象来显示计时器的时间
-        super().__init__(text='00:00', position=(0.65, -0.45), font=UrsinaConfig.CN_FONT)
+        super().__init__(text='                                 ', position=(0.70, -0.465),
+                         origin=(-0.5, 0.5),
+                         font=UrsinaConfig.CN_FONT, background=True)
         UrsinaEvent.on_timer_changed_subscription(self.on_timer_changed)
 
     def on_timer_changed(self, time_text, time_data):
         self.text = time_text
+
+    def update(self):
+        self.text = "00:00:00"
 
 
 if __name__ == '__main__':

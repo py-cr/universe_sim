@@ -29,8 +29,8 @@ class SpeedOfLightInit:
         self.arrived_info = ""
 
         self.__camera_follow_light = camera_follow_light
-        self.light_body = None
-        self.bodies = None
+        self.__light_body = None
+        self.__bodies = None
 
         if self.__camera_follow_light == "SideView":
             # 摄像机位置 = 前-后+、上+下-、左-右+、
@@ -50,6 +50,22 @@ class SpeedOfLightInit:
             self.show_trail = True
             self.light_size_scale = 2e3
             self.light_init_position = [AU / 3, 0, 0]
+
+    @property
+    def light_body(self):
+        return self.__light_body
+
+    @light_body.setter
+    def light_body(self, value):
+        self.__light_body = value
+
+    @property
+    def bodies(self):
+        return self.__bodies
+
+    @bodies.setter
+    def bodies(self, value):
+        self.__bodies = value
 
     def on_reset(self):
         """

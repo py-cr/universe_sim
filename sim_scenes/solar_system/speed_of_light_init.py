@@ -94,6 +94,24 @@ class SpeedOfLightInit:
         # 订阅计时器事件（记录已到达天体列表）
         UrsinaEvent.on_timer_changed_subscription(self.on_timer_changed)
 
+    def light_body_input(self, key):
+        # TODO: 在这里控制光体的运动
+        # if self.light_body.planet.hovered:
+        if key == "w":
+            # 上
+            pass
+        elif key == "s":
+            # 上
+            pass
+        elif key == "a":
+            # 左
+            pass
+        elif key == "d":
+            # 右
+            pass
+            # self.light_body.velocity[1] = 1
+            # self.light_body.planet.update()
+
     def on_ready(self):
         """
         模拟器开始运行前触发
@@ -108,6 +126,7 @@ class SpeedOfLightInit:
         elif self.__camera_follow_light == "ForwardView":
             # self.light_body.planet.enabled = False
             camera.parent = self.light_body.planet
+            self.light_body.planet.input = self.light_body_input
             camera.rotation_y = -15
 
     def on_timer_changed(self, time_text, time_data):

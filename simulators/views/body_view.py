@@ -71,7 +71,10 @@ class BodyView(metaclass=ABCMeta):
         :param texture:
         :return:
         """
-        colors = get_dominant_colors(texture)
+        try:
+            colors = get_dominant_colors(texture)
+        except Exception as e:
+            return tuple(np.array((255,255,255)) / 255)
         first_color = colors[0]
         # print(self.name, first_color)
         return tuple(np.array(first_color) / 255)

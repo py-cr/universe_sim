@@ -12,6 +12,7 @@ from common.system import System
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
 from common.consts import LIGHT_SPEED
+import math
 
 
 def mayavi_run(bodies, dt=SECONDS_PER_WEEK,
@@ -227,6 +228,19 @@ def create_text_panel(width=0.35, height=.5):
         # background_color=color.clear
     )
     return text
+
+
+def get_vector2d_velocity(velocity, angle=15):
+    """
+    根据速度、角度获取矢量速度（vx、vy）
+    @param velocity:
+    @param angle:
+    @return:
+    """
+    vy = math.sin(math.pi * angle / 180) * velocity
+    vx = math.cos(math.pi * angle / 180) * velocity
+    # vx² + vy² = velocity²
+    return vx, vy
 
 
 if __name__ == '__main__':

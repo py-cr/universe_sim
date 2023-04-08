@@ -27,6 +27,7 @@ light_body = create_light_body(init.light_size_scale, init.light_init_position, 
 # 增加光速天体到天体集合
 bodies.append(light_body)
 
+# 运行前指定bodies、light_body并订阅事件
 init.bodies = bodies
 init.light_body = light_body
 init.event_subscription()

@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-# title           :引力弹弓模拟演示
-# description     :引力弹弓模拟演示
+# title           :模拟流浪地球通过木星、土星加速
+# description     :模拟流浪地球通过木星、土星加速
 # author          :Python超人
 # date            :2023-02-11
 # link            :https://gitcode.net/pythoncr/

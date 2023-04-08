@@ -13,7 +13,7 @@ from bodies.body import AU
 
 if __name__ == '__main__':
     """
-    太阳、地球
+    引力弹弓模拟演示
     """
     bodies = [
         Sun(size_scale=2e1),    # 太阳放大 20 倍

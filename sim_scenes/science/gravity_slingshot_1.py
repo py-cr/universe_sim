@@ -7,8 +7,8 @@
 # python_version  :3.8
 # ==============================================================================
 from bodies import Sun, Earth, Moon
-from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
-from sim_scenes.func import mayavi_run, ursina_run
+from common.consts import SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
+from sim_scenes.func import ursina_run
 from bodies.body import AU
 
 if __name__ == '__main__':
@@ -25,9 +25,6 @@ if __name__ == '__main__':
               # init_velocity=[0, 50, -1],
               ),
     ]
-
-    # 使用 mayavi 查看的运行效果
-    # mayavi_run(bodies, SECONDS_PER_WEEK, view_azimuth=-45)
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹

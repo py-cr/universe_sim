@@ -8,7 +8,7 @@
 # ==============================================================================
 from bodies import Moon, Earth, Body
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_MINUTE
-from sim_scenes.func import mayavi_run, ursina_run
+from sim_scenes.func import ursina_run
 
 if __name__ == '__main__':
     """

@@ -27,9 +27,9 @@ if __name__ == '__main__':
     # TODO: 月球在摄像机的前方（从 “新月” 开始）
     moon_pos, moon_vel = [0, 0, 384400], [-(EARTH_INIT_VELOCITY + 1.03), 0, 0]
     # TODO: 月球在摄像机的右方（从 “下弦月” 开始），将会从右方出现
-    # moon_pos, moon_vel = [384400, 0, 0], [-EARTH_INIT_VELOCITY, 0, 1.023]
+    # moon_pos, moon_vel = [384400, 0, 0], [-EARTH_INIT_VELOCITY, 0, 1.03]
     # TODO: 月球在摄像机的左方（从 “上弦月” 开始）
-    # moon_pos, moon_vel = [-384400, 0, 0], [EARTH_INIT_VELOCITY, 0, -1.023]
+    # moon_pos, moon_vel = [-384400, 0, 0], [EARTH_INIT_VELOCITY, 0, -1.03]
     moon = Moon(init_position=moon_pos,  # 距地距离约: 363104 至 405696 km
                 init_velocity=moon_vel,
                 size_scale=2e1)  # 月球放大 20 倍，距离保持不变

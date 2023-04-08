@@ -9,6 +9,7 @@
 from ursina import Text, Ursina, application
 import datetime
 
+from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
 
@@ -22,8 +23,8 @@ class Timer(Text):
                          font=UrsinaConfig.CN_FONT, background=True)
         UrsinaEvent.on_timer_changed_subscription(self.on_timer_changed)
 
-    def on_timer_changed(self, time_text, time_data):
-        self.text = time_text
+    def on_timer_changed(self, time_data: TimeData):
+        self.text = time_data.time_text
 
     def update(self):
         self.text = "00:00:00"

@@ -52,9 +52,9 @@ class UrsinaEvent:
         UrsinaEvent.on_timer_changed_callback.append(fun)
 
     @staticmethod
-    def on_timer_changed(time_text, time_data):
+    def on_timer_changed(time_data):
         for f in UrsinaEvent.on_timer_changed_callback:
-            f(time_text, time_data)
+            f(time_data)
 
     @staticmethod
     def on_evolving_subscription(fun):

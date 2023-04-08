@@ -9,8 +9,10 @@
 from bodies import Sun, Asteroids, Body
 from common.consts import AU
 from sim_scenes.func import create_text_panel
+from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.ursina_event import UrsinaEvent
 from ursina import camera
+import datetime
 
 
 class SpeedOfLightInit:
@@ -73,9 +75,9 @@ class SpeedOfLightInit:
         @return:
         """
         self.arrived_bodies.clear()  # 重置存放记录光体已到达天体列表
-        self.arrived_info = "[00:00:00]\t从 [太阳] 出发\n\n"
+        self.arrived_info = "距离[太阳]：${distance}\n\n"
         if self.text_panel is not None:
-            self.text_panel.text = self.arrived_info
+            self.text_panel.text = self.arrived_info.replace("${distance}", "0 AU")
 
     def event_subscription(self):
         """
@@ -118,7 +120,7 @@ class SpeedOfLightInit:
         @return:
         """
         self.text_panel = create_text_panel()
-        self.text_panel.text = self.arrived_info
+        self.text_panel.text = self.arrived_info.replace("${distance}", "0 AU")
 
         if self.__camera_follow_light == "SideView":
             camera.parent = self.light_body.planet
@@ -129,14 +131,12 @@ class SpeedOfLightInit:
             self.light_body.planet.input = self.light_body_input
             camera.rotation_y = -15
 
-    def on_timer_changed(self, time_text, time_data):
+    def on_timer_changed(self, time_data: TimeData):
         """
         计时器触发
-        @param time_text: 计时器时间文本
         @param time_data: 计时器时间数据
         @return:
         """
-        years, days, hours, minutes, seconds = time_data
         for body in self.bodies:
             if body is self.light_body or isinstance(body, Sun) \
                     or body in self.arrived_bodies or isinstance(body, Asteroids):
@@ -146,6 +146,16 @@ class SpeedOfLightInit:
             if self.light_body.position[2] >= body.position[2]:
                 self.arrived_bodies.append(body)
                 if self.text_panel is not None:
-                    self.arrived_info += f"[{time_text}]\t到达\t[{body.name}]\n\n"
-                    self.text_panel.text = self.arrived_info
-                    print(f"[{time_text}] 到达 [{body.name}]")
+                    self.arrived_info += f"[{time_data.time_text}]\t到达\t[{body.name}]\n\n"
+                    distance = round(self.light_body.position[2] / AU, 2)
+                    self.text_panel.text = self.arrived_info.replace("${distance}", f"{distance} AU")
+                    print(f"[{time_data.time_text}] 到达 [{body.name}]")
+                    return
+
+        if not hasattr(self, "last_time"):
+            self.last_time = datetime.datetime.now()
+        else:
+            if datetime.datetime.now() - datetime.timedelta(milliseconds=1000) > self.last_time:
+                distance = round(self.light_body.position[2] / AU, 2)
+                self.text_panel.text = self.arrived_info.replace("${distance}", f"{distance} AU")
+                self.last_time = datetime.datetime.now()

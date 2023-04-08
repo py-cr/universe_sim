@@ -16,6 +16,32 @@ import math
 from simulators.ursina.ursina_event import UrsinaEvent
 
 
+class TimeData:
+    def __init__(self, seconds):
+        self.total_seconds = seconds
+        # 获取到 seconds 后，通过下面的计算得到时分秒、年、天
+        hours, remainder = divmod(seconds, 3600)
+        minutes, seconds = divmod(remainder, 60)
+        days, hours = divmod(hours, 24)
+        years = days // 365
+        days = days % 365
+
+        self.years = int(years)
+        self.days = int(days)
+        self.hours = int(hours)
+        self.minutes = int(minutes)
+        self.seconds = int(seconds)
+
+        if days > 1:
+            s_days = str(days).rjust(3, " ")
+            if days >= 20 or years >= 1:
+                self.time_text = f'{self.years}年{s_days}天'
+            else:
+                self.time_text = f'{self.days}天 {self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}'
+        else:
+            self.time_text = f'{self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}'
+
+
 class BodyTimer(Singleton):
     """
     天体计时器，原理就是:
@@ -51,23 +77,23 @@ class BodyTimer(Singleton):
 
         # 距离(km) / 速度(km/s) = 时间(s)
         seconds = round(self.position_sum / self.velocity_inc)
-        # 获取到 seconds 后，通过下面的计算得到时分秒、年、天
-        hours, remainder = divmod(seconds, 3600)
-        minutes, seconds = divmod(remainder, 60)
-        days, hours = divmod(hours, 24)
-        years = days // 365
-        days = days % 365
-        if days > 1:
-            s_days = str(days).rjust(3, " ")
-            if days >= 20 or years >= 1:
-                time_text = f'{int(years)}年{s_days}天'
-            else:
-                time_text = f'{int(days)}天 {int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}'
-        else:
-            time_text = f'{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}'
+        # # 获取到 seconds 后，通过下面的计算得到时分秒、年、天
+        # hours, remainder = divmod(seconds, 3600)
+        # minutes, seconds = divmod(remainder, 60)
+        # days, hours = divmod(hours, 24)
+        # years = days // 365
+        # days = days % 365
+        # if days > 1:
+        #     s_days = str(days).rjust(3, " ")
+        #     if days >= 20 or years >= 1:
+        #         time_text = f'{int(years)}年{s_days}天'
+        #     else:
+        #         time_text = f'{int(days)}天 {int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}'
+        # else:
+        #     time_text = f'{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}'
 
         # print(self.text)
-        UrsinaEvent.on_timer_changed(time_text, (years, days, hours, minutes, seconds))
+        UrsinaEvent.on_timer_changed(TimeData(seconds))
 
     def ignore_gravity(self, body):
         return True

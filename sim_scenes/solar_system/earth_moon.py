@@ -8,7 +8,7 @@
 # ==============================================================================
 from bodies import Sun, Earth, Moon
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
-from sim_scenes.func import mayavi_run, ursina_run, camera_look_at
+from sim_scenes.func import ursina_run, camera_look_at
 from bodies.body import AU
 from simulators.ursina.ursina_event import UrsinaEvent
 
@@ -17,19 +17,21 @@ if __name__ == '__main__':
     地球、月球
     """
     OFFSETTING = 0
-    # TODO: 抵消月球带动地球的力
+    # TODO: 可以抵消月球带动地球的力，保持地球在原地
     # OFFSETTING = 0.01265
     bodies = [
-        # sun,
         Earth(init_position=[0, 0, 0], texture="earth_hd.jpg",
               init_velocity=[OFFSETTING, 0, 0], size_scale=0.5e1),  # 地球放大 5 倍，距离保持不变
         Moon(init_position=[0, 0, 363104],  # 距地距离约: 363104 至 405696 km
              init_velocity=[-1.03, 0, 0], size_scale=1e1)  # 月球放大 10 倍，距离保持不变
     ]
 
+
     def on_ready():
+        # 运行开始前，将摄像机指向地球
         earth = bodies[0]
         camera_look_at(earth)
+
 
     UrsinaEvent.on_ready_subscription(on_ready)
 

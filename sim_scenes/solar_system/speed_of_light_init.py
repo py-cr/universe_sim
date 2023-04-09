@@ -99,6 +99,8 @@ class SpeedOfLightInit:
         if self.bodies is None:
             raise Exception("请指定 SpeedOfLightInit.bodies")
 
+
+
         # 订阅重新开始事件
         UrsinaEvent.on_reset_subscription(self.on_reset)
         UrsinaEvent.on_ready_subscription(self.on_ready)
@@ -128,6 +130,7 @@ class SpeedOfLightInit:
         模拟器开始运行前触发
         @return:
         """
+        # self.__light_body.planet_scale = self.__light_body.planet.scale
         self.text_panel = create_text_panel()
         self.text_panel.text = self.arrived_info.replace("${distance}", "0 AU")
 
@@ -140,9 +143,15 @@ class SpeedOfLightInit:
             self.light_body.planet.input = self.light_body_input
             camera.rotation_y = -15
 
+        # 取消订阅（防止 光体 的大小进行变化影响摄像机的视角）
+        UrsinaEvent.on_body_size_changed_unsubscription(self.light_body.planet.change_body_scale)
+
+    # def on_body_size(self):
+    #     self.light_body.planet.scale = self.light_body.planet_scale
+
     def auto_run_speed(self):
-        # if self.__camera_follow_light != "SideViewActualSize":
-        #     return
+        if self.__camera_follow_light != "SideViewActualSize":
+            return
 
         run_speed_maps = [
             {"au": 0.008, "secs": 1},
@@ -169,7 +178,7 @@ class SpeedOfLightInit:
             {"au": 30.692, "secs": SECONDS_PER_MINUTE},
             {"au": 30.702, "secs": 1},  # [04:15:19] 到达 [海王星] 30.7 AU
             {"au": 39.52, "secs": SECONDS_PER_HOUR * 1.2},
-            {"au": 39.53, "secs": SECONDS_PER_MINUTE},
+            {"au": 39.54, "secs": SECONDS_PER_MINUTE},
             {"au": 1000, "secs": 1}  # [05:28:55] 到达 [冥王星] 39.55 AU
         ]
         light_distance = self.light_body.position[2]

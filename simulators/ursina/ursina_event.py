@@ -43,6 +43,10 @@ class UrsinaEvent:
         UrsinaEvent.on_body_size_changed_callback.append(fun)
 
     @staticmethod
+    def on_body_size_changed_unsubscription(fun):
+        UrsinaEvent.on_body_size_changed_callback.remove(fun)
+
+    @staticmethod
     def on_body_size_changed():
         for f in UrsinaEvent.on_body_size_changed_callback:
             f()
@@ -50,6 +54,10 @@ class UrsinaEvent:
     @staticmethod
     def on_timer_changed_subscription(fun):
         UrsinaEvent.on_timer_changed_callback.append(fun)
+
+    @staticmethod
+    def on_timer_changed_unsubscription(fun):
+        UrsinaEvent.on_timer_changed_callback.remove(fun)
 
     @staticmethod
     def on_timer_changed(time_data):
@@ -61,6 +69,10 @@ class UrsinaEvent:
         UrsinaEvent.on_evolving_callback.append(fun)
 
     @staticmethod
+    def on_evolving_unsubscription(fun):
+        UrsinaEvent.on_evolving_callback.remove(fun)
+
+    @staticmethod
     def on_evolving(evolve_dt):
         for f in UrsinaEvent.on_evolving_callback:
             f(evolve_dt)
@@ -70,12 +82,20 @@ class UrsinaEvent:
         UrsinaEvent.on_application_run_callback.append(fun)
 
     @staticmethod
+    def on_application_run_callback_unsubscription(fun):
+        UrsinaEvent.on_application_run_callback.remove(fun)
+
+    @staticmethod
     def on_searching_bodies_subscription(subscription_name, fun):
         UrsinaEvent.on_searching_bodies_funcs.append((subscription_name, fun))
 
     @staticmethod
     def on_reset_subscription(fun):
         UrsinaEvent.on_reset_funcs.append(fun)
+
+    @staticmethod
+    def on_reset_unsubscription(fun):
+        UrsinaEvent.on_reset_funcs.remove(fun)
 
     @staticmethod
     def on_reset():
@@ -87,6 +107,10 @@ class UrsinaEvent:
         UrsinaEvent.on_ready_funcs.append(fun)
 
     @staticmethod
+    def on_ready_unsubscription(fun):
+        UrsinaEvent.on_ready_funcs.remove(fun)
+
+    @staticmethod
     def on_ready():
         for f in UrsinaEvent.on_ready_funcs:
             f()
@@ -94,6 +118,10 @@ class UrsinaEvent:
     @staticmethod
     def on_start_subscription(fun):
         UrsinaEvent.on_start_funcs.append(fun)
+
+    @staticmethod
+    def on_start_unsubscription(fun):
+        UrsinaEvent.on_start_funcs.remove(fun)
 
     @staticmethod
     def on_start():
@@ -105,10 +133,13 @@ class UrsinaEvent:
         UrsinaEvent.on_pause_funcs.append(fun)
 
     @staticmethod
+    def on_pause_unsubscription(fun):
+        UrsinaEvent.on_pause_funcs.remove(fun)
+
+    @staticmethod
     def on_pause():
         for f in UrsinaEvent.on_pause_funcs:
             f()
-
 
     @staticmethod
     def on_application_run():

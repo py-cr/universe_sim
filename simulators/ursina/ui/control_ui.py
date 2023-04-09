@@ -31,7 +31,7 @@ class ControlUI(UiPanel):
         self.trail_button_text = "○--"
 
         self.slider_body_spin_factor = UiSlider(text='自转速度', min=0.01, max=5, default=1)
-        self.slider_body_size_factor = UiSlider(text='天体缩放', min=0.1, max=10, step=0.1, default=1)
+        self.slider_body_size_factor = UiSlider(text='天体缩放', min=0.1, max=20, step=0.1, default=1)
         self.slider_run_speed_factor = UiSlider(text="运行速度", min=0.01, max=20, default=1)
         self.slider_control_speed_factor = UiSlider(text="控制速度", min=0.01, max=10,
                                                     step=0.1, default=application.time_scale)

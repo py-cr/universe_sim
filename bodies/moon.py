@@ -39,6 +39,7 @@ class Moon(Body):
         @param distance_scale: 距离缩放
         @param rotation_speed: 自旋速度（度/小时）
         @param ignore_mass: 是否忽略质量（如果为True，则不计算引力）
+                            TODO: 注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）
         @param trail_color:月球拖尾颜色（默认天体颜色）
         @param show_name: 是否显示月球名称
         @param gravity_only_for_earth: 如果为True，则仅适用于地球的重力，与其他天体之间的重力不会受到影响
@@ -61,12 +62,15 @@ class Moon(Body):
         super().__init__(**params)
         self.gravity_only_for_earth = gravity_only_for_earth
 
-    def ignore_gravity(self, body):
+    def ignore_gravity_with(self, body):
         """
-        是否忽略引力
+        是否忽略指定天体的引力
         @param body:
         @return:
         """
+        if self.ignore_mass:
+            return True
+
         if self.gravity_only_for_earth:
             # 月球只对地球有引力，忽略其他的引力
             if isinstance(body, Earth):

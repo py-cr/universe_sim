@@ -24,7 +24,10 @@ def show_eye_of_god():
     bodies = gen_bodies_from_image(pixel_image="./images/eye.png",
                                          texture="color_body.jpg",
                                          params={"camera_pos": camera_pos})
+
     # 放一个恒星作为背景
+    # TODO: ignore_mass=True
+    #  注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）
     bg = FixedStar(name="背景恒星", texture="fixed_star.png",
                    mass=2e32, color=(0xff, 0xf8, 0xd4),
                    init_position=[-400 * D, 100 * D, 6000 * D],  # [ 左-右+, 上+下-, 远+近- ]

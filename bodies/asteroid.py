@@ -47,9 +47,9 @@ class Asteroid(Body):
     def show_trail(self):
         return False
 
-    def ignore_gravity(self, body):
+    def ignore_gravity_with(self, body):
         """
-        是否忽略引力
+        是否忽略指定天体的引力
         @param body:
         @return:
         """

@@ -18,6 +18,7 @@ camera_follow_light = 'SideView'  # 摄像机跟随光，方向是侧面看
 # 实例化一个初始化对象（订阅事件，记录到达每个行星所需要的时间）
 init = SpeedOfLightInit(camera_follow_light)
 
+# TODO: 注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）
 # 创建太阳系天体（忽略质量，引力无效，初速度全部为0）
 bodies = create_solar_system_bodies(ignore_mass=True, init_velocity=[0, 0, 0])
 

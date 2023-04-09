@@ -19,6 +19,8 @@ if __name__ == '__main__':
     """
     resolution = 50
     # resolution = 500
+    # TODO: ignore_mass=True
+    #  注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）
     bodies = [
         Earth(texture="earth_at_night_hd.jpg",
               init_position=[0, 0, 0], init_velocity=[0, 0, 0],

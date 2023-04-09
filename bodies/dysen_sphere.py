@@ -39,13 +39,14 @@ class DysenSphere(Body):
             "parent": parent
         }
         super().__init__(**params)
+        # TODO: 注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）
         self.ignore_mass = True
         # 灯光禁用
         self.light_disable = True
 
-    def ignore_gravity(self, body):
+    def ignore_gravity_with(self, body):
         """
-        是否忽略引力
+        是否忽略指定天体的引力
         @param body:
         @return:
         """

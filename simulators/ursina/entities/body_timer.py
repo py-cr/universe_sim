@@ -41,6 +41,15 @@ class TimeData:
         else:
             self.time_text = f'{self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}'
 
+    @property
+    def total_minutes(self):
+        return self.total_seconds / 60
+
+    @property
+    def total_hours(self):
+        return self.total_seconds / 3600
+
+
 
 class BodyTimer(Singleton):
     """

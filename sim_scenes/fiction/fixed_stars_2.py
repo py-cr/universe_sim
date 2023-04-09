@@ -19,6 +19,8 @@ if __name__ == '__main__':
     # 构建恒星天体对象
     D = 5e5  # 基本距离单位:km（随意赋值）
     SIZE_SCALE = 0.5  # 所有天体尺寸缩放保持一致
+    # TODO: ignore_mass=True
+    #  注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）
     bodies = [
         Earth(size_scale=SIZE_SCALE, ignore_mass=True),
         Sun(size_scale=SIZE_SCALE, ignore_mass=True),                   # 太阳

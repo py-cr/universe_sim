@@ -73,7 +73,7 @@ class Planet(Entity):
             scale=scale,
             texture=texture,
             color=self.plant_color,
-            # collider="sphere",
+            collider="sphere",
             position=pos,
             rotation=rotation,
             double_sided=True

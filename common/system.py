@@ -186,7 +186,7 @@ class System(object):
 
                 if body1 is body2:
                     continue
-                elif body1.ignore_gravity(body2) or body2.ignore_gravity(body1):
+                elif body1.ignore_gravity_with(body2) or body2.ignore_gravity_with(body1):
                     continue
 
                 r = body2.position - body1.position

@@ -38,6 +38,7 @@ class Body(metaclass=ABCMeta):
         @param rotation_speed: 自旋速度（度/小时）
         @param parent: 天体的父对象
         @param ignore_mass: 是否忽略质量（如果为True，则不计算引力）
+                            TODO: 注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）
         @param is_fixed_star: 是否为恒星
         @param trail_color: 天体拖尾颜色（默认天体颜色）
         @param show_name: 是否显示天体名称
@@ -53,10 +54,11 @@ class Body(metaclass=ABCMeta):
         self.name = name
         self.__mass = mass
 
+        # 是否忽略质量（如果为True，则不计算引力）
+        # TODO: 注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）
         if self.__mass <= 0:  # 质量小于等于0就忽略
             self.ignore_mass = True
         else:
-            # 是否忽略质量（如果为True，则不计算引力）
             self.ignore_mass = ignore_mass
 
         self.__init_position = None
@@ -97,12 +99,13 @@ class Body(metaclass=ABCMeta):
 
         self.__has_rings = False
 
-    def set_ignore_mass(self, value=True):
+    def set_ignore_gravity(self, value=True):
         """
         设置忽略质量，True为引力失效
         @param value:
         @return:
         """
+        # TODO: 注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）
         if self.__mass <= 0:  # 质量小于等于0就忽略
             self.ignore_mass = True
         else:
@@ -220,8 +223,25 @@ class Body(metaclass=ABCMeta):
         @param value:
         @return:
         """
-        self.__acceleration = value
+        self.__acceleration = np.array(value, dtype=float)
         self.__record_history()
+
+    def stop(self):
+        """
+        停止运动，将加速度和速度置零
+        @return:
+        """
+        self.init_velocity = [0.0, 0.0, 0.0]
+        self.acceleration = [0.0, 0.0, 0.0]
+
+    def stop_and_ignore_gravity(self):
+        """
+        停止运动，并忽略质量（不受引力影响）
+        TODO: 注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）
+        @return:
+        """
+        self.set_ignore_gravity()
+        self.stop()
 
     @property
     def velocity(self):
@@ -359,12 +379,15 @@ class Body(metaclass=ABCMeta):
                (self.name, self.__class__.__name__, self.mass, self.raduis, self.diameter, self.volume, self.density,
                 self.position[0], self.position[1], self.position[2], self.velocity)
 
-    def ignore_gravity(self, body):
+    def ignore_gravity_with(self, body):
         """
-        是否忽略引力
+        是否忽略指定天体的引力
         @param body:
         @return:
         """
+        # TODO: 注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）
+        if self.ignore_mass:
+            return True
 
         return False
 

@@ -8,7 +8,9 @@
 # ==============================================================================
 from bodies import Moon, Earth, Body
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_MINUTE
-from sim_scenes.func import ursina_run, get_vector2d_velocity
+from sim_scenes.func import ursina_run, get_vector2d_velocity, camera_look_at, two_bodies_colliding
+from simulators.ursina.entities.body_timer import TimeData
+from simulators.ursina.ursina_event import UrsinaEvent
 
 
 def create_ejected_object(velocity, raduis, trail_color, angle=10):
@@ -33,16 +35,38 @@ if __name__ == '__main__':
     抛物线模拟
     """
     # 地球在中心位置
-    e = Earth(init_position=[0, 0, 0], size_scale=1, texture="earth_hd.jpg", init_velocity=[0, 0, 0])
-    raduis = e.raduis + 300
-    # 红色：velocity = 8  # 物体飞不出地球太远，就落地
-    obj1 = create_ejected_object(velocity=8, raduis=raduis, trail_color=(255, 0, 0))
-    # 绿色：velocity = 10  # 物体能飞出地球很远，但还是无法摆脱地球引力
+    earth = Earth(init_position=[0, 0, 0], size_scale=1, texture="earth_hd.jpg", init_velocity=[0, 0, 0])
+    raduis = earth.raduis + 300
+    # TODO: 4个不同的抛出速度  7.5km/s、8.5km/s、10km/s、11.2km/s（第二宇宙速度）
+    # 粉色：velocity = 7.5，飞不出地球太远，就落地
+    obj0 = create_ejected_object(velocity=7.5, raduis=raduis, trail_color=(255, 0, 255))
+    # 红色：velocity = 8.5，飞不出地球太远，就落地
+    obj1 = create_ejected_object(velocity=8.5, raduis=raduis, trail_color=(255, 0, 0))
+    # 绿色：velocity = 10，能飞出地球很远，但还是无法摆脱地球引力
     obj2 = create_ejected_object(velocity=10, raduis=raduis, trail_color=(0, 255, 0))
-    # 蓝色：velocity = 11.2  # 脱离地球引力直接飞出。速度11.2千米/秒为脱离地球引力的速度叫第二宇宙速度
+    # 蓝色：velocity = 11.2，脱离地球引力直接飞出。速度11.2千米/秒为脱离地球引力的速度叫第二宇宙速度
     obj3 = create_ejected_object(velocity=11.2, raduis=raduis, trail_color=(0, 0, 255))
 
-    bodies = [e, obj1, obj2, obj3]
+    bodies = [earth, obj0, obj1, obj2, obj3]
+
+
+    def on_timer_changed(time_data: TimeData):
+        """
+        定时触发，在10分钟后，进行碰撞判断，如果抛出物与地球相碰撞了，则抛出物体静止不动
+        @param time_data:
+        @return:
+        """
+        if time_data.total_minutes > 10:
+            # 抛出物体10分钟后，再进行碰撞判断
+            for obj in [obj0, obj1, obj2, obj3]:
+                # 循环判断每个抛出物与地球是否相碰撞
+                if two_bodies_colliding(obj, earth):
+                    # 如果抛出物与地球相碰撞了，则静止不动（抛出物停止并忽略引力）
+                    obj.stop_and_ignore_gravity()
+
+
+    # 订阅计时器事件（定时触发）
+    UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹

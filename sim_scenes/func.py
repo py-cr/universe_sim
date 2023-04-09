@@ -8,11 +8,14 @@
 # ==============================================================================
 import matplotlib.pyplot as plt
 from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, SECONDS_PER_HALF_DAY
+from common.func import calculate_distance
 from common.system import System
+from bodies import Body
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
 from common.consts import LIGHT_SPEED
 import math
+import numpy as np
 
 
 def mayavi_run(bodies, dt=SECONDS_PER_WEEK,
@@ -202,7 +205,7 @@ def create_solar_system_bodies(ignore_mass=False, init_velocity=None):
 
     # 遍历所有天体，
     for idx, body in enumerate(bodies):
-        body.set_ignore_mass(ignore_mass)  # 忽略质量（引力无效）
+        body.set_ignore_gravity(ignore_mass)  # 忽略质量（引力无效）
         if init_velocity is not None:
             body.init_velocity = init_velocity
     return bodies
@@ -260,6 +263,29 @@ def get_vector2d_velocity(velocity, angle=15):
     vx = math.cos(math.pi * angle / 180) * velocity
     # vx² + vy² = velocity²
     return vx, vy
+
+
+def two_bodies_colliding(body1: Body, body2: Body):
+    """
+    判断两个天体是否相撞
+    @param body1:
+    @param body2:
+    @return:
+    """
+    if hasattr(body1, "planet") and hasattr(body2, "planet"):
+        # 使用 Ursina 的算法
+        if hasattr(body1.planet, "intersects"):
+            return body1.planet.intersects(body2.planet).hit
+
+    # 自行实现的算法，两物体的距离小于两物体半径的和，就视为碰撞了
+    d = calculate_distance(np.array(body1.position) * body1.distance_scale,
+                           np.array(body2.position) * body2.distance_scale)
+
+    if d <= body1.raduis * body1.size_scale + body2.raduis * body2.size_scale:
+        return True
+    return False
+
+    # raise Exception("two_bodies_colliding 不支持类型[body1 body2]")
 
 
 if __name__ == '__main__':

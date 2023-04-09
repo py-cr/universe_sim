@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-# title           :太阳系场景模拟（展示用）
-# description     :太阳系场景模拟（为了更好的展示效果，对距离进行的调整，不是太阳系的真实距离）
+# title           :太阳系场景模拟4（展示用）
+# description     :太阳系场景模拟4（为了更好的展示效果，对距离进行的调整，不是太阳系的真实距离）
 # author          :Python超人
 # date            :2023-02-11
 # link            :https://gitcode.net/pythoncr/

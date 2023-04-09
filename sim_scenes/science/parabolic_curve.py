@@ -2,7 +2,7 @@
 # title           :抛物线模拟
 # description     :抛物线模拟
 # author          :Python超人
-# date            :2023-02-11
+# date            :2023-04-09
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================

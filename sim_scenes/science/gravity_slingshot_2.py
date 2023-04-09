@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-# title           :模拟流浪地球通过木星、土星加速
-# description     :模拟流浪地球通过木星、土星加速
+# title           :引力弹弓模拟演示2（模拟流浪地球通过木星、土星加速）
+# description     :引力弹弓模拟演示2（模拟流浪地球通过木星、土星加速）
 # author          :Python超人
 # date            :2023-02-11
 # link            :https://gitcode.net/pythoncr/
@@ -13,7 +13,7 @@ from bodies.body import AU
 
 if __name__ == '__main__':
     """
-    模拟流浪地球通过木星、土星加速
+    引力弹弓模拟演示2（模拟流浪地球通过木星、土星加速）
     """
     # params 为不同参数量的加速效果，j_pos为木星位置；s_pos为土星位置；e_vel为地球初始速度
     # 地球初始速度≈36km/s，通过木星加速到 42.43km/s(加速度为0时的速度)，再通过土星加速到 108.64km/s(加速度为0时的速度)

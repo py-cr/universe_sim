@@ -1,8 +1,8 @@
 # -*- coding:utf-8 -*-
-# title           :地月场景模拟
-# description     :地月场景模拟
+# title           :地球和卫星模拟
+# description     :地球和卫星模拟
 # author          :Python超人
-# date            :2023-02-11
+# date            :2023-04-09
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================

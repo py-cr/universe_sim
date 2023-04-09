@@ -20,8 +20,8 @@ COSMIC_FORE_COLOR = "white"
 def get_default_colors(styles={}):
     """
 
-    :param styles:
-    :return:
+    @param styles:
+    @return:
     """
     bg_color = styles["bg_color"] if "bg_color" in styles else "white"  # COSMIC_BG_COLOR
     fore_color = styles["fore_color"] if "fore_color" in styles else "black"  # COSMIC_FORE_COLOR
@@ -35,8 +35,8 @@ def get_default_colors(styles={}):
 def create_fig_ax(styles={}):
     """
 
-    :param styles:
-    :return:
+    @param styles:
+    @return:
     """
     bg_color, fore_color = get_default_colors(styles)
 
@@ -69,9 +69,9 @@ def create_fig_ax(styles={}):
 def update_ax_styles(ax, styles={}):
     """
 
-    :param ax:
-    :param styles:
-    :return:
+    @param ax:
+    @param styles:
+    @return:
     """
     plt.cla()
     bg_color, fore_color = get_default_colors(styles)

@@ -74,8 +74,8 @@ class UrsinaSimulator(Simulator):
     def get_bodies_max_distance(self, body_views):
         """
         算法优化
-        :param body_views:
-        :return:
+        @param body_views:
+        @return:
         """
         max_distance = 0
         for b1, b2 in itertools.combinations(body_views, 2):
@@ -93,7 +93,7 @@ class UrsinaSimulator(Simulator):
     def adjust_system_motion_params(self):
         """
         调整天体系统运行的参数
-        :return:
+        @return:
         """
         max_distance = self.get_bodies_max_distance(self.body_views)
         # 根据天体之间的距离，调整 application.time_scale（控制摄像头运动的速度）
@@ -116,7 +116,7 @@ class UrsinaSimulator(Simulator):
     def check_interval_expired(self):
         """
         检查时间间隔是否已过期
-        :return:
+        @return:
         """
         now = datetime.datetime.now()
         elapsed_time = now - self.last_time
@@ -154,8 +154,8 @@ class UrsinaSimulator(Simulator):
     def cosmic_background(self, texture='../textures/cosmic2.jpg'):
         """
         加入宇宙背景
-        :param texture:
-        :return:
+        @param texture:
+        @return:
         """
         # Add skybox
 

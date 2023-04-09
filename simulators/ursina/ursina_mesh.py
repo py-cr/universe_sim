@@ -18,9 +18,9 @@ from simulators.ursina.ursina_config import UrsinaConfig
 def create_sphere(radius, subdivisions):
     """
     创建一个球体
-    :param radius:
-    :param subdivisions:
-    :return:
+    @param radius:
+    @param subdivisions:
+    @return:
     """
     # 生成球体的顶点、UV坐标uvs、法线tris和三角面
     verts = []

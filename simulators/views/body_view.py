@@ -51,8 +51,8 @@ class BodyView(metaclass=ABCMeta):
     def __find_texture(self, texture):
         """
         尝试在多个路径下寻找纹理图片
-        :param texture: 纹理图片
-        :return: 纹理图片的路径
+        @param texture: 纹理图片
+        @return: 纹理图片的路径
         """
         return find_texture(texture)
         # if os.path.exists(texture):
@@ -68,8 +68,8 @@ class BodyView(metaclass=ABCMeta):
     def __get_texture_main_color(self, texture):
         """
         获取纹理图片的主要颜色
-        :param texture:
-        :return:
+        @param texture:
+        @return:
         """
         try:
             colors = get_dominant_colors(texture)
@@ -83,14 +83,14 @@ class BodyView(metaclass=ABCMeta):
     def update(self):
         """
         更新天体信息和数据，比如：更新天体的位置
-        :return:
+        @return:
         """
         pass
 
     def disappear(self):
         """
         天体消失的操作，比如：销毁天体视图对象
-        :return:
+        @return:
         """
         pass
 
@@ -98,6 +98,6 @@ class BodyView(metaclass=ABCMeta):
     def appear(self):
         """
         天体显示的操作，比如：构建天体视图对象
-        :return:
+        @return:
         """
         pass

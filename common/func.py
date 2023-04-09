@@ -17,9 +17,9 @@ import math
 def get_dominant_colors(infile, resize=(20, 20)):
     """
     获取图片的主要颜色
-    :param infile:
-    :param resize:
-    :return:
+    @param infile:
+    @param resize:
+    @return:
     """
     image = Image.open(infile)
 
@@ -49,12 +49,12 @@ def get_positions_velocitys(angles, velocity=1, radius=1, radius_offset=None, ve
     """
     以位置 （0, 0, 0）为中心，随机获取空间上的位置和公转方向的速度集合
     （比如：获取大批小行星的位置）
-    :param angles: 参考中心位置（0, 0, 0）的角度集合
-    :param velocity: 速度
-    :param radius: 半径（距离中心位置（0, 0, 0）的距离）
-    :param radius_offset:在半径的基础上，随机偏移的值
-    :param velocity_offset:在速度的基础上，随机偏移的值
-    :return:
+    @param angles: 参考中心位置（0, 0, 0）的角度集合
+    @param velocity: 速度
+    @param radius: 半径（距离中心位置（0, 0, 0）的距离）
+    @param radius_offset:在半径的基础上，随机偏移的值
+    @param velocity_offset:在速度的基础上，随机偏移的值
+    @return:
     """
     angles = np.array(angles * np.pi)
 
@@ -99,9 +99,9 @@ def find_file(file_path, default_val=None, find_deep=5):
 def calculate_distance(pos1, pos2=[0, 0, 0]):
     """
     计算两点间的距离
-    :param pos1:
-    :param pos2:
-    :return:
+    @param pos1:
+    @param pos2:
+    @return:
     """
     d = pow(pow(np.array(pos1[0]) - np.array(pos2[0]), 2) +
             pow(np.array(pos1[1]) - np.array(pos2[1]), 2) +

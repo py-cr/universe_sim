@@ -32,10 +32,10 @@ class MplSimulator(Simulator):
     def save_as_gif(self, dt, gif_max_frame=200, gif_file_name='bodies_run.gif', styles={}):
         """
         保存 GIF 文件
-        :param dt: 单位：秒，按时间差进行演变，值越小越精确，但演变速度会慢。
-        :param gif_max_frame: 导出的 gif 文件的画面帧数
-        :param gif_file_name: 导出的 gif 文件名
-        :return:
+        @param dt: 单位：秒，按时间差进行演变，值越小越精确，但演变速度会慢。
+        @param gif_max_frame: 导出的 gif 文件的画面帧数
+        @param gif_file_name: 导出的 gif 文件名
+        @return:
         """
 
         fig, ax = create_fig_ax()
@@ -57,11 +57,11 @@ class MplSimulator(Simulator):
     def run(self, dt, **kwargs):
         """
 
-        :param dt: 单位：秒，按时间差进行演变，值越小越精确，但演变速度会慢。
-        :param kwargs:
+        @param dt: 单位：秒，按时间差进行演变，值越小越精确，但演变速度会慢。
+        @param kwargs:
             gif_file_name: 导出的 gif 文件名，如果为空，则显示动画
             gif_max_frame: 导出的 gif 文件的画面帧数
-        :return:
+        @return:
         """
         gif_file_name = kwargs["gif_file_name"] if "gif_file_name" in kwargs else None
         gif_max_frame = kwargs["gif_max_frame"] if "gif_max_frame" in kwargs else None
@@ -84,10 +84,10 @@ class MplSimulator(Simulator):
     def show_figure(self, ax, bodies, pause=0.1, update_ax=None, styles={}):
         """
 
-        :param ax:
-        :param bodies:
-        :param pause:
-        :return:
+        @param ax:
+        @param bodies:
+        @param pause:
+        @return:
         """
         if update_ax is not None:
             # 更新 ax

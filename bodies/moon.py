@@ -26,7 +26,23 @@ class Moon(Body):
                  init_position=[0, 0, 363104 + 1.12 * AU],
                  init_velocity=[-(29.79 + 1.03), 0, 0],
                  texture="moon.jpg", size_scale=1.0, distance_scale=1.0,
-                 rotation_speed=0.25, ignore_mass=False, trail_color=None, show_name=False):
+                 rotation_speed=0.25, ignore_mass=False,
+                 trail_color=None, show_name=False,
+                 gravity_only_for_earth=False):
+        """
+        @param name: 月球名称
+        @param mass: 月球质量 (kg)
+        @param init_position: 初始位置 (km)
+        @param init_velocity: 初始速度 (km/s)
+        @param texture: 纹理图片
+        @param size_scale: 尺寸缩放
+        @param distance_scale: 距离缩放
+        @param rotation_speed: 自旋速度（度/小时）
+        @param ignore_mass: 是否忽略质量（如果为True，则不计算引力）
+        @param trail_color:月球拖尾颜色（默认天体颜色）
+        @param show_name: 是否显示月球名称
+        @param gravity_only_for_earth: 如果为True，则仅适用于地球的重力，与其他天体之间的重力不会受到影响
+        """
         params = {
             "name": name,
             "mass": mass,
@@ -43,18 +59,22 @@ class Moon(Body):
             "show_name": show_name
         }
         super().__init__(**params)
+        self.gravity_only_for_earth = gravity_only_for_earth
 
-    # def ignore_gravity(self, body):
-    #     """
-    #     是否忽略引力
-    #     :param body:
-    #     :return:
-    #     """
-    #     # 月球只对地球有引力，忽略其他的引力
-    #     if isinstance(body, Earth):
-    #         return False
-    #
-    #     return True
+    def ignore_gravity(self, body):
+        """
+        是否忽略引力
+        @param body:
+        @return:
+        """
+        if self.gravity_only_for_earth:
+            # 月球只对地球有引力，忽略其他的引力
+            if isinstance(body, Earth):
+                return False
+        else:
+            return False
+
+        return True
 
 
 if __name__ == '__main__':

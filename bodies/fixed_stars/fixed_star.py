@@ -88,7 +88,7 @@ class FixedStar(Body):
     def is_fixed_star(self):
         """
         恒星
-        :return:
+        @return:
         """
         return True
 

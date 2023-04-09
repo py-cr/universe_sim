@@ -50,8 +50,8 @@ class Asteroid(Body):
     def ignore_gravity(self, body):
         """
         是否忽略引力
-        :param body:
-        :return:
+        @param body:
+        @return:
         """
         # 小行星只对恒星有引力，忽略其他行星的引力
         if body.is_fixed_star:

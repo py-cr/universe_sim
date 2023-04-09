@@ -46,8 +46,8 @@ class DysenSphere(Body):
     def ignore_gravity(self, body):
         """
         是否忽略引力
-        :param body:
-        :return:
+        @param body:
+        @return:
         """
         return True
 

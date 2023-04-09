@@ -49,7 +49,7 @@ class Saturn(Body):
     def has_rings(self):
         """
         土星带光环的天体
-        :return:
+        @return:
         """
         return True
 
@@ -57,7 +57,7 @@ class Saturn(Body):
     def rings_color(self):
         """
         土星光环的颜色
-        :return:
+        @return:
         """
         return 173, 121, 92
 

@@ -21,8 +21,8 @@ class System(object):
     def __init__(self, bodies, max_distance=200 * AU):
         """
 
-        :param bodies:
-        :param max_distance:系统的最大范围，超出范围的天体就不显示了
+        @param bodies:
+        @param max_distance:系统的最大范围，超出范围的天体就不显示了
         """
         self.bodies = bodies
         # self.adjust_distance_and_velocity()
@@ -78,7 +78,7 @@ class System(object):
     def total_mass(self):
         """
         总质量
-        :return:
+        @return:
         """
         total_mass = 0.0
         for body in self.bodies:
@@ -91,7 +91,7 @@ class System(object):
     def center_of_mass(self):
         """
         质心
-        :return:
+        @return:
         """
         r = np.zeros(2)
         for body in self.bodies:
@@ -101,8 +101,8 @@ class System(object):
     def evolve(self, dt):
         """
 
-        :param dt:
-        :return:
+        @param dt:
+        @return:
         """
         self.calc_bodies_acceleration()
 
@@ -115,9 +115,9 @@ class System(object):
     def save_to_json(self, json_file_name, params=None):
         """
 
-        :param json_file_name:
-        :param params:
-        :return:
+        @param json_file_name:
+        @param params:
+        @return:
         """
         import json
         import os
@@ -145,14 +145,14 @@ class System(object):
     def calc_bodies_acceleration(self):
         """
         计算加速度
-        :return:
+        @return:
         """
 
         def valid_body(body):
             """
             判断是否为有效的天体
-            :param body:
-            :return:
+            @param body:
+            @return:
             """
             if not body.appeared:  # 不显示
                 return False

@@ -26,20 +26,21 @@ class Body(metaclass=ABCMeta):
                  is_fixed_star=False, trail_color=None, show_name=False):
         """
         天体类
-        :param name: 天体名称
-        :param mass: 天体质量 (kg)
-        :param init_position: 初始位置 (km)
-        :param init_velocity: 初始速度 (km/s)
-        :param density: 平均密度 (kg/m³)
-        :param color: 天体颜色（纹理图片优先）
-        :param texture: 纹理图片
-        :param size_scale: 尺寸缩放
-        :param distance_scale: 距离缩放
-        :param rotation_speed: 自旋速度（度/小时）
-        :param parent: 天体的父对象
-        :param ignore_mass: 是否忽略质量（如果为True，则不计算引力）
-        :param is_fixed_star: 是否为恒星
-        :param trail_color: 天体拖尾颜色（默认天体颜色）
+        @param name: 天体名称
+        @param mass: 天体质量 (kg)
+        @param init_position: 初始位置 (km)
+        @param init_velocity: 初始速度 (km/s)
+        @param density: 平均密度 (kg/m³)
+        @param color: 天体颜色（纹理图片优先）
+        @param texture: 纹理图片
+        @param size_scale: 尺寸缩放
+        @param distance_scale: 距离缩放
+        @param rotation_speed: 自旋速度（度/小时）
+        @param parent: 天体的父对象
+        @param ignore_mass: 是否忽略质量（如果为True，则不计算引力）
+        @param is_fixed_star: 是否为恒星
+        @param trail_color: 天体拖尾颜色（默认天体颜色）
+        @param show_name: 是否显示天体名称
         """
         self.__his_pos = []
         self.__his_vel = []
@@ -130,7 +131,7 @@ class Body(metaclass=ABCMeta):
     def init_position(self):
         """
         获取天体的初始位置（单位：km）
-        :return:
+        @return:
         """
         return self.__init_position
 
@@ -138,8 +139,8 @@ class Body(metaclass=ABCMeta):
     def init_position(self, value):
         """
         设置天体的初始位置（单位：km）
-        :param value:
-        :return:
+        @param value:
+        @return:
         """
         self.__init_position = np.array(value, dtype='float32')
         self.__position = copy.deepcopy(self.__init_position)
@@ -148,7 +149,7 @@ class Body(metaclass=ABCMeta):
     def init_velocity(self):
         """
         获取天体的初始速度 (km/s)
-        :return:
+        @return:
         """
         return self.__init_velocity
 
@@ -156,8 +157,8 @@ class Body(metaclass=ABCMeta):
     def init_velocity(self, value):
         """
         设置天体的初始速度 (km/s)
-        :param value:
-        :return:
+        @param value:
+        @return:
         """
         self.__init_velocity = np.array(value, dtype='float32')
         self.__velocity = copy.deepcopy(self.__init_velocity)
@@ -166,7 +167,7 @@ class Body(metaclass=ABCMeta):
     def has_rings(self):
         """
         是否为带光环的天体（土星为 True）
-        :return:
+        @return:
         """
         return self.__has_rings
 
@@ -178,7 +179,7 @@ class Body(metaclass=ABCMeta):
     def is_fixed_star(self):
         """
         是否为恒星（太阳为 True）
-        :return:
+        @return:
         """
         return self.__is_fixed_star
 
@@ -190,7 +191,7 @@ class Body(metaclass=ABCMeta):
     def position(self):
         """
         获取天体的位置（单位：km）
-        :return:
+        @return:
         """
         return self.__position
 
@@ -198,8 +199,8 @@ class Body(metaclass=ABCMeta):
     def position(self, value):
         """
         设置天体的位置（单位：km）
-        :param value:
-        :return:
+        @param value:
+        @return:
         """
         self.__position = value
         self.__record_history()
@@ -208,7 +209,7 @@ class Body(metaclass=ABCMeta):
     def acceleration(self):
         """
         获取天体的加速度（单位：km/s²）
-        :return:
+        @return:
         """
         return self.__acceleration
 
@@ -216,8 +217,8 @@ class Body(metaclass=ABCMeta):
     def acceleration(self, value):
         """
         设置天体的加速度（单位：km/s²）
-        :param value:
-        :return:
+        @param value:
+        @return:
         """
         self.__acceleration = value
         self.__record_history()
@@ -226,7 +227,7 @@ class Body(metaclass=ABCMeta):
     def velocity(self):
         """
         获取天体的速度（单位：km/s）
-        :return:
+        @return:
         """
         return self.__velocity
 
@@ -234,8 +235,8 @@ class Body(metaclass=ABCMeta):
     def velocity(self, value):
         """
         设置天体的速度（单位：km/s）
-        :param value:
-        :return:
+        @param value:
+        @return:
         """
         self.__velocity = value
         self.__record_history()
@@ -243,9 +244,9 @@ class Body(metaclass=ABCMeta):
     def __append_history(self, his_list, data):
         """
         追加每个位置时刻的历史数据
-        :param his_list:
-        :param data:
-        :return:
+        @param his_list:
+        @param data:
+        @return:
         """
         # 如果历史记录为0 或者 新增数据和最后的历史数据不相同，则添加
         if len(his_list) == 0 or \
@@ -255,7 +256,7 @@ class Body(metaclass=ABCMeta):
     def __record_history(self):
         """
         记录每个位置时刻的历史数据
-        :return:
+        @return:
         """
         # 如果历史记录数超过了保留数量，则截断，只保留 __his_reserved_num 数量的历史
         if len(self.__his_pos) > self.__his_reserved_num:
@@ -272,21 +273,21 @@ class Body(metaclass=ABCMeta):
     def his_position(self):
         """
         历史位置
-        :return:
+        @return:
         """
         return self.__his_pos
 
     def his_velocity(self):
         """
         历史瞬时速度
-        :return:
+        @return:
         """
         return self.__his_vel
 
     def his_acceleration(self):
         """
         历史瞬时加速度
-        :return:
+        @return:
         """
         return self.__his_acc
 
@@ -294,7 +295,7 @@ class Body(metaclass=ABCMeta):
     def mass(self):
         """
         天体质量 (单位：kg)
-        :return:
+        @return:
         """
         return self.__mass
 
@@ -302,7 +303,7 @@ class Body(metaclass=ABCMeta):
     def rotation_speed(self):
         """
         自旋速度（度/小时）
-        :return:
+        @return:
         """
         return self.__rotation_speed
 
@@ -310,7 +311,7 @@ class Body(metaclass=ABCMeta):
     def rotation_speed(self, value):
         """
         自旋速度（度/小时）
-        :return:
+        @return:
         """
         self.__rotation_speed = value
 
@@ -318,7 +319,7 @@ class Body(metaclass=ABCMeta):
     def density(self):
         """
         平均密度 (单位：kg/m³)
-        :return:
+        @return:
         """
         return self.__density
 
@@ -340,7 +341,7 @@ class Body(metaclass=ABCMeta):
     def raduis(self):
         """
         天体的半径（单位：km）
-        :return:
+        @return:
         """
         # V = ⁴⁄₃πr³  -> r = pow((3V)/(4π),1/3)
         return pow(3 * self.volume / (4 * math.pi), 1 / 3)
@@ -349,7 +350,7 @@ class Body(metaclass=ABCMeta):
     def diameter(self):
         """
         天体的直径（单位：km）
-        :return:
+        @return:
         """
         return self.raduis * 2
 
@@ -361,8 +362,8 @@ class Body(metaclass=ABCMeta):
     def ignore_gravity(self, body):
         """
         是否忽略引力
-        :param body:
-        :return:
+        @param body:
+        @return:
         """
 
         return False
@@ -370,7 +371,7 @@ class Body(metaclass=ABCMeta):
     def position_au(self):
         """
         获取天体的位置（单位：天文单位 A.U.）
-        :return:
+        @return:
         """
         pos = self.position
         pos_au = pos / AU
@@ -385,7 +386,7 @@ class Body(metaclass=ABCMeta):
     def reset(self):
         """
         重新设置初始速度和初始位置
-        :return:
+        @return:
         """
         self.position = copy.deepcopy(self.init_position)
         self.velocity = copy.deepcopy(self.init_velocity)
@@ -405,8 +406,8 @@ class Body(metaclass=ABCMeta):
     def build_bodies_from_json(json_file):
         """
         JSON文件转为天体对象
-        :param json_file:
-        :return:
+        @param json_file:
+        @return:
         """
         bodies = []
         params = {}
@@ -451,8 +452,8 @@ class Body(metaclass=ABCMeta):
     def exp(body_data):
         """
         进行表达式分析，将表达式改为eval执行后的结果
-        :param body_data:
-        :return:
+        @param body_data:
+        @return:
         """
         #
         for k in body_data.keys():

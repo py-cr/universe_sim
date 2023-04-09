@@ -20,13 +20,13 @@ def mayavi_run(bodies, dt=SECONDS_PER_WEEK,
                bgcolor=(1 / 255, 1 / 255, 30 / 255)):
     """
     用 mayavi 查看运行效果
-    :param bodies: 天体
-    :param dt: 单位：秒，按时间差进行演变，值越小越精确，但演变速度会慢。
-    :param view_azimuth: 观测方位角，可选，float类型（以度为单位，0-360），用x轴投影到x-y平面上的球体上的位置矢量所对的角度。
-    :param view_distance: 观测距离，可选，float类型 or 'auto',一个正浮点数，表示距放置相机的焦点的距离。
-    :param view_focalpoint: 观测焦点，可选，类型为一个由3个浮点数组成的数组 or 'auto'，，代表观测相机的焦点
-    :param bgcolor:
-    :return:
+    @param bodies: 天体
+    @param dt: 单位：秒，按时间差进行演变，值越小越精确，但演变速度会慢。
+    @param view_azimuth: 观测方位角，可选，float类型（以度为单位，0-360），用x轴投影到x-y平面上的球体上的位置矢量所对的角度。
+    @param view_distance: 观测距离，可选，float类型 or 'auto',一个正浮点数，表示距放置相机的焦点的距离。
+    @param view_focalpoint: 观测焦点，可选，类型为一个由3个浮点数组成的数组 or 'auto'，，代表观测相机的焦点
+    @param bgcolor:
+    @return:
     """
     from mayavi import mlab
     from simulators.mayavi_simulator import MayaviSimulator
@@ -146,10 +146,10 @@ def ursina_run(bodies,
 def mpl_run(bodies, dt=SECONDS_PER_WEEK, gif_file_name=None, gif_max_frame=200):
     """
 
-    :param bodies: 天体
-    :param dt: 单位：秒，按时间差进行演变，值越小越精确，但演变速度会慢。
-    :param gif_file_name: 导出的 gif 文件名，如果为空，则显示动画
-    :return:
+    @param bodies: 天体
+    @param dt: 单位：秒，按时间差进行演变，值越小越精确，但演变速度会慢。
+    @param gif_file_name: 导出的 gif 文件名，如果为空，则显示动画
+    @return:
     """
     from simulators.mpl_simulator import MplSimulator
     body_sys = System(bodies)

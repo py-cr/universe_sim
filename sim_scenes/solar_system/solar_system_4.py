@@ -16,11 +16,11 @@ from common.consts import G
 def get_velocity(mass, distance, velocity, target_distance):
     """
     根据天体的质量和天体原始距离、速度，计算出能稳定围绕太阳转的速度。
-    :param mass: 天体质量，单位 kg
-    :param distance: 天体原始距离，单位 km
-    :param velocity: 天体原始速度，单位 km/s
-    :param target_distance: 目标距离，即新轨道的距离，单位 km
-    :return: 稳定围绕太阳转的速度，单位 km/s
+    @param mass: 天体质量，单位 kg
+    @param distance: 天体原始距离，单位 km
+    @param velocity: 天体原始速度，单位 km/s
+    @param target_distance: 目标距离，即新轨道的距离，单位 km
+    @return: 稳定围绕太阳转的速度，单位 km/s
     """
     v = velocity * pow(distance / target_distance, 0.5)
     # # 计算原始速率

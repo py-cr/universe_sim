@@ -18,8 +18,8 @@ class Simulator(metaclass=ABCMeta):
     def __init__(self, bodies_sys: System, viewer_type: type):
         """
 
-        :param bodies_sys: 天体系统
-        :param viewer_type: BodyViewer类型
+        @param bodies_sys: 天体系统
+        @param viewer_type: BodyViewer类型
         """
         self.body_views = []
         self.bodies_sys = bodies_sys
@@ -28,8 +28,8 @@ class Simulator(metaclass=ABCMeta):
     def init_views(self, viewer_type: type):
         """
 
-        :param viewer_type: BodyViewer类型
-        :return:
+        @param viewer_type: BodyViewer类型
+        @return:
         """
         for body in self.bodies_sys.bodies:
             view = viewer_type(body, self.bodies_sys)
@@ -38,8 +38,8 @@ class Simulator(metaclass=ABCMeta):
     def evolve(self, dt: int):
         """
         单位：秒，按时间差进行演变，值越小越精确，但演变速度会慢。
-        :param dt: 时间差（秒）
-        :return:
+        @param dt: 时间差（秒）
+        @return:
         """
         self.bodies_sys.evolve(dt)
         for idx, view in enumerate(self.body_views):
@@ -71,7 +71,7 @@ class Simulator(metaclass=ABCMeta):
     def run(self, dt: int, **kwargs):
         """
         按时间差运行，值越小越精确，但演变速度会慢。
-        :param dt: 时间差（秒）
-        :return:
+        @param dt: 时间差（秒）
+        @return:
         """
         pass

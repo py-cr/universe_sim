@@ -46,7 +46,7 @@ class Sun(FixedStar):
     def is_fixed_star(self):
         """
         太阳为恒星
-        :return:
+        @return:
         """
         return True
 

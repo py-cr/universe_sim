@@ -19,13 +19,13 @@ hsv_to_rgb = np.vectorize(colorsys.hsv_to_rgb)
 def image_file_enhance(imageFilePath, bright, contrast, color, sharpness, saveFolderPath):
     """
     图像增强之亮度、对比度与饱和度调整
-    :param imageFilePath: 图像文件路径
-    :param bright: 亮度
-    :param contrast: 对比度
-    :param color: 饱和度
-    :param sharpness: 清晰度
-    :param saveFolderPath: 结果保存路径
-    :return:
+    @param imageFilePath: 图像文件路径
+    @param bright: 亮度
+    @param contrast: 对比度
+    @param color: 饱和度
+    @param sharpness: 清晰度
+    @param saveFolderPath: 结果保存路径
+    @return:
     """
     imageFileName = os.path.basename(imageFilePath)
     imageOriginal = Image.open(imageFilePath)
@@ -59,13 +59,13 @@ def image_file_enhance(imageFilePath, bright, contrast, color, sharpness, saveFo
 def image_enhance(imageOriginal, bright=0, contrast=0, color=0, sharpness=0):
     """
     图像增强之亮度、对比度与饱和度调整
-    :param imageFilePath: 图像文件路径
-    :param bright: 亮度
-    :param contrast: 对比度
-    :param color: 饱和度
-    :param sharpness: 清晰度
-    :param saveFolderPath: 结果保存路径
-    :return:
+    @param imageFilePath: 图像文件路径
+    @param bright: 亮度
+    @param contrast: 对比度
+    @param color: 饱和度
+    @param sharpness: 清晰度
+    @param saveFolderPath: 结果保存路径
+    @return:
     """
     image = imageOriginal
     if bright > 0:
@@ -194,8 +194,8 @@ def find_texture_root_path():
 def find_texture(texture):
     """
     尝试在多个路径下寻找纹理图片
-    :param texture: 纹理图片
-    :return: 纹理图片的路径
+    @param texture: 纹理图片
+    @return: 纹理图片的路径
     """
     if os.path.exists(texture):
         return texture
@@ -339,8 +339,8 @@ if __name__ == '__main__':
 #     """
 #     自适应地调整图片的对比度和亮度。
 #
-#     :param image_path: 图像路径。
-#     :return: 调整后的图像对象。
+#     @param image_path: 图像路径。
+#     @return: 调整后的图像对象。
 #     """
 #     if isinstance(src_img, str):
 #         image = Image.open(src_img)
@@ -382,8 +382,8 @@ if __name__ == '__main__':
 #     """
 #     自适应地调整图片的对比度和亮度。
 #
-#     :param image_path: 图像路径。
-#     :return: 调整后的图像对象。
+#     @param image_path: 图像路径。
+#     @return: 调整后的图像对象。
 #     """
 #     if isinstance(src_img, str):
 #         image = Image.open(src_img)
@@ -418,8 +418,8 @@ if __name__ == '__main__':
 #     """
 #     自适应地调整图片的对比度和亮度。
 #
-#     :param image_path: 图像路径。
-#     :return: 调整后的图像对象。
+#     @param image_path: 图像路径。
+#     @return: 调整后的图像对象。
 #     """
 #     if isinstance(src_img, str):
 #         image = Image.open(src_img)

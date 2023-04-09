@@ -42,7 +42,7 @@ def create_name_text(parent):
 def trail_init(parent):
     """
     拖尾球体的初始化
-    :return:
+    @return:
     """
     # 存放拖尾球体
     parent.trails = {}
@@ -79,7 +79,7 @@ def distance_between_two_points(point_a: Vec3, point_b: Vec3) -> float:
 def create_trails(parent):
     """
     创建拖尾
-    :return:
+    @return:
     """
     # 当前天体的位置
     try:
@@ -129,8 +129,8 @@ def create_trails(parent):
 def create_trail_sphere(parent, pos):
     """
     在天体当前的位置创建一个拖尾球体
-    :param pos:
-    :return:
+    @param pos:
+    @return:
     """
     # sphere = create_sphere(1,6)  diamond sphere
     trail = BodyTrail(color=parent.trail_color, scale=parent.trail_scale, position=pos)
@@ -154,8 +154,8 @@ def merge_vectors(vectors):
 def create_trail_line(parent, pos):
     """
     在天体当前的位置创建一个拖尾球体
-    :param pos:
-    :return:
+    @param pos:
+    @return:
     """
     if hasattr(parent, "trail_last_pos"):
         trail_last_pos = parent.trail_last_pos
@@ -174,7 +174,7 @@ def create_trail_line(parent, pos):
 def create_rings(self):
     """
     创建行星环（使用土星贴图）
-    :return:
+    @return:
     """
     rings_texture = 'textures/saturnRings.jpg'
     rings_texture = find_file(rings_texture)
@@ -213,8 +213,8 @@ def clear_trails(self):
 def create_fixed_star_lights(fixed_star):
     """
     创建恒星的发光的效果、并作为灯光源
-    :param entity:
-    :return:
+    @param entity:
+    @return:
     """
 
     # 如果是恒星（如：太阳），自身会发光，则需要关闭灯光

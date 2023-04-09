@@ -24,7 +24,7 @@ class MayaviView(BodyView):
     def update(self):
         """
         更新天体信息和数据，比如：更新天体的位置
-        :return:
+        @return:
         """
         if hasattr(self.sphere, "mlab_source"):
             # self.sphere.mlab_source.x 的位置是已经和 distance_scale 进行了相乘
@@ -83,7 +83,7 @@ class MayaviView(BodyView):
     def appear(self):
         """
         天体显示的操作，比如：构建天体视图对象
-        :return:
+        @return:
         """
         if hasattr(self.body, "torus_stars"):
             # 暂不支持环状小行星群
@@ -131,8 +131,8 @@ class MayaviView(BodyView):
     def __set_texture(self, image_file):
         """
         设置纹理图片到天体
-        :param image_file:
-        :return:
+        @param image_file:
+        @return:
         """
         outfile = image_file.replace('.jpg', '_flipped.jpg').replace('.png', '_flipped.jpg')
         if os.path.exists(outfile):

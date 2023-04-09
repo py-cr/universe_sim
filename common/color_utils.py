@@ -11,9 +11,9 @@
 def conv_to_vec4_color(colour: tuple, alpha=1):
     """
 
-    :param colour:
-    :param alpha:
-    :return:
+    @param colour:
+    @param alpha:
+    @return:
     """
     from ursina import Vec4
     if len(colour) == 3:
@@ -26,9 +26,9 @@ def conv_to_vec4_color(colour: tuple, alpha=1):
 def adjust_brightness(color, target_brightness: float = 0.6):
     """
     调整颜色的亮度到目标 target_brightness（确保亮度不超过 1.0）
-    :param color:
-    :param target_brightness:（确保亮度不超过 1.0）
-    :return:
+    @param color:
+    @param target_brightness:（确保亮度不超过 1.0）
+    @return:
     """
     from ursina import Vec4
     # 获取颜色的亮度值

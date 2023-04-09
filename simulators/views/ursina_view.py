@@ -29,7 +29,7 @@ class UrsinaView(BodyView):
     def update(self):
         """
 
-        :return:
+        @return:
         """
         self.planet.update()
 

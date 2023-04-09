@@ -65,9 +65,9 @@ class UiPanel(WindowPanel):
     def show_message(self, message, close_time=3):
         """
         显示消息框
-        :param message: 消息内容
-        :param close_time: 定义显示消息框关闭时间
-        :return:
+        @param message: 消息内容
+        @param close_time: 定义显示消息框关闭时间
+        @return:
         """
         # 创建消息框
         message_box = Text(text=message, font=UrsinaConfig.CN_FONT, background=True, origin=(0, 0), y=.25)

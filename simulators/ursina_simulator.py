@@ -245,6 +245,7 @@ class UrsinaSimulator(Simulator):
 
         # ui = UrsinaUI()
         ctl = ControlUI(ControlHandler(), position=(0.6, 0.5))
+        ControlUI.current_ui = ctl
         if self.show_timer:
             self.create_timer()
 

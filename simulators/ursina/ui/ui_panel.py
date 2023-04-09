@@ -23,6 +23,7 @@ class UiPanel(WindowPanel):
     """
     界面面板类
     """
+
     def __init__(self, handler: EventHandler, position=(0, 0), enabled=False, title=''):
         """
 
@@ -69,8 +70,16 @@ class UiPanel(WindowPanel):
         @param close_time: 定义显示消息框关闭时间
         @return:
         """
+        if hasattr(self, "last_message_box"):
+            destroy(self.last_message_box)
         # 创建消息框
         message_box = Text(text=message, font=UrsinaConfig.CN_FONT, background=True, origin=(0, 0), y=.25)
+
+        self.last_message_box = message_box
+
+        if close_time <= 0:
+            return message_box
+
         close_time = close_time * application.time_scale
 
         # 定义关闭函数
@@ -82,3 +91,4 @@ class UiPanel(WindowPanel):
             Func(close_message)
         )
         s.start()
+        return message_box

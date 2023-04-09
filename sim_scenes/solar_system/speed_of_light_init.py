@@ -10,6 +10,7 @@ from bodies import Sun, Asteroids, Body
 from common.consts import AU, LIGHT_SPEED, SECONDS_PER_MINUTE, SECONDS_PER_HOUR
 from sim_scenes.func import create_text_panel
 from simulators.ursina.entities.body_timer import TimeData
+from simulators.ursina.ui.control_ui import ControlUI
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
 from ursina import camera
@@ -99,8 +100,6 @@ class SpeedOfLightInit:
         if self.bodies is None:
             raise Exception("请指定 SpeedOfLightInit.bodies")
 
-
-
         # 订阅重新开始事件
         UrsinaEvent.on_reset_subscription(self.on_reset)
         UrsinaEvent.on_ready_subscription(self.on_ready)
@@ -150,9 +149,13 @@ class SpeedOfLightInit:
     #     self.light_body.planet.scale = self.light_body.planet_scale
 
     def auto_run_speed(self):
+        """
+        自动调整速度（对于空旷的位置，摄像机会进行加速）
+        @return:
+        """
         if self.__camera_follow_light != "SideViewActualSize":
             return
-
+        # 运行速度配置
         run_speed_maps = [
             {"au": 0.008, "secs": 1},
             {"au": 0.36, "secs": SECONDS_PER_MINUTE * 2},
@@ -165,19 +168,24 @@ class SpeedOfLightInit:
             {"au": 1.50, "secs": SECONDS_PER_MINUTE * 2},
             {"au": 1.516, "secs": SECONDS_PER_MINUTE},
             {"au": 1.522, "secs": 1},  # [00:12:39] 到达 [火星] 1.52 AU
-            {"au": 5.1, "secs": SECONDS_PER_HOUR},
+            # {"au": 5.1, "secs": SECONDS_PER_HOUR},
+            {"au": 5.1, "secs": SECONDS_PER_MINUTE * 10},
             {"au": 5.182, "secs": SECONDS_PER_MINUTE * 2},
             {"au": 5.192, "secs": 1},  # [00:43:10] 到达 [木星] 5.19 AU
-            {"au": 9.44, "secs": SECONDS_PER_HOUR},
+            # {"au": 9.44, "secs": SECONDS_PER_HOUR},
+            {"au": 9.44, "secs": SECONDS_PER_MINUTE * 20},
             {"au": 9.492, "secs": SECONDS_PER_MINUTE},
             {"au": 9.502, "secs": 1},  # [01:19:01] 到达 [土星] 9.5 AU
-            {"au": 19.15, "secs": SECONDS_PER_HOUR},
+            # {"au": 19.15, "secs": SECONDS_PER_HOUR},
+            {"au": 19.15, "secs": SECONDS_PER_MINUTE * 30},
             {"au": 19.192, "secs": SECONDS_PER_MINUTE},
             {"au": 19.202, "secs": 1},  # [02:39:41] 到达 [天王星] 19.2 AU
-            {"au": 30.67, "secs": SECONDS_PER_HOUR},
+            # {"au": 30.67, "secs": SECONDS_PER_HOUR},
+            {"au": 30.67, "secs": SECONDS_PER_MINUTE * 30},
             {"au": 30.692, "secs": SECONDS_PER_MINUTE},
             {"au": 30.702, "secs": 1},  # [04:15:19] 到达 [海王星] 30.7 AU
-            {"au": 39.52, "secs": SECONDS_PER_HOUR * 1.2},
+            # {"au": 39.52, "secs": SECONDS_PER_HOUR * 1.2},
+            {"au": 39.52, "secs": SECONDS_PER_MINUTE * 30},
             {"au": 39.54, "secs": SECONDS_PER_MINUTE},
             {"au": 1000, "secs": 1}  # [05:28:55] 到达 [冥王星] 39.55 AU
         ]
@@ -191,7 +199,18 @@ class SpeedOfLightInit:
             au_max = m["au"]
 
             if au_max * AU > light_distance >= au_min * AU:
-                UrsinaConfig.seconds_per = m["secs"]
+                if UrsinaConfig.seconds_per != m["secs"]:
+                    seconds_per = m["secs"]
+                    UrsinaConfig.seconds_per = seconds_per
+                    if seconds_per >= 10000:
+                        msg = f"{seconds_per / 10000}万"
+                    elif seconds_per >= 1000:
+                        msg = f"{seconds_per / 1000}千"
+                    else:
+                        msg = f"{seconds_per}"
+
+                    msg += "倍光速"
+                    ControlUI.current_ui.show_message(msg, close_time=-1)
 
     def on_timer_changed(self, time_data: TimeData):
         """

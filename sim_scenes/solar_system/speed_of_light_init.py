@@ -147,30 +147,30 @@ class SpeedOfLightInit:
         run_speed_maps = [
             {"au": 0.008, "secs": 1},
             {"au": 0.36, "secs": SECONDS_PER_MINUTE * 2},
-            {"au": 0.37, "secs": SECONDS_PER_MINUTE},
-            {"au": 0.385, "secs": 1},  # [00:03:12] 到达 [水星] 0.38 AU
+            {"au": 0.376, "secs": SECONDS_PER_MINUTE},
+            {"au": 0.386, "secs": 1},  # [00:03:12] 到达 [水星] 0.384 AU
             {"au": 0.715, "secs": SECONDS_PER_MINUTE},
-            {"au": 0.725, "secs": 1},  # [00:06:00] 到达 [金星] 0.72 AU
-            {"au": 0.99, "secs": SECONDS_PER_MINUTE},
-            {"au": 1.005, "secs": 1},  # [00:08:19] 到达 [地球] 1.0 AU
+            {"au": 0.723, "secs": 1},  # [00:06:00] 到达 [金星] 0.721 AU
+            {"au": 0.996, "secs": SECONDS_PER_MINUTE},
+            {"au": 1.002, "secs": 1},  # [00:08:19] 到达 [地球] 1.0 AU
             {"au": 1.50, "secs": SECONDS_PER_MINUTE * 2},
-            {"au": 1.51, "secs": SECONDS_PER_MINUTE},
-            {"au": 1.525, "secs": 1},  # [00:12:39] 到达 [火星] 1.52 AU
-            {"au": 5.17, "secs": SECONDS_PER_MINUTE * 5},
-            {"au": 5.18, "secs": SECONDS_PER_MINUTE},
-            {"au": 5.195, "secs": 1},  # [00:43:11] 到达 [木星] 5.19 AU
-            {"au": 9.475, "secs": SECONDS_PER_MINUTE * 5},
-            {"au": 9.485, "secs": SECONDS_PER_MINUTE},
-            {"au": 9.505, "secs": 1},  # [01:19:03] 到达 [土星] 9.5 AU
-            {"au": 19.17, "secs": SECONDS_PER_HOUR},
-            {"au": 19.18, "secs": SECONDS_PER_MINUTE},
-            {"au": 19.205, "secs": 1},  # [02:39:41] 到达 [天王星] 19.2 AU
-            {"au": 30.675, "secs": SECONDS_PER_HOUR},
-            {"au": 30.685, "secs": SECONDS_PER_MINUTE},
-            {"au": 30.705, "secs": 1},  # [04:15:18] 到达 [海王星] 30.7 AU
-            {"au": 39.53, "secs": SECONDS_PER_HOUR * 1.2},
-            {"au": 39.54, "secs": SECONDS_PER_MINUTE},
-            {"au": 1000, "secs": 1}  # [05:28:54] 到达 [冥王星] 39.55 AU
+            {"au": 1.516, "secs": SECONDS_PER_MINUTE},
+            {"au": 1.522, "secs": 1},  # [00:12:39] 到达 [火星] 1.52 AU
+            {"au": 5.1, "secs": SECONDS_PER_HOUR},
+            {"au": 5.182, "secs": SECONDS_PER_MINUTE * 2},
+            {"au": 5.192, "secs": 1},  # [00:43:10] 到达 [木星] 5.19 AU
+            {"au": 9.44, "secs": SECONDS_PER_HOUR},
+            {"au": 9.492, "secs": SECONDS_PER_MINUTE},
+            {"au": 9.502, "secs": 1},  # [01:19:01] 到达 [土星] 9.5 AU
+            {"au": 19.15, "secs": SECONDS_PER_HOUR},
+            {"au": 19.192, "secs": SECONDS_PER_MINUTE},
+            {"au": 19.202, "secs": 1},  # [02:39:41] 到达 [天王星] 19.2 AU
+            {"au": 30.67, "secs": SECONDS_PER_HOUR},
+            {"au": 30.692, "secs": SECONDS_PER_MINUTE},
+            {"au": 30.702, "secs": 1},  # [04:15:19] 到达 [海王星] 30.7 AU
+            {"au": 39.52, "secs": SECONDS_PER_HOUR * 1.2},
+            {"au": 39.53, "secs": SECONDS_PER_MINUTE},
+            {"au": 1000, "secs": 1}  # [05:28:55] 到达 [冥王星] 39.55 AU
         ]
         light_distance = self.light_body.position[2]
         for i, m in enumerate(run_speed_maps):

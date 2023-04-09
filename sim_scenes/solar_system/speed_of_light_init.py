@@ -203,13 +203,14 @@ class SpeedOfLightInit:
                     seconds_per = m["secs"]
                     UrsinaConfig.seconds_per = seconds_per
                     if seconds_per >= 10000:
-                        msg = f"{seconds_per / 10000}万"
+                        msg = f" {seconds_per / 10000} 万"
                     elif seconds_per >= 1000:
-                        msg = f"{seconds_per / 1000}千"
+                        msg = f" {seconds_per / 1000} 千"
                     else:
-                        msg = f"{seconds_per}"
+                        msg = f" {seconds_per} "
 
-                    msg += "倍光速"
+                    msg = f"当前为{msg}倍光速"
+
                     ControlUI.current_ui.show_message(msg, close_time=-1)
 
     def on_timer_changed(self, time_data: TimeData):

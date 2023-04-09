@@ -7,9 +7,10 @@
 # python_version  :3.8
 # ==============================================================================
 from bodies import Sun, Asteroids, Body
-from common.consts import AU
+from common.consts import AU, LIGHT_SPEED, SECONDS_PER_MINUTE, SECONDS_PER_HOUR
 from sim_scenes.func import create_text_panel
 from simulators.ursina.entities.body_timer import TimeData
+from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
 from ursina import camera
 import datetime
@@ -33,8 +34,8 @@ class SpeedOfLightInit:
         self.__camera_follow_light = camera_follow_light
         self.__light_body = None
         self.__bodies = None
-
-        if self.__camera_follow_light == "SideView":
+        self.view_closely = False
+        if self.__camera_follow_light in ["SideView", "SideViewActualSize"]:
             # 摄像机位置 = 前-后+、上+下-、左-右+、
             self.camera_position = (AU, 0, 0)
             self.show_trail = True
@@ -68,6 +69,14 @@ class SpeedOfLightInit:
     @bodies.setter
     def bodies(self, value):
         self.__bodies = value
+        if self.__camera_follow_light == "SideViewActualSize":
+            # TODO: 将天体的大小不进行缩放
+            for body in self.__bodies:
+                if body is self.light_body:
+                    continue
+                body.size_scale = 1
+            self.camera_position = [-self.light_init_position[0] / 1.35, 0, 0]
+            self.view_closely = True
 
     def on_reset(self):
         """
@@ -122,7 +131,7 @@ class SpeedOfLightInit:
         self.text_panel = create_text_panel()
         self.text_panel.text = self.arrived_info.replace("${distance}", "0 AU")
 
-        if self.__camera_follow_light == "SideView":
+        if self.__camera_follow_light in ["SideView", "SideViewActualSize"]:
             camera.parent = self.light_body.planet
             camera.rotation_y = -85
         elif self.__camera_follow_light == "ForwardView":
@@ -131,12 +140,58 @@ class SpeedOfLightInit:
             self.light_body.planet.input = self.light_body_input
             camera.rotation_y = -15
 
+    def auto_run_speed(self):
+        # if self.__camera_follow_light != "SideViewActualSize":
+        #     return
+
+        run_speed_maps = [
+            {"au": 0.008, "secs": 1},
+            {"au": 0.36, "secs": SECONDS_PER_MINUTE * 2},
+            {"au": 0.37, "secs": SECONDS_PER_MINUTE},
+            {"au": 0.385, "secs": 1},  # [00:03:12] 到达 [水星] 0.38 AU
+            {"au": 0.715, "secs": SECONDS_PER_MINUTE},
+            {"au": 0.725, "secs": 1},  # [00:06:00] 到达 [金星] 0.72 AU
+            {"au": 0.99, "secs": SECONDS_PER_MINUTE},
+            {"au": 1.005, "secs": 1},  # [00:08:19] 到达 [地球] 1.0 AU
+            {"au": 1.50, "secs": SECONDS_PER_MINUTE * 2},
+            {"au": 1.51, "secs": SECONDS_PER_MINUTE},
+            {"au": 1.525, "secs": 1},  # [00:12:39] 到达 [火星] 1.52 AU
+            {"au": 5.17, "secs": SECONDS_PER_MINUTE * 5},
+            {"au": 5.18, "secs": SECONDS_PER_MINUTE},
+            {"au": 5.195, "secs": 1},  # [00:43:11] 到达 [木星] 5.19 AU
+            {"au": 9.475, "secs": SECONDS_PER_MINUTE * 5},
+            {"au": 9.485, "secs": SECONDS_PER_MINUTE},
+            {"au": 9.505, "secs": 1},  # [01:19:03] 到达 [土星] 9.5 AU
+            {"au": 19.17, "secs": SECONDS_PER_HOUR},
+            {"au": 19.18, "secs": SECONDS_PER_MINUTE},
+            {"au": 19.205, "secs": 1},  # [02:39:41] 到达 [天王星] 19.2 AU
+            {"au": 30.675, "secs": SECONDS_PER_HOUR},
+            {"au": 30.685, "secs": SECONDS_PER_MINUTE},
+            {"au": 30.705, "secs": 1},  # [04:15:18] 到达 [海王星] 30.7 AU
+            {"au": 39.53, "secs": SECONDS_PER_HOUR * 1.2},
+            {"au": 39.54, "secs": SECONDS_PER_MINUTE},
+            {"au": 1000, "secs": 1}  # [05:28:54] 到达 [冥王星] 39.55 AU
+        ]
+        light_distance = self.light_body.position[2]
+        for i, m in enumerate(run_speed_maps):
+            if i == 0:
+                au_min = 0
+            else:
+                au_min = run_speed_maps[i - 1]["au"]
+
+            au_max = m["au"]
+
+            if au_max * AU > light_distance >= au_min * AU:
+                UrsinaConfig.seconds_per = m["secs"]
+
     def on_timer_changed(self, time_data: TimeData):
         """
         计时器触发
         @param time_data: 计时器时间数据
         @return:
         """
+        self.auto_run_speed()
+
         for body in self.bodies:
             if body is self.light_body or isinstance(body, Sun) \
                     or body in self.arrived_bodies or isinstance(body, Asteroids):
@@ -149,7 +204,7 @@ class SpeedOfLightInit:
                     self.arrived_info += f"[{time_data.time_text}]\t到达\t[{body.name}]\n\n"
                     distance = round(self.light_body.position[2] / AU, 2)
                     self.text_panel.text = self.arrived_info.replace("${distance}", f"{distance} AU")
-                    print(f"[{time_data.time_text}] 到达 [{body.name}]")
+                    print(f"[{time_data.time_text}] 到达 [{body.name}] {round(self.light_body.position[2] / AU, 4)} AU")
                     return
 
         if not hasattr(self, "last_time"):

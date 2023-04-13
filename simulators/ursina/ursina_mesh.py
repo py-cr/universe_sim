@@ -98,6 +98,17 @@ def create_label(parent, label, pos, color, scale=50, alpha=1.0):
     return text
 
 
+def create_line(from_pos, to_pos, parent=None, alpha=1.0, len_scale=1,set_light_off=True,
+                color=color.white, thickness=1):
+    line = Entity(parent=parent,
+                  model=Mesh(vertices=(from_pos * len_scale, to_pos * len_scale),
+                             mode='line', thickness=thickness),
+                  color=color, alpha=alpha)
+    if set_light_off:
+        line.set_light_off()
+    return line
+
+
 def create_arrow_line(from_pos, to_pos, parent=None, label=None,
                       set_light_off=True, alpha=1.0, len_scale=0.5,
                       color=color.white, thickness=2,
@@ -123,6 +134,7 @@ def create_arrow_line(from_pos, to_pos, parent=None, label=None,
     line = Entity(parent=parent,
                   model=Mesh(vertices=(from_pos * len_scale, to_pos * len_scale), mode='line', thickness=thickness),
                   color=color, alpha=alpha)
+
     arrow = Entity(parent=line, model=arrow_mesh, position=to_pos * len_scale,
                    scale=thickness * arrow_scale, color=color, alpha=alpha)
     arrow.look_at(to_pos * 100)

@@ -37,6 +37,8 @@ class UrsinaConfig:
     show_trail = False
     # 拖尾球体的数量
     trail_length = 100
+    # 拖尾的类型（球体、线条）
+    trail_type = "sphere"  # trail_type="line" or trail_type="sphere"
     # 默认秒数（0表示默认）
     seconds_per = 0
     # # 控制摄像机动作速度（天体越大，速度越快，天体越小，速度越慢）

@@ -281,6 +281,8 @@ class UrsinaSimulator(Simulator):
 
         UrsinaEvent.on_ready()
 
+        UrsinaEvent.after_ready()
+
         self.app.run()
 
 

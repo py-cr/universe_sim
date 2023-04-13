@@ -50,6 +50,10 @@ class TimeData:
         return self.total_seconds / 3600
 
 
+    @property
+    def total_days(self):
+        return self.total_hours / 24
+
 
 class BodyTimer(Singleton):
     """

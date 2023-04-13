@@ -25,6 +25,8 @@ class ControlUI(UiPanel):
     控制面板界面
     """
     def component_init(self):
+
+        UrsinaEvent.after_ready_subscription(self.after_ready)
         self.start_button_text = "●"  # 》●▲○◎
         self.pause_button_text = "〓"  # 〓 || ‖
         self.no_trail_button_text = "○ "
@@ -74,6 +76,9 @@ class ControlUI(UiPanel):
         )
 
         return content
+
+    def after_ready(self):
+        self.slider_trail_length.value = UrsinaConfig.trail_length
 
     def after_component_init(self):
         self.sec_per_time_switch.x = -0.4

@@ -7,7 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 from bodies import Sun, Earth, Jupiter
-from common.consts import SECONDS_PER_YEAR,SECONDS_PER_MONTH, AU
+from common.consts import SECONDS_PER_YEAR, SECONDS_PER_MONTH, AU
 from sim_scenes.func import mayavi_run, ursina_run
 
 if __name__ == '__main__':

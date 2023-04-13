@@ -50,7 +50,7 @@ class Io(Body):
 
     def __init__(self, name="木卫一", mass=8.9319e22,
                  init_position=[0, 0, 420000],
-                 init_velocity=[17.334, 0, 0],
+                 init_velocity=[-17.334, 0, 0],
                  texture="jupiter_io.jpg", size_scale=1.0, distance_scale=1.0,
                  rotation_speed=0.25, ignore_mass=False,
                  trail_color=None, show_name=False,

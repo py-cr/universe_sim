@@ -26,12 +26,12 @@ class Callisto(Body):
 
     　逃逸速度:
     　天体质量: 1.08 x 10²³ kg
-    　平均密度:  g/cm³ -> ✕10³ kg/m³
+    　平均密度: 1.83 g/cm³ -> 1.83✕10³ kg/m³
     """
 
     def __init__(self, name="木卫四", mass=1.08e23,
                  init_position=[0, 0, 1880000],
-                 init_velocity=[8.15, 0, 0],
+                 init_velocity=[-8.15, 0, 0],
                  texture="jupiter_callisto.jpg", size_scale=1.0, distance_scale=1.0,
                  rotation_speed=0.25, ignore_mass=False,
                  trail_color=None, show_name=False,
@@ -56,7 +56,7 @@ class Callisto(Body):
             "mass": mass,
             "init_position": init_position,
             "init_velocity": init_velocity,
-            "density": 3.014e3,
+            "density": 1.83e3,
             "color": (162, 162, 162),
             "texture": texture,
             "size_scale": size_scale,

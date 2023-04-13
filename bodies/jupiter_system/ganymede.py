@@ -59,7 +59,7 @@ class Ganymede(Body):
 
     def __init__(self, name="木卫三", mass=1.4819e23,
                  init_position=[0, 0, 1069200],
-                 init_velocity=[10.880, 0, 0],
+                 init_velocity=[-10.880, 0, 0],
                  texture="jupiter_ganymede.jpg", size_scale=1.0, distance_scale=1.0,
                  rotation_speed=0.25, ignore_mass=False,
                  trail_color=None, show_name=False,

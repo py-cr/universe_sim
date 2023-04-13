@@ -82,7 +82,7 @@ zero
 
     def __init__(self, name="木卫二", mass=4.80e22,
                  init_position=[0, 0, 670900],
-                 init_velocity=[13.741, 0, 0],
+                 init_velocity=[-13.741, 0, 0],
                  texture="jupiter_europa.jpg", size_scale=1.0, distance_scale=1.0,
                  rotation_speed=0.25, ignore_mass=False,
                  trail_color=None, show_name=False,

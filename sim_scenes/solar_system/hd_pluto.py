@@ -15,7 +15,7 @@ if __name__ == '__main__':
     高清冥王星模拟运行
     """
     bodies = [
-        Pluto(texture="pluto_hd.jpg",
+        Pluto(texture="pluto.png",
               init_position=[0, 0, 0], init_velocity=[0, 0, 0],
               size_scale=2, show_name=True)
     ]

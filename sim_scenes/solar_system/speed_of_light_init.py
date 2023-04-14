@@ -85,7 +85,7 @@ class SpeedOfLightInit:
         @return:
         """
         self.arrived_bodies.clear()  # 重置存放记录光体已到达天体列表
-        self.arrived_info = "距离[太阳]：${distance}\n\n"
+        self.arrived_info = "距离[太阳中心]：${distance}\n\n"
         if self.text_panel is not None:
             self.text_panel.text = self.arrived_info.replace("${distance}", "0 AU")
 
@@ -141,6 +141,11 @@ class SpeedOfLightInit:
             camera.parent = self.light_body.planet
             self.light_body.planet.input = self.light_body_input
             camera.rotation_y = -15
+            if hasattr(camera, "sky"):
+                # 摄像机跟随地球后，需要对深空背景进行调整，否则看到的是黑色背景
+                camera.sky.scale = 800
+                camera.clip_plane_near = 0.1
+                camera.clip_plane_far = 1000000
 
         # 取消订阅（防止 光体 的大小进行变化影响摄像机的视角）
         UrsinaEvent.on_body_size_changed_unsubscription(self.light_body.planet.change_body_scale)

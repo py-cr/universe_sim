@@ -190,10 +190,10 @@ def create_solar_system_bodies(ignore_mass=False, init_velocity=None):
     sun = Sun(name="太阳", size_scale=0.5e2)  # 太阳放大 50 倍，距离保持不变
     bodies = [
         sun,
-        Mercury(name="水星", size_scale=1e3),  # 水星放大 1000 倍，距离保持不变
-        Venus(name="金星", size_scale=1e3),  # 金星放大 1000 倍，距离保持不变
-        Earth(name="地球", size_scale=1e3),  # 地球放大 1000 倍，距离保持不变
-        Mars(name="火星", size_scale=1e3),  # 火星放大 1000 倍，距离保持不变
+        Mercury(name="水星", size_scale=0.3e3),  # 水星放大 300 倍，距离保持不变
+        Venus(name="金星", size_scale=0.3e3),  # 金星放大 300 倍，距离保持不变
+        Earth(name="地球", size_scale=0.3e3),  # 地球放大 300 倍，距离保持不变
+        Mars(name="火星", size_scale=0.3e3),  # 火星放大 300 倍，距离保持不变
         # Asteroids(name="小行星群", size_scale=3.2e2,
         #           parent=sun),  # 小行星群模拟(仅 ursina 模拟器支持)
         Jupiter(name="木星", size_scale=0.3e3),  # 木星放大 300 倍，距离保持不变

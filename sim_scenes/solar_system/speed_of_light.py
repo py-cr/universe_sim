@@ -12,9 +12,9 @@ from sim_scenes.solar_system.speed_of_light_init import SpeedOfLightInit
 
 # TODO: 三种不同的摄像机视角
 camera_follow_light = None  # 摄像机固定，不会跟随光
-# camera_follow_light = 'ForwardView'  # 摄像机跟随光，方向是向前看
-# camera_follow_light = 'SideView'  # 摄像机跟随光，方向是从侧面看
-# camera_follow_light = 'SideViewActualSize'  # 摄像机跟随光，方向是从侧面看，天体是实际大小
+camera_follow_light = 'ForwardView'  # 摄像机跟随光，方向是向前看
+camera_follow_light = 'SideView'  # 摄像机跟随光，方向是从侧面看
+camera_follow_light = 'SideViewActualSize'  # 摄像机跟随光，方向是从侧面看，天体是实际大小
 
 # 实例化一个初始化对象（订阅事件，记录到达每个行星所需要的时间）
 init = SpeedOfLightInit(camera_follow_light)

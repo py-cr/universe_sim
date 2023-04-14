@@ -21,8 +21,8 @@ if __name__ == '__main__':
     """
     # 选择舞者
     Dancer = Earth  # 舞者为地球
-    Dancer = Venus  # 舞者为金星
-    Dancer = Mars  # 舞者为火星
+    # Dancer = Venus  # 舞者为金星
+    # Dancer = Mars  # 舞者为火星
 
     bodies = [
         Sun(size_scale=0.8e2),    # 太阳放大 80 倍

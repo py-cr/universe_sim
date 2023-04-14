@@ -7,7 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 import matplotlib.pyplot as plt
-from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, SECONDS_PER_HALF_DAY
+from common.consts import SECONDS_PER_WEEK, SECONDS_PER_MINUTE, SECONDS_PER_HALF_DAY
 from common.func import calculate_distance
 from common.system import System
 from bodies import Body
@@ -288,15 +288,123 @@ def two_bodies_colliding(body1: Body, body2: Body):
     # raise Exception("two_bodies_colliding 不支持类型[body1 body2]")
 
 
-if __name__ == '__main__':
-    from bodies import Sun, Earth
+def smooth_speed_transition(run_speed_maps, transition_secs=1):
+    """
+    通过逐步调整速度在给定的过渡时间内实现运行速度地图中速度的圆滑过渡。
+    参数：
+        run_speed_maps: 运行速度分段的列表，每一个速度分段是一个字典，包含两个键值对{"au": au, "secs": seconds}，
+                        其中au是以天文单位（AU）表示的距离，seconds则是以秒为单位的时间。
+        transition_secs: 运行速度过渡的时间（秒数），默认为1秒。
+    """
+    # assuming 60 steps per second
+    transition_steps = transition_secs * 60
 
-    """
-    太阳、地球
-    """
-    bodies = [
-        Sun(size_scale=1.2e2),  # 太阳放大 120 倍
-        Earth(size_scale=4e3, distance_scale=1),  # 地球放大 4000 倍，距离保持不变
+    # 初始化速度分段序列
+    speed_maps = []
+
+    # 循环每一个分段
+    for i, speed_map in enumerate(run_speed_maps):
+        if i == 0:
+            # 对于第一个分段，直接添加到速度分段序列中
+            speed_maps.append(speed_map)
+            continue
+        if speed_map["secs"] <= 1:
+            # 如果当前分段所用时间小于等于1秒，直接添加到速度分段序列中
+            speed_maps.append(speed_map)
+            continue
+        # 否则，保存前一个速度分段
+        prev_speed_map = run_speed_maps[i - 1]
+
+        # 计算距离和时间差
+        distance_diff = speed_map["au"] - prev_speed_map["au"]
+        time_diff = speed_map["secs"] - prev_speed_map["secs"]
+
+        # 计算每一步速度的变化值
+        speed_per_step = distance_diff / time_diff / transition_steps
+
+        # 添加过渡步数个过渡速度分段
+        for j in range(transition_steps):
+            tran_speed_map = {}
+            # 计算过渡速度分段的距离和时间
+            tran_speed_map["au"] = prev_speed_map["au"] + distance_diff * ((j + 1) / transition_steps)
+            tran_speed_map["secs"] = prev_speed_map["secs"] + time_diff * ((j + 1) / transition_steps)
+            # 计算过渡速度分段的速度
+            tran_speed = prev_speed_map["au"] + speed_per_step * (j + 1)
+            tran_speed_map["speed"] = tran_speed
+            # 将过渡速度分段添加到速度分段序列中
+            speed_maps.append(tran_speed_map)
+
+        # 添加当前分段到速度分段序列中
+        speed_maps.append(speed_map)
+
+    # 返回计算出来的速度分段序列
+    return speed_maps
+
+
+def speed_smooth_adjust_test():
+    run_speed_maps = [
+        {"au": 0.008, "secs": 1},
+        {"au": 0.36, "secs": SECONDS_PER_MINUTE * 2},
+        {"au": 0.376, "secs": SECONDS_PER_MINUTE},
+        {"au": 0.386, "secs": 1},  # [00:03:12] 到达 [水星] 0.384 AU
+        {"au": 0.715, "secs": SECONDS_PER_MINUTE},
+        {"au": 0.723, "secs": 1},  # [00:06:00] 到达 [金星] 0.721 AU
+        {"au": 0.996, "secs": SECONDS_PER_MINUTE},
+        {"au": 1.002, "secs": 1},  # [00:08:19] 到达 [地球] 1.0 AU
+        {"au": 1.50, "secs": SECONDS_PER_MINUTE * 2},
+        {"au": 1.516, "secs": SECONDS_PER_MINUTE},
+        {"au": 1.522, "secs": 1},  # [00:12:39] 到达 [火星] 1.52 AU
+        # {"au": 5.1, "secs": SECONDS_PER_HOUR},
+        {"au": 5.1, "secs": SECONDS_PER_MINUTE * 10},
+        {"au": 5.182, "secs": SECONDS_PER_MINUTE * 2},
+        {"au": 5.192, "secs": 1},  # [00:43:10] 到达 [木星] 5.19 AU
+        # {"au": 9.44, "secs": SECONDS_PER_HOUR},
+        {"au": 9.44, "secs": SECONDS_PER_MINUTE * 20},
+        {"au": 9.492, "secs": SECONDS_PER_MINUTE},
+        {"au": 9.502, "secs": 1},  # [01:19:01] 到达 [土星] 9.5 AU
+        # {"au": 19.15, "secs": SECONDS_PER_HOUR},
+        {"au": 19.15, "secs": SECONDS_PER_MINUTE * 30},
+        {"au": 19.192, "secs": SECONDS_PER_MINUTE},
+        {"au": 19.202, "secs": 1},  # [02:39:41] 到达 [天王星] 19.2 AU
+        # {"au": 30.67, "secs": SECONDS_PER_HOUR},
+        {"au": 30.67, "secs": SECONDS_PER_MINUTE * 30},
+        {"au": 30.692, "secs": SECONDS_PER_MINUTE},
+        {"au": 30.702, "secs": 1},  # [04:15:19] 到达 [海王星] 30.7 AU
+        # {"au": 39.52, "secs": SECONDS_PER_HOUR * 1.2},
+        {"au": 39.52, "secs": SECONDS_PER_MINUTE * 30},
+        {"au": 39.54, "secs": SECONDS_PER_MINUTE},
+        {"au": 40, "secs": 1}  # [05:28:55] 到达 [冥王星] 39.55 AU
     ]
-    # mpl_run(bodies, SECONDS_PER_WEEK)
-    ursina_run(bodies, SECONDS_PER_WEEK)
+
+    data1 = [(m["au"], m["secs"]) for m in run_speed_maps]
+    x1, y1 = zip(*data1)
+    run_speed_maps2 = smooth_speed_transition(run_speed_maps)
+
+    data2 = [(m["au"], m["secs"]) for m in run_speed_maps2]
+    x2, y2 = zip(*data2)
+
+    # print(run_speed_maps2)
+    # 导入包
+    import matplotlib.pyplot as plt
+    # 生成一个Figure画布和一个Axes坐标系
+    fig, ax = plt.subplots()
+    # 在生成的坐标系下画折线图
+    ax.plot(x1, y1, 'r', linewidth=1)
+    ax.plot(x2, y2, 'b', linewidth=1)
+    # 显示图形
+    plt.show()
+
+
+if __name__ == '__main__':
+    # from bodies import Sun, Earth
+    #
+    # """
+    # 太阳、地球
+    # """
+    # bodies = [
+    #     Sun(size_scale=1.2e2),  # 太阳放大 120 倍
+    #     Earth(size_scale=4e3, distance_scale=1),  # 地球放大 4000 倍，距离保持不变
+    # ]
+    # # mpl_run(bodies, SECONDS_PER_WEEK)
+    # ursina_run(bodies, SECONDS_PER_WEEK)
+    speed_smooth_adjust_test()

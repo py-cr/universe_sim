@@ -8,7 +8,7 @@
 # ==============================================================================
 from bodies import Sun, Asteroids, Body
 from common.consts import AU, LIGHT_SPEED, SECONDS_PER_MINUTE, SECONDS_PER_HOUR
-from sim_scenes.func import create_text_panel
+from sim_scenes.func import create_text_panel, smooth_speed_transition
 from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.ui.control_ui import ControlUI
 from simulators.ursina.ursina_config import UrsinaConfig
@@ -194,6 +194,9 @@ class SpeedOfLightInit:
             {"au": 39.54, "secs": SECONDS_PER_MINUTE},
             {"au": 1000, "secs": 1}  # [05:28:55] 到达 [冥王星] 39.55 AU
         ]
+
+        run_speed_maps = smooth_speed_transition(run_speed_maps)
+
         light_distance = self.light_body.position[2]
         for i, m in enumerate(run_speed_maps):
             if i == 0:
@@ -205,14 +208,14 @@ class SpeedOfLightInit:
 
             if au_max * AU > light_distance >= au_min * AU:
                 if UrsinaConfig.seconds_per != m["secs"]:
-                    seconds_per = m["secs"]
+                    seconds_per = m["secs"]  # int(round(m["secs"], 0))
                     UrsinaConfig.seconds_per = seconds_per
                     if seconds_per >= 10000:
-                        msg = f" {seconds_per / 10000} 万"
+                        msg = f" {int(seconds_per / 10000)} 万"
                     elif seconds_per >= 1000:
-                        msg = f" {seconds_per / 1000} 千"
+                        msg = f" {int(seconds_per / 1000)} 千"
                     else:
-                        msg = f" {seconds_per} "
+                        msg = f" {int(seconds_per)} "
 
                     msg = f"当前为{msg}倍光速"
 

@@ -14,7 +14,11 @@ from simulators.ursina.ursina_event import UrsinaEvent
 
 if __name__ == '__main__':
     # 水星、金星凌日
-    earth = Earth(name="地球", rotation_speed=0, texture="transparent.png")  # 地球纹理透明，不会挡住摄像机视线
+    earth = Earth(
+        name="地球",
+        rotation_speed=0,
+        texture="transparent.png"  # 地球纹理透明，不会挡住摄像机视线
+    )
     sun = Sun(name="太阳", size_scale=5e1)  # 太阳放大 50 倍
     bodies = [
         sun,
@@ -32,6 +36,7 @@ if __name__ == '__main__':
     # 让太阳的旋转速度放慢10倍
     sun.rotation_speed /= 10
 
+
     def on_ready():
         from ursina import camera
         # 摄像机跟随地球（模拟在地球上看到的效果）
@@ -42,6 +47,8 @@ if __name__ == '__main__':
             camera.sky.scale = 800
             camera.clip_plane_near = 0.1
             camera.clip_plane_far = 1000000
+            # camera.fov = 40
+
 
     def on_timer_changed(time_data: TimeData):
         # 时时刻刻的让地球看向太阳（摄像机跟随地球看向太阳）

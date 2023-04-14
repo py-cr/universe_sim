@@ -29,6 +29,8 @@ if __name__ == '__main__':
               size_scale=5e1)  # 金星放大 50 倍，距离保持不变
     ]
 
+    # 让太阳的旋转速度放慢10倍
+    sun.rotation_speed /= 10
 
     def on_ready():
         from ursina import camera
@@ -40,10 +42,6 @@ if __name__ == '__main__':
             camera.sky.scale = 800
             camera.clip_plane_near = 0.1
             camera.clip_plane_far = 1000000
-
-        # 让太阳的旋转速度放慢10倍
-        sun.rotation_speed /= 10
-
 
     def on_timer_changed(time_data: TimeData):
         # 时时刻刻的让地球看向太阳（摄像机跟随地球看向太阳）

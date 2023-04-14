@@ -195,7 +195,7 @@ class SpeedOfLightInit:
             {"au": 1000, "secs": 1}  # [05:28:55] 到达 [冥王星] 39.55 AU
         ]
 
-        run_speed_maps = smooth_speed_transition(run_speed_maps)
+        # run_speed_maps = smooth_speed_transition(run_speed_maps)
 
         light_distance = self.light_body.position[2]
         for i, m in enumerate(run_speed_maps):

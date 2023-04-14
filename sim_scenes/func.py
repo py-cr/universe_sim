@@ -288,7 +288,7 @@ def two_bodies_colliding(body1: Body, body2: Body):
     # raise Exception("two_bodies_colliding 不支持类型[body1 body2]")
 
 
-def smooth_speed_transition(run_speed_maps, transition_secs=1):
+def smooth_speed_transition2(run_speed_maps, transition_secs=1):
     """
     通过逐步调整速度在给定的过渡时间内实现运行速度地图中速度的圆滑过渡。
     参数：
@@ -341,6 +341,74 @@ def smooth_speed_transition(run_speed_maps, transition_secs=1):
     return speed_maps
 
 
+def smooth_speed_transition(run_speed_maps, transition_secs=1):
+    """
+    通过逐步调整速度在给定的过渡时间内实现运行速度地图中速度的圆滑过渡。
+    参数：
+        run_speed_maps: 运行速度分段的列表，每一个速度分段是一个字典，包含两个键值对{"au": au, "secs": seconds}，
+                        其中au是以天文单位（AU）表示的距离，seconds则是以秒为单位的时间。
+        transition_secs: 运行速度过渡的时间（秒数），默认为1秒。
+    """
+    # assuming 60 steps per second
+    transition_steps = transition_secs * 30
+
+    from scipy.interpolate import CubicSpline
+    from scipy.interpolate import InterpolatedUnivariateSpline
+
+    xs = np.array([p["au"] for p in run_speed_maps])
+    ys = np.array([p["secs"] for p in run_speed_maps])
+
+    # 计算 dydx（即导数）
+    # dydx = np.diff(ys) / np.diff(xs)
+    # spl = CubicSpline(xs, ys)
+    spl = InterpolatedUnivariateSpline(xs, ys, k=2)
+
+    # x = 2
+    # y = spl(x)
+
+    # 初始化速度分段序列
+    speed_maps = []
+
+    # 循环每一个分段
+    for i, speed_map in enumerate(run_speed_maps):
+        if i == 0:
+            # 对于第一个分段，直接添加到速度分段序列中
+            speed_maps.append(speed_map)
+            continue
+        if speed_map["secs"] <= 1:
+            # 如果当前分段所用时间小于等于1秒，直接添加到速度分段序列中
+            speed_maps.append(speed_map)
+            continue
+        if i + 1 >= len(run_speed_maps):
+            speed_maps.append(speed_map)
+            continue
+        # 否则，保存前一个速度分段
+        prev_speed_map = run_speed_maps[i - 1]
+        next_speed_map = run_speed_maps[i + 1]
+        current_speed_map = speed_map
+
+        distance_step = (current_speed_map["au"] - prev_speed_map["au"]) / 3
+
+        for j in range(2):
+            d = prev_speed_map["au"] + (distance_step * (j + 1))
+            s = spl(d)
+            s = np.clip(s, 1, 1800)
+            speed_maps.append({"au": d, "secs": float(s)})
+
+        speed_maps.append(speed_map)
+
+        distance_step = (next_speed_map["au"] - current_speed_map["au"]) / 5
+
+        for j in range(4):
+            d = current_speed_map["au"] + (distance_step * (j + 1))
+            s = spl(d)
+            s = np.clip(s, 1, 1800)
+            speed_maps.append({"au": d, "secs": float(s)})
+
+    # 返回计算出来的速度分段序列
+    return speed_maps
+
+
 def speed_smooth_adjust_test():
     run_speed_maps = [
         {"au": 0.008, "secs": 1},
@@ -378,7 +446,8 @@ def speed_smooth_adjust_test():
 
     data1 = [(m["au"], m["secs"]) for m in run_speed_maps]
     x1, y1 = zip(*data1)
-    run_speed_maps2 = smooth_speed_transition(run_speed_maps)
+    import copy
+    run_speed_maps2 = smooth_speed_transition(copy.deepcopy(run_speed_maps))
 
     data2 = [(m["au"], m["secs"]) for m in run_speed_maps2]
     x2, y2 = zip(*data2)
@@ -389,7 +458,7 @@ def speed_smooth_adjust_test():
     # 生成一个Figure画布和一个Axes坐标系
     fig, ax = plt.subplots()
     # 在生成的坐标系下画折线图
-    ax.plot(x1, y1, 'r', linewidth=1)
+    # ax.plot(x1, y1, 'o', linewidth=1)
     ax.plot(x2, y2, 'b', linewidth=1)
     # 显示图形
     plt.show()

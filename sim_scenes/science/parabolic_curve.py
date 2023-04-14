@@ -64,9 +64,13 @@ if __name__ == '__main__':
                     # 如果抛出物与地球相碰撞了，则静止不动（抛出物停止并忽略引力）
                     obj.stop_and_ignore_gravity()
 
+    def on_reset():
+        for obj in [obj0, obj1, obj2, obj3]:
+            obj.ignore_mass = False
 
     # 订阅计时器事件（定时触发）
     UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
+    UrsinaEvent.on_reset_subscription(on_reset)
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹

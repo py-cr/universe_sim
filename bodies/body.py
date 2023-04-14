@@ -231,7 +231,7 @@ class Body(metaclass=ABCMeta):
         停止运动，将加速度和速度置零
         @return:
         """
-        self.init_velocity = [0.0, 0.0, 0.0]
+        self.velocity = [0.0, 0.0, 0.0]
         self.acceleration = [0.0, 0.0, 0.0]
 
     def stop_and_ignore_gravity(self):

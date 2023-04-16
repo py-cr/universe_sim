@@ -7,6 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 from bodies import Moon, Earth, Body
+from objs import Football
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_MINUTE
 from sim_scenes.func import ursina_run
 
@@ -18,9 +19,12 @@ if __name__ == '__main__':
     e = Earth(init_position=[0, 0, 0], size_scale=1, texture="earth_hd.jpg", init_velocity=[0, 0, 0])
     bodies = [
         e,
-        Moon(name='小月球', mass=4.4e18,
-             init_position=[0, e.raduis + 500, 0],  # 球在地面上 500km
-             init_velocity=[0, 0, 0]),
+        Football(mass=500, size_scale=3e2, trail_color=[255, 0, 0],
+                 init_position=[-500, e.raduis + 500, 0],  # 球在地面上 500km
+                 init_velocity=[0, 0, 0]),
+        Football(mass=5000, size_scale=3.8e2,
+                 init_position=[500, e.raduis + 1000, 0],  # 球在地面上 500km
+                 init_velocity=[0, 0, 0]),
     ]
 
     # 使用 ursina 查看的运行效果

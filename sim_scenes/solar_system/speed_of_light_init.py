@@ -8,7 +8,7 @@
 # ==============================================================================
 from bodies import Sun, Asteroids, Body
 from common.consts import AU, LIGHT_SPEED, SECONDS_PER_MINUTE, SECONDS_PER_HOUR
-from sim_scenes.func import create_text_panel, smooth_speed_transition
+from sim_scenes.func import create_text_panel, smooth_speed_transition, check_calc_run_speed_maps
 from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.ui.control_ui import ControlUI
 from simulators.ursina.ursina_config import UrsinaConfig
@@ -84,6 +84,9 @@ class SpeedOfLightInit:
         点击了重置按钮触发
         @return:
         """
+        if hasattr(self, "run_speed_maps"):
+            delattr(self, "run_speed_maps")
+
         self.arrived_bodies.clear()  # 重置存放记录光体已到达天体列表
         self.arrived_info = "距离[太阳中心]：${distance}\n\n"
         if self.text_panel is not None:
@@ -160,66 +163,79 @@ class SpeedOfLightInit:
         """
         if self.__camera_follow_light != "SideViewActualSize":
             return
-        # 运行速度配置
-        run_speed_maps = [
-            {"au": 0.008, "secs": 1},
-            {"au": 0.36, "secs": SECONDS_PER_MINUTE * 2},
-            {"au": 0.376, "secs": SECONDS_PER_MINUTE},
-            {"au": 0.386, "secs": 1},  # [00:03:12] 到达 [水星] 0.384 AU
-            {"au": 0.715, "secs": SECONDS_PER_MINUTE},
-            {"au": 0.723, "secs": 1},  # [00:06:00] 到达 [金星] 0.721 AU
-            {"au": 0.996, "secs": SECONDS_PER_MINUTE},
-            {"au": 1.002, "secs": 1},  # [00:08:19] 到达 [地球] 1.0 AU
-            {"au": 1.50, "secs": SECONDS_PER_MINUTE * 2},
-            {"au": 1.516, "secs": SECONDS_PER_MINUTE},
-            {"au": 1.522, "secs": 1},  # [00:12:39] 到达 [火星] 1.52 AU
-            # {"au": 5.1, "secs": SECONDS_PER_HOUR},
-            {"au": 5.1, "secs": SECONDS_PER_MINUTE * 10},
-            {"au": 5.182, "secs": SECONDS_PER_MINUTE * 2},
-            {"au": 5.192, "secs": 1},  # [00:43:10] 到达 [木星] 5.19 AU
-            # {"au": 9.44, "secs": SECONDS_PER_HOUR},
-            {"au": 9.44, "secs": SECONDS_PER_MINUTE * 20},
-            {"au": 9.492, "secs": SECONDS_PER_MINUTE},
-            {"au": 9.502, "secs": 1},  # [01:19:01] 到达 [土星] 9.5 AU
-            # {"au": 19.15, "secs": SECONDS_PER_HOUR},
-            {"au": 19.15, "secs": SECONDS_PER_MINUTE * 30},
-            {"au": 19.192, "secs": SECONDS_PER_MINUTE},
-            {"au": 19.202, "secs": 1},  # [02:39:41] 到达 [天王星] 19.2 AU
-            # {"au": 30.67, "secs": SECONDS_PER_HOUR},
-            {"au": 30.67, "secs": SECONDS_PER_MINUTE * 30},
-            {"au": 30.692, "secs": SECONDS_PER_MINUTE},
-            {"au": 30.702, "secs": 1},  # [04:15:19] 到达 [海王星] 30.7 AU
-            # {"au": 39.52, "secs": SECONDS_PER_HOUR * 1.2},
-            {"au": 39.52, "secs": SECONDS_PER_MINUTE * 30},
-            {"au": 39.54, "secs": SECONDS_PER_MINUTE},
-            {"au": 1000, "secs": 1}  # [05:28:55] 到达 [冥王星] 39.55 AU
-        ]
 
-        # run_speed_maps = smooth_speed_transition(run_speed_maps)
+        if not hasattr(self, "run_speed_maps"):
+            # 运行速度配置
+            run_speed_maps = [
+                {"au": 0., "secs": 1},
+                {"au": 0.008, "secs": 1},
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 10},
+                {"au": 0.386, "secs": 1},
+                {"au": 0.3865, "secs": 1},  # [00:03:12] 到达 [水星] 0.384 AU
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 10},
+                {"au": 0.721, "secs": 1},
+                {"au": 0.723, "secs": 1},  # [00:06:00] 到达 [金星] 0.721 AU
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 10},
+                {"au": 1.0, "secs": 1},
+                {"au": 1.002, "secs": 1},  # [00:08:19] 到达 [地球] 1.0 AU
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 10},
+                {"au": 1.52, "secs": 1},
+                {"au": 1.522, "secs": 1},  # [00:12:39] 到达 [火星] 1.52 AU
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 30},
+                {"au": 5.19, "secs": 1},
+                {"au": 5.20, "secs": 1},  # [00:43:10] 到达 [木星] 5.19 AU
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 30},
+                {"au": 9.5, "secs": 1},
+                {"au": 9.51, "secs": 1},  # [01:19:01] 到达 [土星] 9.5 AU
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 30},
+                {"au": 19.2, "secs": 1},
+                {"au": 19.21, "secs": 1},  # [02:39:41] 到达 [天王星] 19.2 AU
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 30},
+                {"au": 30.7, "secs": 1},
+                {"au": 30.71, "secs": 1},  # [04:15:19] 到达 [海王星] 30.7 AU
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 30},
+                {"au": 39.55, "secs": 1},
+                {"au": 40, "secs": 1}  # [05:28:55] 到达 [冥王星] 39.55 AU
+            ]
+            run_speed_maps = check_calc_run_speed_maps(run_speed_maps)
+            run_speed_maps = smooth_speed_transition(run_speed_maps)
+            self.run_speed_maps = run_speed_maps
 
         light_distance = self.light_body.position[2]
-        for i, m in enumerate(run_speed_maps):
+        current_idx = 0
+        for i, m in enumerate(self.run_speed_maps):
             if i == 0:
                 au_min = 0
             else:
-                au_min = run_speed_maps[i - 1]["au"]
+                au_min = self.run_speed_maps[i - 1]["au"]
 
             au_max = m["au"]
+
+            if light_distance < au_min * AU:
+                # 如果光体的距离小于 au_min 则无需再循环
+                break
 
             if au_max * AU > light_distance >= au_min * AU:
                 if UrsinaConfig.seconds_per != m["secs"]:
                     seconds_per = m["secs"]  # int(round(m["secs"], 0))
                     UrsinaConfig.seconds_per = seconds_per
                     if seconds_per >= 10000:
-                        msg = f" {int(seconds_per / 10000)} 万"
+                        msg = f"加速到 {int(seconds_per / 10000)} 万"
                     elif seconds_per >= 1000:
-                        msg = f" {int(seconds_per / 1000)} 千"
+                        msg = f"加速到 {int(seconds_per / 1000)} 千"
+                    elif seconds_per > 1:
+                        msg = f"加速到 {int(seconds_per)} "
                     else:
-                        msg = f" {int(seconds_per)} "
+                        msg = f"当前为 {int(seconds_per)} "
 
-                    msg = f"当前为{msg}倍光速"
+                    msg = f"{msg}倍光速"
 
                     ControlUI.current_ui.show_message(msg, close_time=-1)
+                    current_idx = i
+                    break
+
+        if current_idx > 0:
+            self.run_speed_maps = self.run_speed_maps[current_idx:]
 
     def on_timer_changed(self, time_data: TimeData):
         """
@@ -239,8 +255,9 @@ class SpeedOfLightInit:
                 self.arrived_bodies.append(body)
                 if self.text_panel is not None:
                     self.arrived_info += f"[{time_data.time_text}]\t到达\t[{body.name}]\n\n"
-                    distance = round(self.light_body.position[2] / AU, 2)
-                    self.text_panel.text = self.arrived_info.replace("${distance}", f"{distance} AU")
+                    # distance = round(self.light_body.position[2] / AU, 4)
+                    # # print("浮点数保留两位小数，宽5位，不足补0：%05.5f " % 2.222)
+                    # self.text_panel.text = self.arrived_info.replace("${distance}", "%.4f AU" % distance)
                     print(f"[{time_data.time_text}] 到达 [{body.name}] {round(self.light_body.position[2] / AU, 4)} AU")
                     return
 
@@ -248,6 +265,9 @@ class SpeedOfLightInit:
             self.last_time = datetime.datetime.now()
         else:
             if datetime.datetime.now() - datetime.timedelta(milliseconds=1000) > self.last_time:
-                distance = round(self.light_body.position[2] / AU, 2)
-                self.text_panel.text = self.arrived_info.replace("${distance}", f"{distance} AU")
+                # distance = round(self.light_body.position[2] / AU, 4)
+                # self.text_panel.text = self.arrived_info.replace("${distance}", "%.4f AU" % distance)
                 self.last_time = datetime.datetime.now()
+
+        distance = round(self.light_body.position[2] / AU, 4)
+        self.text_panel.text = self.arrived_info.replace("${distance}", "%.4f AU" % distance)

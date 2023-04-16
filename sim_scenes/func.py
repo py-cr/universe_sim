@@ -341,6 +341,21 @@ def smooth_speed_transition2(run_speed_maps, transition_secs=1):
     return speed_maps
 
 
+def check_calc_run_speed_maps(run_speed_maps):
+    # 循环每一个分段
+    for i, speed_map in enumerate(run_speed_maps):
+        if i == 0:
+            continue
+        if i + 1 >= len(run_speed_maps):
+            continue
+        prev_speed_map = run_speed_maps[i - 1]
+        next_speed_map = run_speed_maps[i + 1]
+
+        if isinstance(speed_map["au"], str):
+            speed_map["au"] = (next_speed_map["au"] + prev_speed_map["au"]) / 2
+    return run_speed_maps
+
+
 def smooth_speed_transition(run_speed_maps, transition_secs=1):
     """
     通过逐步调整速度在给定的过渡时间内实现运行速度地图中速度的圆滑过渡。
@@ -349,25 +364,20 @@ def smooth_speed_transition(run_speed_maps, transition_secs=1):
                         其中au是以天文单位（AU）表示的距离，seconds则是以秒为单位的时间。
         transition_secs: 运行速度过渡的时间（秒数），默认为1秒。
     """
-    # assuming 60 steps per second
-    transition_steps = transition_secs * 30
-
-    from scipy.interpolate import CubicSpline
     from scipy.interpolate import InterpolatedUnivariateSpline
+
+    # 初始化速度分段序列
+    speed_maps = []
 
     xs = np.array([p["au"] for p in run_speed_maps])
     ys = np.array([p["secs"] for p in run_speed_maps])
+    # x = 2
+    # y = spl(x)
 
     # 计算 dydx（即导数）
     # dydx = np.diff(ys) / np.diff(xs)
     # spl = CubicSpline(xs, ys)
-    spl = InterpolatedUnivariateSpline(xs, ys, k=2)
-
-    # x = 2
-    # y = spl(x)
-
-    # 初始化速度分段序列
-    speed_maps = []
+    spl = InterpolatedUnivariateSpline(xs, ys, k=1)  # k=5)
 
     # 循环每一个分段
     for i, speed_map in enumerate(run_speed_maps):
@@ -387,19 +397,21 @@ def smooth_speed_transition(run_speed_maps, transition_secs=1):
         next_speed_map = run_speed_maps[i + 1]
         current_speed_map = speed_map
 
-        distance_step = (current_speed_map["au"] - prev_speed_map["au"]) / 3
+        diff_au = current_speed_map["au"] - prev_speed_map["au"]
 
-        for j in range(2):
+        distance_step = 0.01
+
+        for j in range(int(diff_au / distance_step)):
             d = prev_speed_map["au"] + (distance_step * (j + 1))
             s = spl(d)
             s = np.clip(s, 1, 1800)
             speed_maps.append({"au": d, "secs": float(s)})
 
         speed_maps.append(speed_map)
+        diff_au = next_speed_map["au"] - current_speed_map["au"]
+        # distance_step = diff_au / 10
 
-        distance_step = (next_speed_map["au"] - current_speed_map["au"]) / 5
-
-        for j in range(4):
+        for j in range(int(diff_au / distance_step)):
             d = current_speed_map["au"] + (distance_step * (j + 1))
             s = spl(d)
             s = np.clip(s, 1, 1800)
@@ -409,45 +421,79 @@ def smooth_speed_transition(run_speed_maps, transition_secs=1):
     return speed_maps
 
 
+def smooth_speed_transition3(run_speed_maps):
+    # 初始化速度分段序列
+    speed_maps = []
+
+    # 循环每一个分段
+    for i, speed_map in enumerate(run_speed_maps):
+        if i == 0:
+            # 对于第一个分段，直接添加到速度分段序列中
+            speed_maps.append(speed_map)
+            continue
+        if speed_map["secs"] <= 1:
+            # 如果当前分段所用时间小于等于1秒，直接添加到速度分段序列中
+            speed_maps.append(speed_map)
+            continue
+        if i + 1 >= len(run_speed_maps):
+            speed_maps.append(speed_map)
+            continue
+
+        # 否则，保存前一个速度分段
+        prev_speed_map = run_speed_maps[i - 1]
+        next_speed_map = run_speed_maps[i + 1]
+        current_speed_map = speed_map
+
+        speed_maps.append(speed_map)
+
+    return speed_maps
+
+
 def speed_smooth_adjust_test():
+    # 运行速度配置
     run_speed_maps = [
+        {"au": 0., "secs": 1},
         {"au": 0.008, "secs": 1},
-        {"au": 0.36, "secs": SECONDS_PER_MINUTE * 2},
-        {"au": 0.376, "secs": SECONDS_PER_MINUTE},
+        {"au": "?", "secs": SECONDS_PER_MINUTE * 10},
+        {"au": 0.3855, "secs": 1},
         {"au": 0.386, "secs": 1},  # [00:03:12] 到达 [水星] 0.384 AU
-        {"au": 0.715, "secs": SECONDS_PER_MINUTE},
-        {"au": 0.723, "secs": 1},  # [00:06:00] 到达 [金星] 0.721 AU
-        {"au": 0.996, "secs": SECONDS_PER_MINUTE},
-        {"au": 1.002, "secs": 1},  # [00:08:19] 到达 [地球] 1.0 AU
-        {"au": 1.50, "secs": SECONDS_PER_MINUTE * 2},
-        {"au": 1.516, "secs": SECONDS_PER_MINUTE},
-        {"au": 1.522, "secs": 1},  # [00:12:39] 到达 [火星] 1.52 AU
-        # {"au": 5.1, "secs": SECONDS_PER_HOUR},
-        {"au": 5.1, "secs": SECONDS_PER_MINUTE * 10},
-        {"au": 5.182, "secs": SECONDS_PER_MINUTE * 2},
-        {"au": 5.192, "secs": 1},  # [00:43:10] 到达 [木星] 5.19 AU
-        # {"au": 9.44, "secs": SECONDS_PER_HOUR},
-        {"au": 9.44, "secs": SECONDS_PER_MINUTE * 20},
-        {"au": 9.492, "secs": SECONDS_PER_MINUTE},
-        {"au": 9.502, "secs": 1},  # [01:19:01] 到达 [土星] 9.5 AU
-        # {"au": 19.15, "secs": SECONDS_PER_HOUR},
-        {"au": 19.15, "secs": SECONDS_PER_MINUTE * 30},
-        {"au": 19.192, "secs": SECONDS_PER_MINUTE},
-        {"au": 19.202, "secs": 1},  # [02:39:41] 到达 [天王星] 19.2 AU
-        # {"au": 30.67, "secs": SECONDS_PER_HOUR},
-        {"au": 30.67, "secs": SECONDS_PER_MINUTE * 30},
-        {"au": 30.692, "secs": SECONDS_PER_MINUTE},
-        {"au": 30.702, "secs": 1},  # [04:15:19] 到达 [海王星] 30.7 AU
-        # {"au": 39.52, "secs": SECONDS_PER_HOUR * 1.2},
-        {"au": 39.52, "secs": SECONDS_PER_MINUTE * 30},
-        {"au": 39.54, "secs": SECONDS_PER_MINUTE},
-        {"au": 40, "secs": 1}  # [05:28:55] 到达 [冥王星] 39.55 AU
+        {"au": "?", "secs": SECONDS_PER_MINUTE * 10},
+        {"au": 0.719, "secs": 1},
+        # {"au": 0.723, "secs": 1},  # [00:06:00] 到达 [金星] 0.721 AU
+        # {"au": "?", "secs": SECONDS_PER_MINUTE * 10},
+        # {"au": 0.99, "secs": 1},
+        # {"au": 1.002, "secs": 1},  # [00:08:19] 到达 [地球] 1.0 AU
+        # {"au": "?", "secs": SECONDS_PER_MINUTE * 10},
+        # {"au": 1.51, "secs": 1},
+        # {"au": 1.522, "secs": 1},  # [00:12:39] 到达 [火星] 1.52 AU
+        # # {"au": 5.1, "secs": SECONDS_PER_HOUR},
+        # {"au": "?", "secs": SECONDS_PER_MINUTE * 20},
+        # {"au": 5.189, "secs": 1},
+        # {"au": 5.192, "secs": 1},  # [00:43:10] 到达 [木星] 5.19 AU
+        # # {"au": 9.44, "secs": SECONDS_PER_HOUR},
+        # {"au": "?", "secs": SECONDS_PER_MINUTE * 20},
+        # {"au": 9.492, "secs": 1},
+        # {"au": 9.502, "secs": 1},  # [01:19:01] 到达 [土星] 9.5 AU
+        # # {"au": 19.15, "secs": SECONDS_PER_HOUR},
+        # {"au": "?", "secs": SECONDS_PER_MINUTE * 30},
+        # {"au": 19.192, "secs": 1},
+        # {"au": 19.202, "secs": 1},  # [02:39:41] 到达 [天王星] 19.2 AU
+        # # {"au": 30.67, "secs": SECONDS_PER_HOUR},
+        # {"au": "?", "secs": SECONDS_PER_MINUTE * 30},
+        # {"au": 30.692, "secs": 1},
+        # {"au": 30.702, "secs": 1},  # [04:15:19] 到达 [海王星] 30.7 AU
+        # # {"au": 39.52, "secs": SECONDS_PER_HOUR * 1.2},
+        # {"au": "?", "secs": SECONDS_PER_MINUTE * 30},
+        # {"au": 39.54, "secs": 1},
+        # {"au": 40, "secs": 1}  # [05:28:55] 到达 [冥王星] 39.55 AU
     ]
+
+    run_speed_maps = check_calc_run_speed_maps(run_speed_maps)
 
     data1 = [(m["au"], m["secs"]) for m in run_speed_maps]
     x1, y1 = zip(*data1)
     import copy
-    run_speed_maps2 = smooth_speed_transition(copy.deepcopy(run_speed_maps))
+    run_speed_maps2 = smooth_speed_transition(run_speed_maps)
 
     data2 = [(m["au"], m["secs"]) for m in run_speed_maps2]
     x2, y2 = zip(*data2)
@@ -458,8 +504,8 @@ def speed_smooth_adjust_test():
     # 生成一个Figure画布和一个Axes坐标系
     fig, ax = plt.subplots()
     # 在生成的坐标系下画折线图
-    # ax.plot(x1, y1, 'o', linewidth=1)
-    ax.plot(x2, y2, 'b', linewidth=1)
+    ax.plot(x1, y1, 'o', linewidth=1)
+    ax.plot(x2, y2, 'r', linewidth=1)
     # 显示图形
     plt.show()
 

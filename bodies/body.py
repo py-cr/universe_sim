@@ -21,6 +21,7 @@ class Body(metaclass=ABCMeta):
 
     def __init__(self, name, mass, init_position, init_velocity, rotate_angle=0,
                  density=5e3, color=(125 / 255, 125 / 255, 125 / 255),
+                 text_color=None,
                  texture=None, size_scale=1.0, distance_scale=1.0,
                  rotation_speed=None, parent=None, ignore_mass=False,
                  is_fixed_star=False, trail_color=None, show_name=False):
@@ -53,6 +54,7 @@ class Body(metaclass=ABCMeta):
 
         self.name = name
         self.__mass = mass
+        self.text_color = text_color
 
         # 是否忽略质量（如果为True，则不计算引力）
         # TODO: 注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）

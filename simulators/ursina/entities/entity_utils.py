@@ -26,6 +26,7 @@ def create_name_text(parent):
     @param parent:
     @return:
     """
+    text_color = parent.body.text_color
     b_color = parent.body_view.color
     name_text = Text(parent.body_view.body.name, scale=1, billboard=True, parent=parent,
                      font=UrsinaConfig.CN_FONT, background=True,
@@ -33,8 +34,12 @@ def create_name_text(parent):
     name_text.background.color = color.rgba(b_color[0], b_color[1], b_color[2], 0.3)
     name_text.resolution = 24
     # self.name_text.scale = self.scale
-    inverse_color = get_inverse_color(b_color)
-    name_text.color = color.rgba(inverse_color[0], inverse_color[1], inverse_color[2], 1)
+    if text_color is None:
+        text_color = get_inverse_color(b_color)
+    else:
+        text_color = (text_color[0]/255, text_color[1]/255, text_color[2]/255)
+    name_text.set_light_off()
+    name_text.color = color.rgba(text_color[0], text_color[1], text_color[2], 1)
     parent.name_text = name_text
     return name_text
 

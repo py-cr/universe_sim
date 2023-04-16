@@ -6,7 +6,7 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
-from sim_scenes.func import ursina_run, create_solar_system_bodies, create_light_body
+from sim_scenes.func import ursina_run, create_solar_system_bodies, create_light_ship
 from common.consts import LIGHT_SPEED
 from sim_scenes.solar_system.speed_of_light_init import SpeedOfLightInit
 
@@ -25,12 +25,12 @@ bodies = create_solar_system_bodies(ignore_mass=True, init_velocity=[0, 0, 0])
 
 # 从 init 对象中获取 光体的大小（light_size_scale），光体的位置（light_init_position）
 # 创建一个以光速前进的天体（模拟一个光子） speed=1光速=299792.458千米/秒，注意：质量为0才能达到光速，虽然如此，但也可以试试超光速
-light_body = create_light_body(init.light_size_scale, init.light_init_position, speed=LIGHT_SPEED * 1)
+light_ship = create_light_ship(init.light_size_scale, init.light_init_position, speed=LIGHT_SPEED * 1)
 # 增加光速天体到天体集合
-bodies.append(light_body)
+bodies.append(light_ship)
 
 # 运行前指定bodies、light_body并订阅事件
-init.light_body = light_body
+init.light_ship = light_ship
 init.bodies = bodies
 init.event_subscription()
 

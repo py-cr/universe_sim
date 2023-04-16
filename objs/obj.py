@@ -25,6 +25,7 @@ class Obj(metaclass=ABCMeta):
                  texture=None, size_scale=1.0, distance_scale=1.0,
                  parent=None, ignore_mass=False,
                  trail_color=None, show_name=False,
+                 rotation=None,
                  gravity_only_for=[], model=None):
         """
         对象类
@@ -49,6 +50,7 @@ class Obj(metaclass=ABCMeta):
         self.__his_reserved_num = 200
         self.gravity_only_for = gravity_only_for
         self.model = self.find_model(model)
+        self.rotation = rotation
 
         if name is None:
             name = getattr(self.__class__, '__name__')

@@ -74,7 +74,11 @@ class Planet(Entity):
                     model = self.body.model
                 else:
                     model = self.body.model
-                rotation = (0, 0, 0)
+                if hasattr(self.body, "rotation"):
+                    if self.body.rotation is None:
+                        rotation = (0, 0, 0)
+                    else:
+                        rotation = tuple(self.body.rotation)
             else:
                 model = create_sphere(0.5, subdivisions)
                 rotation = (0, 0, 0)

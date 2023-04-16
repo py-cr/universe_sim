@@ -225,6 +225,20 @@ def create_light_body(size_scale, init_position, speed=LIGHT_SPEED):
                 init_velocity=[0, 0, speed]).set_light_disable(True)
 
 
+def create_light_ship(size_scale, init_position, speed=LIGHT_SPEED):
+    """
+    用天体模拟一个光速飞船
+    @param size_scale: 光速飞船的大小
+    @param init_position: 光速飞船的初始位置
+    @param speed: 光速飞船的速度->1光速=299792.458 千米/秒(km/秒)
+    @return:
+    """
+    from objs.space_ship import SpaceShip
+    return SpaceShip(name='光速飞船', mass=0, size_scale=size_scale, color=(255, 110, 0),
+                     init_position=init_position,
+                     init_velocity=[0, 0, speed]).set_light_disable(True)
+
+
 def create_text_panel(width=0.35, height=.5):
     # 创建一个 Panel 组件
     from ursina import Text, Panel, color, camera, Vec3

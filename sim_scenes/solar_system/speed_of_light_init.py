@@ -33,35 +33,42 @@ class SpeedOfLightInit:
         self.arrived_info = ""
 
         self.__camera_follow_light = camera_follow_light
-        self.__light_body = None
+        self.__light_ship = None
         self.__bodies = None
         self.view_closely = False
-        if self.__camera_follow_light in ["SideView", "SideViewActualSize"]:
+        if self.__camera_follow_light in ["SideView"]:
             # 摄像机位置 = 前-后+、上+下-、左-右+、
-            self.camera_position = (AU, 0, 0)
+            self.camera_position = (AU / 5, 0, 0)
             self.show_trail = True
-            self.light_size_scale = 1e3
-            self.light_init_position = [AU / 3, 0, 0]
+            self.light_size_scale = 2e6
+            self.light_init_position = [AU, 0, 0]
+        elif self.__camera_follow_light in ["SideViewActualSize"]:
+            # 摄像机位置 = 前-后+、上+下-、左-右+、
+            # self.camera_position = (0, AU, 0)
+            self.show_trail = True
+            self.light_size_scale = 2e6
+            self.light_init_position = [AU, 0, 0]
         elif self.__camera_follow_light == "ForwardView":
-            # 摄像机位置 = 左-右+、上+下-、前+后-
-            self.camera_position = (0, AU / 10, -AU)
+            # 摄像机位置 = 左-右+、前+后-、上-下+
+            # self.camera_position = (0, AU / 10, -AU)
+            self.camera_position = (0, -AU / 25, -AU / 50)
             self.show_trail = True
-            self.light_size_scale = 1e2
+            self.light_size_scale = 2e6
             self.light_init_position = [AU / 12, 0, 0]
         else:
             # 摄像机位置 = 左-右+、上+下-、前+后-
             self.camera_position = (0, AU, -6 * AU)
             self.show_trail = True
-            self.light_size_scale = 2e3
+            self.light_size_scale = 1e7
             self.light_init_position = [AU / 3, 0, 0]
 
     @property
-    def light_body(self):
-        return self.__light_body
+    def light_ship(self):
+        return self.__light_ship
 
-    @light_body.setter
-    def light_body(self, value):
-        self.__light_body = value
+    @light_ship.setter
+    def light_ship(self, value):
+        self.__light_ship = value
 
     @property
     def bodies(self):
@@ -73,10 +80,10 @@ class SpeedOfLightInit:
         if self.__camera_follow_light == "SideViewActualSize":
             # TODO: 将天体的大小不进行缩放
             for body in self.__bodies:
-                if body is self.light_body:
+                if body is self.light_ship:
                     continue
                 body.size_scale = 1
-            self.camera_position = [-self.light_init_position[0] / 1.35, 0, 0]
+            self.camera_position = [-self.light_init_position[0] / 1.005, 0, 0]
             self.view_closely = True
 
     def on_reset(self):
@@ -97,7 +104,7 @@ class SpeedOfLightInit:
         订阅事件
         @return:
         """
-        if self.light_body is None:
+        if self.light_ship is None:
             raise Exception("请指定 SpeedOfLightInit.light_body")
 
         if self.bodies is None:
@@ -136,14 +143,26 @@ class SpeedOfLightInit:
         self.text_panel = create_text_panel()
         self.text_panel.text = self.arrived_info.replace("${distance}", "0 AU")
 
-        if self.__camera_follow_light in ["SideView", "SideViewActualSize"]:
-            camera.parent = self.light_body.planet
+        self.light_ship.planet.rotation_x = 90
+
+        if self.__camera_follow_light in ["SideView"]:
+            camera.rotation_z = -90
             camera.rotation_y = -85
+        elif self.__camera_follow_light in ["ForwardView"]:
+            camera.rotation_x = -75
+        elif self.__camera_follow_light in ["SideViewActualSize"]:
+            self.light_ship.planet.rotation_x = 0
+            # camera.rotation_z = -90
+            camera.rotation_y = -85
+
+        if self.__camera_follow_light in ["SideView", "SideViewActualSize"]:
+            camera.parent = self.light_ship.planet
+
         elif self.__camera_follow_light == "ForwardView":
             # self.light_body.planet.enabled = False
-            camera.parent = self.light_body.planet
-            self.light_body.planet.input = self.light_body_input
-            camera.rotation_y = -15
+            camera.parent = self.light_ship.planet
+            self.light_ship.planet.input = self.light_body_input
+            # camera.rotation_y = -15
             if hasattr(camera, "sky"):
                 # 摄像机跟随地球后，需要对深空背景进行调整，否则看到的是黑色背景
                 camera.sky.scale = 800
@@ -151,7 +170,7 @@ class SpeedOfLightInit:
                 camera.clip_plane_far = 1000000
 
         # 取消订阅（防止 光体 的大小进行变化影响摄像机的视角）
-        UrsinaEvent.on_body_size_changed_unsubscription(self.light_body.planet.change_body_scale)
+        UrsinaEvent.on_body_size_changed_unsubscription(self.light_ship.planet.change_body_scale)
 
     # def on_body_size(self):
     #     self.light_body.planet.scale = self.light_body.planet_scale
@@ -201,7 +220,7 @@ class SpeedOfLightInit:
             run_speed_maps = smooth_speed_transition(run_speed_maps)
             self.run_speed_maps = run_speed_maps
 
-        light_distance = self.light_body.position[2]
+        light_distance = self.light_ship.position[2]
         current_idx = 0
         for i, m in enumerate(self.run_speed_maps):
             if i == 0:
@@ -246,19 +265,19 @@ class SpeedOfLightInit:
         self.auto_run_speed()
 
         for body in self.bodies:
-            if body is self.light_body or isinstance(body, Sun) \
+            if body is self.light_ship or isinstance(body, Sun) \
                     or body in self.arrived_bodies or isinstance(body, Asteroids):
                 # 对于光速天体、太阳、小行星群、“已到达天体列表”中的天体无需计算
                 continue
             # 计算判断，如果光速天体距离到达了某个天体，就记录到“已到达天体列表”中
-            if self.light_body.position[2] >= body.position[2]:
+            if self.light_ship.position[2] >= body.position[2]:
                 self.arrived_bodies.append(body)
                 if self.text_panel is not None:
                     self.arrived_info += f"[{time_data.time_text}]\t到达\t[{body.name}]\n\n"
                     # distance = round(self.light_body.position[2] / AU, 4)
                     # # print("浮点数保留两位小数，宽5位，不足补0：%05.5f " % 2.222)
                     # self.text_panel.text = self.arrived_info.replace("${distance}", "%.4f AU" % distance)
-                    print(f"[{time_data.time_text}] 到达 [{body.name}] {round(self.light_body.position[2] / AU, 4)} AU")
+                    print(f"[{time_data.time_text}] 到达 [{body.name}] {round(self.light_ship.position[2] / AU, 4)} AU")
                     return
 
         if not hasattr(self, "last_time"):
@@ -269,5 +288,5 @@ class SpeedOfLightInit:
                 # self.text_panel.text = self.arrived_info.replace("${distance}", "%.4f AU" % distance)
                 self.last_time = datetime.datetime.now()
 
-        distance = round(self.light_body.position[2] / AU, 4)
+        distance = round(self.light_ship.position[2] / AU, 4)
         self.text_panel.text = self.arrived_info.replace("${distance}", "%.4f AU" % distance)

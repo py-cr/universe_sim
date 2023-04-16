@@ -19,13 +19,13 @@ if __name__ == '__main__':
     """
     bodies = [
         Sun(size_scale=5e1, texture="transparent.png"),  # 太阳透明
-        Earth(name="中国春天", size_scale=6e3, texture="earth_hd.jpg", text_color=(0, 255, 0),
+        Earth(name="中国春天", size_scale=5e3, texture="earth_hd.jpg", text_color=(0, 255, 0),
               init_position=[-1 * AU, 0, 0], init_velocity=[0, 0, -29.79]),
-        Earth(name="中国夏天", size_scale=6e3, texture="earth_hd.jpg", text_color=(255, 0, 0),
+        Earth(name="中国夏天", size_scale=5e3, texture="earth_hd.jpg", text_color=(255, 0, 0),
               init_position=[0, 0, -1 * AU], init_velocity=[29.79, 0, 0]),
-        Earth(name="中国秋天", size_scale=6e3, texture="earth_hd.jpg", text_color=(255, 255, 0),
+        Earth(name="中国秋天", size_scale=5e3, texture="earth_hd.jpg", text_color=(255, 255, 0),
               init_position=[1 * AU, 0, 0], init_velocity=[0, 0, 29.79]),
-        Earth(name="中国冬天", size_scale=6e3, texture="earth_hd.jpg", text_color=(0, 255, 255),
+        Earth(name="中国冬天", size_scale=5e3, texture="earth_hd.jpg", text_color=(0, 255, 255),
               init_position=[0, 0, 1 * AU], init_velocity=[-29.79, 0, 0]),
     ]
     sun = bodies[0]
@@ -47,7 +47,7 @@ if __name__ == '__main__':
         earth_4.planet.rotation_y -= 145  # 冬天
 
         # camera.parent = sun.planet
-        camera.look_at(earth_4.planet)
+        camera.look_at(earth_1.planet)
         camera.rotation_z = 0
         # camera.position=[0,0,0]
         pass

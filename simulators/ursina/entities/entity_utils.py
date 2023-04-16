@@ -9,7 +9,7 @@
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
 from ursina import Ursina, window, Entity, Mesh, SmoothFollow, Texture, clamp, time, \
     camera, color, mouse, Vec2, Vec3, Vec4, Text, \
-    load_texture, held_keys, destroy, PointLight
+    load_texture, held_keys, destroy, PointLight, distance
 
 from simulators.ursina.entities.body_trail import BodyTrail, BodyTrailLine
 from simulators.ursina.ursina_config import UrsinaConfig
@@ -143,14 +143,14 @@ def create_trail_sphere(parent, pos):
     return trail
 
 
-def merge_vectors(vectors):
-    # 计算速度的大小
-    x, y, z = vectors[0], vectors[1], vectors[2]
-    value = math.sqrt(x ** 2 + y ** 2 + z ** 2)
-    # 计算速度的方向
-    direction = (x / value, y / value, z / value)
-    # 返回速度大小和速度方向
-    return value, direction
+# def merge_vectors(vectors):
+#     # 计算速度的大小
+#     x, y, z = vectors[0], vectors[1], vectors[2]
+#     value = math.sqrt(x ** 2 + y ** 2 + z ** 2)
+#     # 计算速度的方向
+#     direction = (x / value, y / value, z / value)
+#     # 返回速度大小和速度方向
+#     return value, direction
 
 
 def create_trail_line(parent, pos):
@@ -159,16 +159,16 @@ def create_trail_line(parent, pos):
     @param pos:
     @return:
     """
+    trail = None
     if hasattr(parent, "trail_last_pos"):
         trail_last_pos = parent.trail_last_pos
-        value, direction = merge_vectors(pos - trail_last_pos)
-        trail = BodyTrailLine(color=parent.trail_color, scale=parent.trail_scale, position=trail_last_pos,
-                              direction=Vec3(direction))
-        trail.set_light_off()
+        if distance(pos, trail_last_pos) > 0:
+            value, direction = get_value_direction_vectors(pos - trail_last_pos)
+            trail = BodyTrailLine(color=parent.trail_color, scale=parent.trail_scale, position=trail_last_pos,
+                                  direction=Vec3(direction))
+            trail.set_light_off()
         parent.last_trail = trail
 
-    else:
-        trail = None
     parent.trail_last_pos = pos
     return trail
 
@@ -261,7 +261,7 @@ def create_fixed_star_lights(fixed_star):
                 light = PointLight(parent=fixed_star, intensity=10, range=10, color=color.white)
 
 
-def merge_vectors(vectors):
+def get_value_direction_vectors(vectors):
     # 计算速度的大小
     x, y, z = vectors[0], vectors[1], vectors[2]
     value = math.sqrt(x ** 2 + y ** 2 + z ** 2)
@@ -276,8 +276,8 @@ def merge_vectors(vectors):
 
 
 def create_trail_info(body, trail):
-    velocity = merge_vectors(body.velocity)
-    acceleration = merge_vectors(body.acceleration)
+    velocity = get_value_direction_vectors(body.velocity)
+    acceleration = get_value_direction_vectors(body.acceleration)
     vel_value = velocity[0]  # km/s
     acc_value = acceleration[0]  # km/s²
 

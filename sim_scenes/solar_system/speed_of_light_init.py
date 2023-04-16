@@ -36,18 +36,22 @@ class SpeedOfLightInit:
         self.__light_ship = None
         self.__bodies = None
         self.view_closely = False
+        self.auto_control_speed = False
+
         if self.__camera_follow_light in ["SideView"]:
             # 摄像机位置 = 前-后+、上+下-、左-右+、
             self.camera_position = (AU / 5, 0, 0)
             self.show_trail = True
             self.light_size_scale = 2e6
             self.light_init_position = [AU, 0, 0]
+            self.auto_control_speed = True
         elif self.__camera_follow_light in ["SideViewActualSize"]:
             # 摄像机位置 = 前-后+、上+下-、左-右+、
             # self.camera_position = (0, AU, 0)
             self.show_trail = True
             self.light_size_scale = 2e6
             self.light_init_position = [AU, 0, 0]
+            self.auto_control_speed = True
         elif self.__camera_follow_light == "ForwardView":
             # 摄像机位置 = 左-右+、前+后-、上-下+
             # self.camera_position = (0, AU / 10, -AU)
@@ -55,12 +59,14 @@ class SpeedOfLightInit:
             self.show_trail = True
             self.light_size_scale = 2e6
             self.light_init_position = [AU / 12, 0, 0]
+            # self.auto_control_speed = True
         else:
             # 摄像机位置 = 左-右+、上+下-、前+后-
             self.camera_position = (0, AU, -6 * AU)
             self.show_trail = True
             self.light_size_scale = 1e7
             self.light_init_position = [AU / 3, 0, 0]
+            self.auto_control_speed = True
 
     @property
     def light_ship(self):
@@ -180,8 +186,10 @@ class SpeedOfLightInit:
         自动调整速度（对于空旷的位置，摄像机会进行加速）
         @return:
         """
-        if self.__camera_follow_light != "SideViewActualSize":
+        if not self.auto_control_speed:
             return
+        # if self.__camera_follow_light != "SideViewActualSize":
+        #     return
 
         if not hasattr(self, "run_speed_maps"):
             # 运行速度配置

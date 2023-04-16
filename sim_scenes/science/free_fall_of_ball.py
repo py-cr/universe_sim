@@ -6,7 +6,7 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
-from bodies import Moon, Earth, Body
+from bodies import Earth, Body
 from objs import Football
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_MINUTE
 from sim_scenes.func import ursina_run

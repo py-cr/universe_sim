@@ -36,6 +36,7 @@ class Planet(Entity):
         if hasattr(self.body, "rotation_speed"):
             self.rotation_speed = self.body.rotation_speed
         self.rotMode = 'x'  # random.choice(["x", "y", "z"])
+
         self.name = body_view.name
 
         pos = body_view.position * self.body.distance_scale * UrsinaConfig.SCALE_FACTOR
@@ -97,6 +98,21 @@ class Planet(Entity):
             rotation=rotation,
             double_sided=True
         )
+        if hasattr(self.body, "rotate_angle"):
+            if self.body.rotate_angle != 0:
+                self.rotate_angle = self.body.rotate_angle
+                self.main_entity = Entity()
+                self.main_entity.rotation_x = self.rotate_angle
+                self.main_entity.body_view = self.body_view
+                self.main_entity.body = self.body
+                self.parent = self.main_entity
+                self.position = [0, 0, 0]
+            else:
+                self.rotate_angle = 0
+                self.main_entity = self
+        else:
+            self.rotate_angle = 0
+            self.main_entity = self
 
         if hasattr(self.body, "torus_stars"):
             # 星环小天体群（主要模拟小行星群，非一个天体）
@@ -105,7 +121,7 @@ class Planet(Entity):
         else:
             # 一个天体
             # 拖尾球体的初始化
-            trail_init(self)
+            trail_init(self.main_entity, self.scale_x)
 
         if hasattr(self.body, "is_fixed_star"):
             if self.body.is_fixed_star:
@@ -141,9 +157,9 @@ class Planet(Entity):
             # self.x = -pos[1]
             # self.y = pos[2]
             # self.z = pos[0]
-            self.x = pos[0]
-            self.y = pos[1]
-            self.z = pos[2]
+            self.main_entity.x = pos[0]
+            self.main_entity.y = pos[1]
+            self.main_entity.z = pos[2]
         else:
             self.follow_parent()
 
@@ -183,9 +199,9 @@ class Planet(Entity):
             if UrsinaConfig.show_trail:
                 # 有时候第一个位置不正确，所以判断一下有历史记录后在创建
                 if len(self.body.his_position()) > 1:
-                    create_trails(self)
+                    create_trails(self.main_entity)
             else:
-                clear_trails(self)
+                clear_trails(self.main_entity)
 
         if hasattr(self, "name_text"):
             d = (camera.world_position - self.name_text.world_position).length()
@@ -213,18 +229,18 @@ class Planet(Entity):
         # self.x = -pos[1]
         # self.y = pos[2]
         # self.z = pos[0]
-        self.x = pos[0]
-        self.y = pos[1]
-        self.z = pos[2]
+        self.main_entity.x = pos[0]
+        self.main_entity.y = pos[1]
+        self.main_entity.z = pos[2]
 
     def destroy_all(self):
         # 从天体系统中移除自己（TODO:暂时还不能移除）
         # self.body_view.bodies_system.bodies.remove(self.body)
         # 删除拖尾
-        clear_trails(self)
+        clear_trails(self.main_entity)
         # 如果有行星环，则删除行星环
         if hasattr(self, "ring"):
-            destroy(self.ring)
+            destroy(self.main_entity.ring)
         self.body.appeared = False
         self.body_view.appeared = False
         # 最后删除自己

@@ -39,7 +39,7 @@ def create_name_text(parent):
     return name_text
 
 
-def trail_init(parent):
+def trail_init(parent, scale):
     """
     拖尾球体的初始化
     @return:
@@ -52,7 +52,7 @@ def trail_init(parent):
     trail_color = adjust_brightness(trail_color, 0.4)
     parent.trail_color = color.rgba(trail_color[0], trail_color[1], trail_color[2], 0.6)
     # 拖尾球体的大小为该天体的 1/5
-    parent.trail_scale = parent.scale_x / 5
+    parent.trail_scale = scale / 5
     if parent.trail_scale < 1:
         # 如果太小，则
         pass

@@ -38,7 +38,10 @@ class BodyView(metaclass=ABCMeta):
         self.position = body.position
         self.name = body.name
         self.mass = body.mass
-        self.raduis = body.raduis
+
+        if hasattr(body, "raduis"):
+            self.raduis = body.raduis
+
         self.velocity = body.velocity
 
         self.appeared = True

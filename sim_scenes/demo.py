@@ -26,7 +26,7 @@ if __name__ == '__main__':
         Sun(name="抖音", mass=1.9891e30,
             init_position=[0, 0, 0],
             init_velocity=[0, 0, 0],
-            texture="douyin.jpg", size_scale=8e1, distance_scale=1.0),
+            texture="douyin.jpg", size_scale=6e1, distance_scale=1.0),
 
         # 地球的质量为 5.97237✕10²⁴ kg
         # 初始位置 x=1.12天文单位, y=0, z=0
@@ -35,10 +35,10 @@ if __name__ == '__main__':
         # 放大倍数为 5000 倍
         # 距离保持不变
         Earth(name="超人", mass=5.97237e24,
-              init_position=[2 * AU, 0, 0],
-              init_velocity=[0, 29.79, 0],
+              init_position=[0, 0, AU],
+              init_velocity=[-29.79, 0, 0],
               rotation_speed=1.5,
-              texture="pythoncr.jpg", size_scale=5e3, distance_scale=1.0),
+              texture="pythoncr.jpg", size_scale=3e3, distance_scale=1.0),
     ]
     # 使用 mayavi 查看的运行效果
     # mayavi_run(bodies, SECONDS_PER_DAY, view_azimuth=135)
@@ -49,4 +49,4 @@ if __name__ == '__main__':
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_WEEK, position=(0, AU, -5 * AU))
+    ursina_run(bodies, SECONDS_PER_WEEK * 2, position=(0, AU, -5 * AU))

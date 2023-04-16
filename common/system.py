@@ -194,7 +194,8 @@ class System(object):
                 # m/s² = kg * m / m**3
                 # km/s² = kg * m / m**3 / 1e9
                 # acceleration = G * body2.mass * dx / (d ** 3)
-                acceleration += (G * body2.mass * r / np.linalg.norm(r) ** 3) / 1e9
+                if np.linalg.norm(r) > 0.0:
+                    acceleration += (G * body2.mass * r / np.linalg.norm(r) ** 3) / 1e9
 
             body1.acceleration = acceleration
 

@@ -55,10 +55,13 @@ class Simulator(metaclass=ABCMeta):
             view.acceleration = body.acceleration
             view.velocity = body.velocity
             # viewer.volume = body.volume
-            view.raduis = body.raduis
+            if hasattr(body, "raduis"):
+                view.raduis = body.raduis
             view.his_position = body.his_position()
-            view.is_fixed_star = body.is_fixed_star
-            view.has_rings = body.has_rings
+            if hasattr(body, "is_fixed_star"):
+                view.is_fixed_star = body.is_fixed_star
+            if hasattr(body, "has_rings"):
+                view.has_rings = body.has_rings
             view.size_scale = body.size_scale
             view.distance_scale = body.distance_scale
 

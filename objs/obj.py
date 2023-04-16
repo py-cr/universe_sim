@@ -12,6 +12,7 @@ import numpy as np
 import math
 from common.consts import AU
 import copy
+import os
 
 
 class Obj(metaclass=ABCMeta):
@@ -23,7 +24,8 @@ class Obj(metaclass=ABCMeta):
                  density=5e3, color=(125 / 255, 125 / 255, 125 / 255),
                  texture=None, size_scale=1.0, distance_scale=1.0,
                  parent=None, ignore_mass=False,
-                 trail_color=None, show_name=False):
+                 trail_color=None, show_name=False,
+                 gravity_only_for=[], model=None):
         """
         对象类
         @param name: 对象名称
@@ -45,6 +47,8 @@ class Obj(metaclass=ABCMeta):
         self.__his_vel = []
         self.__his_acc = []
         self.__his_reserved_num = 200
+        self.gravity_only_for = gravity_only_for
+        self.model = self.find_model(model)
 
         if name is None:
             name = getattr(self.__class__, '__name__')
@@ -89,6 +93,21 @@ class Obj(metaclass=ABCMeta):
         self.light_disable = False
 
         self.__has_rings = False
+
+    def find_model(self, model: str):
+        if not model.endswith(".obj"):
+            return model
+        if os.path.exists(model):
+            return model
+        paths = [os.path.join('.', 'objs/models'),
+                 os.path.join('..', 'objs/models'),
+                 os.path.join('..', '..', 'objs/models')]
+        for path in paths:
+            p = os.path.join(path, model)
+            if os.path.exists(p):
+                return p
+
+        return ""
 
     def set_ignore_gravity(self, value=True):
         """
@@ -198,7 +217,7 @@ class Obj(metaclass=ABCMeta):
         停止运动，将加速度和速度置零
         @return:
         """
-        self.init_velocity = [0.0, 0.0, 0.0]
+        self.velocity = [0.0, 0.0, 0.0]
         self.acceleration = [0.0, 0.0, 0.0]
 
     def stop_and_ignore_gravity(self):
@@ -305,6 +324,10 @@ class Obj(metaclass=ABCMeta):
         @param body:
         @return:
         """
+        if len(self.gravity_only_for) > 0:
+            if body in self.gravity_only_for:
+                return False
+            return True
         # TODO: 注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在对象物理学中是不严谨）
         if self.ignore_mass:
             return True

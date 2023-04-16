@@ -9,18 +9,18 @@
 from objs.obj import Obj
 
 
-class Diamond(Obj):
+class Satellite(Obj):
     """
-    钻石
-    密度：3.51g/cm³
+    卫星
     """
 
-    def __init__(self, name="钻石", mass=5.97237e24,
+    def __init__(self, name="卫星", mass=5.97237e24,
                  init_position=[0, 0, 0],
                  init_velocity=[0, 0, 0],
-                 texture=None, size_scale=1.0, distance_scale=1.0,
-                 ignore_mass=False, density=3.51e3, color=(7, 0, 162),
+                 texture="satelite.png", size_scale=1.0, distance_scale=1.0,
+                 ignore_mass=False, density=1e3, color=(7, 0, 162),
                  trail_color=None, show_name=False,
+                 model="satelite.obj",
                  parent=None, gravity_only_for=[]):
         params = {
             "name": name,
@@ -37,11 +37,11 @@ class Diamond(Obj):
             "show_name": show_name,
             "parent": parent,
             "gravity_only_for": gravity_only_for,
-            "model": "diamond"
+            "model": model
         }
         super().__init__(**params)
 
 
 if __name__ == '__main__':
-    diamond = Diamond()
-    print(diamond)
+    satellite = Satellite()
+    print(satellite)

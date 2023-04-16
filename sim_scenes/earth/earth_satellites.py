@@ -7,8 +7,9 @@
 # python_version  :3.8
 # ==============================================================================
 from bodies import Moon, Earth, Body
+from objs import Satellite
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
-from sim_scenes.func import mayavi_run, ursina_run
+from sim_scenes.func import mayavi_run, ursina_run, camera_look_at
 import math
 import random
 
@@ -35,6 +36,10 @@ import random
 
 import random
 import math
+
+from simulators.ursina.entities.body_timer import TimeData
+from simulators.ursina.ursina_config import UrsinaConfig
+from simulators.ursina.ursina_event import UrsinaEvent
 
 
 def get_satellite_position_velocity(earth_mass, earth_position, earth_radius, altitude):
@@ -97,15 +102,37 @@ if __name__ == '__main__':
     earth = Earth(init_position=[0, 0, 0], size_scale=1, texture="earth_hd.jpg", init_velocity=[0, 0, 0])
     # 北斗卫星高度为2.13-2.15万千米。GPS卫星平均轨道高度2.02万千米。
     bodies = [earth]
-    for i in range(10):
-        altitude = random.randint(4000, 10000)
-        position, velocity = get_satellite_position_velocity(earth.mass, earth.init_position, earth.raduis, altitude)
-        satellite = Body(name=f'卫星{i + 1}', mass=4.4e10, size_scale=1e3, color=(255, 200, 0),
-                         init_position=position,
-                         init_velocity=velocity)
+    satellite_infos = [
+        {"position": [0, 0, 10000], "velocity": [-6.3, 0, 0]},
+        {"position": [0, 0, -12000], "velocity": [5.75, 0, 0]},
+        {"position": [0, 8000, 0], "velocity": [7.05, 0, 0]},
+        {"position": [0, -12000, 0], "velocity": [-5.75, 0, 0]},
+        {"position": [0, 0, 8000], "velocity": [0, 7.05, 0]},
+        {"position": [0, 0, -10000], "velocity": [0, -6.3, 0]},
+    ]
+    for i, info in enumerate(satellite_infos):
+        # altitude = random.randint(4000, 10000)
+        # position, velocity = get_satellite_position_velocity(earth.mass, earth.init_position, earth.raduis, altitude)
+
+        satellite = Satellite(name=f'卫星{i + 1}', mass=4.4e10, size_scale=2e2, color=(255, 200, 0),
+                              init_position=info["position"],
+                              init_velocity=info["velocity"])
         bodies.append(satellite)
+
+
+    def on_ready():
+        camera_look_at(earth, rotation_z=0)
+        UrsinaConfig.trail_length = 150
+        UrsinaConfig.trail_type = "line"
+        pass
+
+
+    UrsinaEvent.on_ready_subscription(on_ready)
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_HOUR/60, position=(0, 0, -80000), show_trail=True, view_closely=0.01)
+    ursina_run(bodies, SECONDS_PER_HOUR / 2,
+               position=(30000, 5000, -30000),
+               show_trail=True,
+               view_closely=0.001)

@@ -33,12 +33,17 @@ class Planet(Entity):
 
     def __init__(self, body_view: BodyView):
         self.body_view = body_view
-        self.rotation_speed = self.body.rotation_speed
+        if hasattr(self.body, "rotation_speed"):
+            self.rotation_speed = self.body.rotation_speed
         self.rotMode = 'x'  # random.choice(["x", "y", "z"])
         self.name = body_view.name
 
-        pos = body_view.position * body_view.body.distance_scale * UrsinaConfig.SCALE_FACTOR
-        scale = body_view.body.diameter * body_view.body.size_scale * UrsinaConfig.SCALE_FACTOR
+        pos = body_view.position * self.body.distance_scale * UrsinaConfig.SCALE_FACTOR
+        if hasattr(self.body, "diameter"):
+            scale = self.body.diameter * self.body.size_scale * UrsinaConfig.SCALE_FACTOR
+        else:
+            scale = self.body.size_scale * UrsinaConfig.SCALE_FACTOR
+
         self.init_scale = scale
         if hasattr(body_view, "texture"):
             texture = load_texture(body_view.texture)
@@ -51,6 +56,8 @@ class Planet(Entity):
                 b_color = (b_color[0], b_color[1], b_color[2], 1.0)
             self.plant_color = color.rgba(*b_color)
 
+        collider = "sphere"
+
         if hasattr(self.body, "torus_stars"):
             # 创建一个星环小天体群（主要模拟小行星群，非一个天体）
             model = create_torus(0.83, 1.05, 64, 1)
@@ -60,9 +67,17 @@ class Planet(Entity):
             subdivisions = 32
             if self.body.resolution is not None:
                 subdivisions = self.body.resolution
-
-            model = create_sphere(0.5, subdivisions)
-            rotation = (0, 0, 0)
+            if hasattr(self.body, "model"):
+                if self.body.model is None:
+                    model = create_sphere(0.5, subdivisions)
+                elif isinstance(self.body.model, str):
+                    model = self.body.model
+                else:
+                    model = self.body.model
+                rotation = (0, 0, 0)
+            else:
+                model = create_sphere(0.5, subdivisions)
+                rotation = (0, 0, 0)
 
         UrsinaEvent.on_reset_subscription(self.on_reset)
         UrsinaEvent.on_body_size_changed_subscription(self.change_body_scale)
@@ -73,7 +88,7 @@ class Planet(Entity):
             scale=scale,
             texture=texture,
             color=self.plant_color,
-            collider="sphere",
+            collider=collider,
             position=pos,
             rotation=rotation,
             double_sided=True
@@ -88,9 +103,13 @@ class Planet(Entity):
             # 拖尾球体的初始化
             trail_init(self)
 
-        if self.body.is_fixed_star:
-            # 如果是恒星，开启恒星的发光的效果、并作为灯光源
-            create_fixed_star_lights(self)
+        if hasattr(self.body, "is_fixed_star"):
+            if self.body.is_fixed_star:
+                # 如果是恒星，开启恒星的发光的效果、并作为灯光源
+                create_fixed_star_lights(self)
+            elif self.body.light_disable:
+                # 如果是非恒星，并且禁用灯光
+                self.set_light_off()
         elif self.body.light_disable:
             # 如果是非恒星，并且禁用灯光
             self.set_light_off()
@@ -98,9 +117,10 @@ class Planet(Entity):
         if self.body.show_name:
             create_name_text(self)
 
-        if self.body.has_rings:
-            # 创建行星环（目前只有土星环）
-            create_rings(self)
+        if hasattr(self.body, "has_rings"):
+            if self.body.has_rings:
+                # 创建行星环（目前只有土星环）
+                create_rings(self)
 
     def change_body_scale(self):
         if hasattr(self.body, "torus_stars"):
@@ -126,21 +146,23 @@ class Planet(Entity):
         dt = 0
         if hasattr(self.body, "dt"):
             dt = self.body.dt
-        if self.rotation_speed is None or dt == 0:
-            self.rotspeed = 0
-            # 旋转速度和大小成反比（未使用真实数据）
-            # self.rotspeed = 30000 / self.body_view.raduis  # random.uniform(1.0, 2.0)
-        else:
-            # 是通过月球保持一面面对地球，调整得到
-            self.rotspeed = self.rotation_speed * (dt / 3600) / 2.4 * \
-                            UrsinaConfig.ROTATION_SPEED_FACTOR * UrsinaConfig.body_spin_factor
-            # rotation_speed 度/小时  dt 秒 = (dt / 3600)小时
+        if hasattr(self, "rotation_speed"):
+            if self.rotation_speed is None or dt == 0:
+                self.rotspeed = 0
+                # 旋转速度和大小成反比（未使用真实数据）
+                # self.rotspeed = 30000 / self.body_view.raduis  # random.uniform(1.0, 2.0)
+            else:
+                # 是通过月球保持一面面对地球，调整得到
+                self.rotspeed = self.rotation_speed * (dt / 3600) / 2.4 * \
+                                UrsinaConfig.ROTATION_SPEED_FACTOR * UrsinaConfig.body_spin_factor
+                # rotation_speed 度/小时  dt 秒 = (dt / 3600)小时
 
         # if self.rotation_y < 0:
         #     self.rotation_y += 360
         try:
-            # 天体旋转
-            self.rotation_y -= self.rotspeed
+            if hasattr(self, "rotspeed"):
+                # 天体旋转
+                self.rotation_y -= self.rotspeed
         except Exception as e:
             print(self.body)
             self.destroy_all()

@@ -295,4 +295,3 @@ def create_trail_info(body, trail):
     if trail is not None:
         trail.entity_infos = {"velocity": [vel_value, vel_direction, vel_position],
                               "acceleration": [acc_value, acc_direction, acc_position]}
-

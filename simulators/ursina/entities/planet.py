@@ -100,6 +100,7 @@ class Planet(Entity):
         )
         if hasattr(self.body, "rotate_angle"):
             if self.body.rotate_angle != 0:
+                # 为了给天体增加一个倾斜角，增加了一个Entity
                 self.rotate_angle = self.body.rotate_angle
                 self.main_entity = Entity()
                 self.main_entity.rotation_x = self.rotate_angle

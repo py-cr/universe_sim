@@ -6,7 +6,7 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
-from bodies import Sun, Earth, Sirius
+from bodies import Sun, Earth
 from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, AU
 from sim_scenes.func import ursina_run
 from simulators.ursina.entities.body_timer import TimeData
@@ -39,7 +39,7 @@ if __name__ == '__main__':
     earth_4 = create_earth(name="冬至", text_color=(0, 255, 255), position=[0, 0, 1.05 * AU])
     # 运动的地球
     earth = Earth(size_scale=5e3, texture="earth_hd.jpg",
-                  text_color=[255, 255, 255], rotation_speed=1,
+                  text_color=[255, 255, 255], rotation_speed=0.5,  # 为演示效果，自转角速度取0.5度/小时，实际为15度/小时
                   init_position=[-1 * AU, 0, 0], init_velocity=[0, 0, -29.79])
 
     bodies = [
@@ -87,7 +87,7 @@ if __name__ == '__main__':
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_DAY * 3,
+    ursina_run(bodies, SECONDS_PER_DAY * 2,
                position=(0, 0, 0),  # 摄像机和太阳是相同位置
                show_name=True,
                show_timer=True)

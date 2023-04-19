@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-# title           :太阳、地球场景模拟
-# description     :太阳、地球场景模拟
+# title           :地球季节模拟（四季和24节气）
+# description     :地球季节模拟（四季和24节气）
 # author          :Python超人
 # date            :2023-02-11
 # link            :https://gitcode.net/pythoncr/

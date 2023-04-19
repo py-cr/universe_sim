@@ -51,7 +51,7 @@ if __name__ == '__main__':
     seasons_angles = [("春天", -135, -45), ("夏天", -180, -135),
                       ("夏天", 135, 180), ("秋天", 45, 135), ("冬天", -45, 45)]
 
-    # 中国农历24节气表
+    # 中国农历24节气表，数据为 节气名称 和 camera.rotation_y 的角度范围值
     solar_terms_angles = [
         ("小寒", -22.5, -7.5), ("大寒", -37.5, -22.5), ("立春", -52.5, -37.5), ("雨水", -67.5, -52.5),
         ("惊蛰", -82.5, -67.5), ("春分", -97.5, -82.5), ("清明", -112.5, -97.5), ("谷雨", -127.5, -112.5),
@@ -74,9 +74,10 @@ if __name__ == '__main__':
         # 摄像机始终看向移动的地球
         camera.look_at(earth.planet)
         camera.rotation_z = 0
-        # 根据角度判断，显示中国农历24节气
+        # 根据角度范围判断，显示中国农历24节气
         for info in solar_terms_angles:
             if info[1] <= camera.rotation_y < info[2]:
+                # 地球名称文字显示为相应的节气
                 earth.planet.name_text.text = info[0]
         # print(camera.rotation_y)
 

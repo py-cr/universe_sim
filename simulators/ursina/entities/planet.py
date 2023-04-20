@@ -173,14 +173,19 @@ class Planet(Entity):
         # UrsinaConfig.SCALE_FACTOR * 10000000 = 5
         # UrsinaConfig.auto_scale_factor = 1
         # UrsinaConfig.body_size_factor = 1
-        if self.main_entity is self:
-            # 没有偏转角度
-            line_scale = math.pow(self.main_entity.scale_x, 1 / 10) / 1.5
-        else:
-            # 有偏转角度
-            # line_scale = math.pow(self.main_entity.scale_x, 1 / 10)
-            line_scale = self.scale_x
+        # if self.main_entity is self:
+        #     # 没有偏转角度
+        #     line_scale = math.pow(self.main_entity.scale_x, 1 / 10) / 1.5
+        # else:
+        #     # 有偏转角度
+        #     # line_scale = math.pow(self.main_entity.scale_x, 1 / 10)
+        #     line_scale = self.scale_x
         # camera.scale_x
+        line_scale = 0.9 * self.scale_x / self.main_entity.scale_x
+        # print(self.body.name, self.main_entity.scale_x, self.scale_x, line_scale)
+        # 0.006373216398060322 0.006373216398060322 0.40210975353339423
+        # 1.0 0.006373216398060322 0.006373216398060322
+
         create_line(from_pos, to_pos, parent=self.main_entity,
                     len_scale=line_scale, color=line_color, thickness=2)
 

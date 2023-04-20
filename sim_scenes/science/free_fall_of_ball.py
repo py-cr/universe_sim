@@ -18,7 +18,7 @@ if __name__ == '__main__':
     # 创建一个地球，位于中心位置，初始速度为 0
     earth = Earth(init_position=[0, 0, 0], init_velocity=[0, 0, 0],
                   size_scale=1, texture="earth_hd.jpg")
-    # earth.raduis = 6373.22
+    # 地球的半径 = earth.raduis = 6373.22
     # 创建的3个不同质量，不同高度的球，观察这3个球打到地球表面上的加速度
     ball_1 = Football(mass=500, size_scale=2.65e2, trail_color=[255, 0, 0],
                       # 球在地面上 518 多公里处

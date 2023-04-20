@@ -21,8 +21,8 @@ if __name__ == '__main__':
     """
     # 选择舞者
     Dancer = Earth  # 舞者为地球
-    # Dancer = Venus  # 舞者为金星
-    # Dancer = Mars  # 舞者为火星
+    Dancer = Venus  # 舞者为金星
+    Dancer = Mars  # 舞者为火星
 
     bodies = [
         Sun(size_scale=0.8e2),    # 太阳放大 80 倍
@@ -41,7 +41,7 @@ if __name__ == '__main__':
 
     def on_timer_changed(time_data: TimeData):
         if int(time_data.total_days) % 10 == 0:
-            create_line(from_pos=jupiter.planet.position, to_pos=dancer.planet.position, color=color.white)
+            create_line(from_pos=jupiter.planet.position, to_pos=dancer.planet.main_entity.position, color=color.white)
 
 
     UrsinaEvent.on_ready_subscription(on_ready)

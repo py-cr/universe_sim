@@ -7,7 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 from bodies import Moon, Earth, Body
-from objs import Satellite
+from objs import Satellite, Satellite2
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
 from sim_scenes.func import mayavi_run, ursina_run, camera_look_at
 import math
@@ -42,56 +42,56 @@ from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
 
 
-def get_satellite_position_velocity(earth_mass, earth_position, earth_radius, altitude):
-    # 万有引力常数
-    G = 6.6743 * 10 ** (-11)
-    # 地球质量
-    M = earth_mass
-    # 地球半径+海拔高度
-    R = earth_radius + altitude
-
-    # 随机生成卫星的位置，确保在球面上
-    phi = random.uniform(0, 2 * math.pi)
-    costheta = random.uniform(-1, 1)
-    u = random.uniform(0, 1)
-
-    theta = math.acos(costheta)
-    r = R * (u ** (1 / 3))
-
-    x = r * math.sin(theta) * math.cos(phi)
-    y = r * math.sin(theta) * math.sin(phi)
-    z = r * math.cos(theta)
-
-    # 计算速度的方向
-    # 位置矢量
-    r_vec = [x, y, z]
-    # 速度方向和位置矢量垂直，采用向量叉积的性质
-    v_dir = [-y, x, 0]
-    # 归一化
-    v_dir_norm = [v / math.sqrt(x ** 2 + y ** 2) for v in v_dir]
-
-    # 计算速度大小
-    v = math.sqrt(G * M / R)
-
-    # 计算速度矢量
-    v_vec = [v * dir for dir in v_dir_norm]
-
-    # 计算卫星的位置和速度
-    position = [earth_position[0] + x, earth_position[1] + y, earth_position[2] + z]
-    velocity = v_vec
-
-    return tuple(position), [0, 0, 0]
-
-
-def generate_satellite_coordinates(earth_radius, altitude):
-    theta = random.uniform(0, 2 * math.pi)  # 在0~2π内随机生成一个角度
-    phi = random.uniform(0, math.pi)  # 在0~π内随机生成一个角度
-    r = earth_radius + altitude  # 地球半径+海拔高度
-    x = r * math.sin(phi) * math.cos(theta)  # 计算x坐标
-    y = r * math.sin(phi) * math.sin(theta)  # 计算y坐标
-    z = r * math.cos(phi)  # 计算z坐标
-
-    return [x, y, z]
+# def get_satellite_position_velocity(earth_mass, earth_position, earth_radius, altitude):
+#     # 万有引力常数
+#     G = 6.6743 * 10 ** (-11)
+#     # 地球质量
+#     M = earth_mass
+#     # 地球半径+海拔高度
+#     R = earth_radius + altitude
+#
+#     # 随机生成卫星的位置，确保在球面上
+#     phi = random.uniform(0, 2 * math.pi)
+#     costheta = random.uniform(-1, 1)
+#     u = random.uniform(0, 1)
+#
+#     theta = math.acos(costheta)
+#     r = R * (u ** (1 / 3))
+#
+#     x = r * math.sin(theta) * math.cos(phi)
+#     y = r * math.sin(theta) * math.sin(phi)
+#     z = r * math.cos(theta)
+#
+#     # 计算速度的方向
+#     # 位置矢量
+#     r_vec = [x, y, z]
+#     # 速度方向和位置矢量垂直，采用向量叉积的性质
+#     v_dir = [-y, x, 0]
+#     # 归一化
+#     v_dir_norm = [v / math.sqrt(x ** 2 + y ** 2) for v in v_dir]
+#
+#     # 计算速度大小
+#     v = math.sqrt(G * M / R)
+#
+#     # 计算速度矢量
+#     v_vec = [v * dir for dir in v_dir_norm]
+#
+#     # 计算卫星的位置和速度
+#     position = [earth_position[0] + x, earth_position[1] + y, earth_position[2] + z]
+#     velocity = v_vec
+#
+#     return tuple(position), [0, 0, 0]
+#
+#
+# def generate_satellite_coordinates(earth_radius, altitude):
+#     theta = random.uniform(0, 2 * math.pi)  # 在0~2π内随机生成一个角度
+#     phi = random.uniform(0, math.pi)  # 在0~π内随机生成一个角度
+#     r = earth_radius + altitude  # 地球半径+海拔高度
+#     x = r * math.sin(phi) * math.cos(theta)  # 计算x坐标
+#     y = r * math.sin(phi) * math.sin(theta)  # 计算y坐标
+#     z = r * math.cos(phi)  # 计算z坐标
+#
+#     return [x, y, z]
 
 
 if __name__ == '__main__':

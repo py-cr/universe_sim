@@ -16,15 +16,16 @@ if __name__ == '__main__':
     自由落地模拟
     """
     # 地球在中心位置
-    earth = Earth(init_position=[0, 0, 0], size_scale=1, texture="earth_hd.jpg", init_velocity=[0, 0, 0])
+    earth = Earth(init_position=[0, 0, 0], init_velocity=[0, 0, 0],
+                  size_scale=1, texture="earth_hd.jpg")
     # earth.raduis = 6373.22
     # 创建的3个不同质量，不同高度的球，观察这3个球打到地球表面上的加速度
-    ball_1 = Football(mass=500, size_scale=3e2, trail_color=[255, 0, 0],
+    ball_1 = Football(mass=500, size_scale=2.65e2, trail_color=[255, 0, 0],
                       # 球在地面上 518 多公里处
                       # 518 = sqrt[(earth.raduis + 500)² + (-500)²] - earth.raduis
                       init_position=[-500, earth.raduis + 500, 0],
                       init_velocity=[0, 0, 0], gravity_only_for=[earth])
-    ball_2 = Football(mass=1000, size_scale=3e2, trail_color=[0, 255, 0],
+    ball_2 = Football(mass=1000, size_scale=3.3e2, trail_color=[0, 255, 0],
                       # 球在地面上 800 多公里处
                       init_position=[0, earth.raduis + 800, 0],
                       init_velocity=[0, 0, 0], gravity_only_for=[earth])

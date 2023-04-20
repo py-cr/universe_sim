@@ -50,10 +50,6 @@ if __name__ == '__main__':
         earth_1, earth_2, earth_3, earth_4,
     ]
 
-    # 四季
-    seasons_angles = [("春天", -135, -45), ("夏天", -180, -135),
-                      ("夏天", 135, 180), ("秋天", 45, 135), ("冬天", -45, 45)]
-
     # 中国农历24节气表，数据为 节气名称 和 camera.rotation_y 的角度范围值
     solar_terms_angles = [
         ("小寒", -22.5, -7.5), ("大寒", -37.5, -22.5), ("立春", -52.5, -37.5), ("雨水", -67.5, -52.5),
@@ -73,6 +69,19 @@ if __name__ == '__main__':
         earth_4.planet.rotation_y -= 145  # 冬至
 
 
+    def earth_text_dispaly(term_name):
+        """
+        控制4个透明地球文本是否显示，防止地球文字的叠加
+        @param term_name:
+        @return:
+        """
+        for e in [earth_1, earth_2, earth_3, earth_4]:
+            if term_name == e.name:
+                e.planet.name_text.enabled = False
+            else:
+                e.planet.name_text.enabled = True
+
+
     def on_timer_changed(time_data: TimeData):
         # 摄像机始终看向移动的地球
         camera.look_at(earth.planet)
@@ -80,8 +89,11 @@ if __name__ == '__main__':
         # 根据角度范围判断，显示中国农历24节气
         for info in solar_terms_angles:
             if info[1] <= camera.rotation_y < info[2]:
+                term_name = info[0]
+                # 控制4个透明地球文本是否显示，防止地球文字的叠加
+                earth_text_dispaly(term_name)
                 # 地球名称文字显示为相应的节气
-                earth.planet.name_text.text = info[0]
+                earth.planet.name_text.text = term_name
         # print(camera.rotation_y)
 
 

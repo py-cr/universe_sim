@@ -42,7 +42,8 @@ if __name__ == '__main__':
                   text_color=[255, 255, 255], rotation_speed=0.5,  # 为演示效果，自转角速度取0.5度/小时，实际为15度/小时
                   init_position=[-1 * AU, 0, 0], init_velocity=[0, 0, -29.79])
 
-    earth.rotate_axis_color = (255, 255, 162)
+    earth.rotate_axis_color = (255, 255, 50)
+    earth.rotate_axis_scale = 0.75
 
     bodies = [
         sun, earth,

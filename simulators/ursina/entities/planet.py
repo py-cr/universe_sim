@@ -181,11 +181,12 @@ class Planet(Entity):
         #     # line_scale = math.pow(self.main_entity.scale_x, 1 / 10)
         #     line_scale = self.scale_x
         # camera.scale_x
-        line_scale = 0.9 * self.scale_x / self.main_entity.scale_x
+        line_scale = self.scale_x / self.main_entity.scale_x
         # print(self.body.name, self.main_entity.scale_x, self.scale_x, line_scale)
         # 0.006373216398060322 0.006373216398060322 0.40210975353339423
         # 1.0 0.006373216398060322 0.006373216398060322
-
+        if hasattr(self.body, "rotate_axis_scale"):
+            line_scale = self.body.rotate_axis_scale * line_scale
         create_line(from_pos, to_pos, parent=self.main_entity,
                     len_scale=line_scale, color=line_color, thickness=2)
 

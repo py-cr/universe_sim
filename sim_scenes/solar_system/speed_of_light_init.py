@@ -43,8 +43,8 @@ class SpeedOfLightInit:
             self.camera_position = (AU / 5, 0, 0)
             self.show_trail = True
             self.light_size_scale = 2e6
-            self.light_init_position = [AU, 0, 0]
-            self.auto_control_speed = True
+            self.light_init_position = [AU, AU / 20, 0]
+            # self.auto_control_speed = True
         elif self.__camera_follow_light in ["SideViewActualSize"]:
             # 摄像机位置 = 前-后+、上+下-、左-右+、
             # self.camera_position = (0, AU, 0)
@@ -58,8 +58,8 @@ class SpeedOfLightInit:
             self.camera_position = (0, -AU / 25, -AU / 50)
             self.show_trail = True
             self.light_size_scale = 2e6
-            self.light_init_position = [AU / 12, 0, 0]
-            # self.auto_control_speed = True
+            self.light_init_position = [AU / 8, AU / 10, 0]
+            self.auto_control_speed = True
         else:
             # 摄像机位置 = 左-右+、上+下-、前+后-
             self.camera_position = (0, AU, -6 * AU)
@@ -155,7 +155,7 @@ class SpeedOfLightInit:
             camera.rotation_z = -90
             camera.rotation_y = -85
         elif self.__camera_follow_light in ["ForwardView"]:
-            camera.rotation_x = -75
+            camera.rotation_x = -72
         elif self.__camera_follow_light in ["SideViewActualSize"]:
             self.light_ship.planet.rotation_x = 0
             # camera.rotation_z = -90
@@ -196,22 +196,22 @@ class SpeedOfLightInit:
             run_speed_maps = [
                 {"au": 0., "secs": 1},
                 {"au": 0.008, "secs": 1},
-                {"au": "?", "secs": SECONDS_PER_MINUTE * 10},
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 5},
                 {"au": 0.386, "secs": 1},
                 {"au": 0.3865, "secs": 1},  # [00:03:12] 到达 [水星] 0.384 AU
-                {"au": "?", "secs": SECONDS_PER_MINUTE * 10},
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 5},
                 {"au": 0.721, "secs": 1},
-                {"au": 0.723, "secs": 1},  # [00:06:00] 到达 [金星] 0.721 AU
-                {"au": "?", "secs": SECONDS_PER_MINUTE * 10},
+                {"au": 0.724, "secs": 1},  # [00:06:00] 到达 [金星] 0.721 AU
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 5},
                 {"au": 1.0, "secs": 1},
                 {"au": 1.002, "secs": 1},  # [00:08:19] 到达 [地球] 1.0 AU
-                {"au": "?", "secs": SECONDS_PER_MINUTE * 10},
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 5},
                 {"au": 1.52, "secs": 1},
                 {"au": 1.522, "secs": 1},  # [00:12:39] 到达 [火星] 1.52 AU
-                {"au": "?", "secs": SECONDS_PER_MINUTE * 30},
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 25},
                 {"au": 5.19, "secs": 1},
                 {"au": 5.20, "secs": 1},  # [00:43:10] 到达 [木星] 5.19 AU
-                {"au": "?", "secs": SECONDS_PER_MINUTE * 30},
+                {"au": "?", "secs": SECONDS_PER_MINUTE * 25},
                 {"au": 9.5, "secs": 1},
                 {"au": 9.51, "secs": 1},  # [01:19:01] 到达 [土星] 9.5 AU
                 {"au": "?", "secs": SECONDS_PER_MINUTE * 30},

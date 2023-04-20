@@ -8,15 +8,17 @@
 # ==============================================================================
 from bodies import Sun, Mercury, Venus, Earth
 from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, SECONDS_PER_HOUR, AU
-from sim_scenes.func import mayavi_run, ursina_run, camera_look_at
+from sim_scenes.func import ursina_run, set_camera_parent
 from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.ursina_event import UrsinaEvent
 
 if __name__ == '__main__':
     # 水星、金星凌日
+    # 以地球的视角看水星、金星凌日
     earth = Earth(
         name="地球",
-        rotation_speed=0,
+        rotate_angle=0,  # 不倾斜
+        rotation_speed=0,  # 不旋转
         texture="transparent.png"  # 地球纹理透明，不会挡住摄像机视线
     )
     sun = Sun(name="太阳", size_scale=5e1)  # 太阳放大 50 倍
@@ -40,7 +42,7 @@ if __name__ == '__main__':
     def on_ready():
         from ursina import camera
         # 摄像机跟随地球（模拟在地球上看到的效果）
-        camera.parent = earth.planet
+        set_camera_parent(earth)
 
         if hasattr(camera, "sky"):
             # 摄像机跟随地球后，需要对深空背景进行调整，否则看到的是黑色背景
@@ -52,8 +54,7 @@ if __name__ == '__main__':
 
     def on_timer_changed(time_data: TimeData):
         # 时时刻刻的让地球看向太阳（摄像机跟随地球看向太阳）
-        earth.planet.look_at(sun.planet)
-        earth.planet.rotation_z = 0
+        earth.look_at(sun, rotation_z=0)
 
 
     UrsinaEvent.on_ready_subscription(on_ready)

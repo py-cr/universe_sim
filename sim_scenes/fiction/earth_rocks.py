@@ -6,13 +6,10 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
-from bodies import Moon, Earth, Body
+from bodies import Earth, Body
 from objs import RockSnow, Rock, create_rock
-from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
-from sim_scenes.func import mayavi_run, ursina_run, camera_look_at, two_bodies_colliding
-import math
-import random
-
+from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY
+from sim_scenes.func import ursina_run, camera_look_at, two_bodies_colliding
 from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
@@ -22,18 +19,20 @@ if __name__ == '__main__':
     岩石坠落地球
     """
     # 地球在中心位置
-    earth = Earth(init_position=[0, 0, 0], size_scale=1, texture="earth_hd.jpg", init_velocity=[0, 0, 0])
+    earth = Earth(init_position=[0, 0, 0], init_velocity=[0, 0, 0],
+                  rotation_speed=0, size_scale=1, texture="earth_hd.jpg")
 
     bodies = [earth]
+    # 岩石位置和初始速度信息
     infos = [
-        {"position": [0, 0, 10002], "velocity": [2.3, 0, 0]},
-        {"position": [0, 0, -12000], "velocity": [1.75, 0, 0]},
-        {"position": [0, 8000, 0], "velocity": [1.05, 0, 0]},
-        {"position": [0, -12002, 0], "velocity": [1.75, 0, 0]},
-        {"position": [0, 18000, 0], "velocity": [1.05, 0, 0]},
-        {"position": [0, -22002, 0], "velocity": [1.75, 0, 0]},
-        {"position": [0, 0, 8002], "velocity": [0, 1.05, 0]},
-        {"position": [0, 0, -10000], "velocity": [0, 1.3, 0]},
+        {"position": [0, 0, 10002], "velocity": [4.5, 0, 0]},
+        {"position": [0, 0, -12000], "velocity": [3.5, 0, 0]},
+        {"position": [0, 8000, 0], "velocity": [4.5, 0, 0]},
+        {"position": [0, -12002, 0], "velocity": [3.5, 0, 0]},
+        {"position": [0, 18000, 0], "velocity": [3.0, 0, 0]},
+        {"position": [-20000, 0, 0], "velocity": [0, -2.0, 0]},
+        {"position": [0, 0, 18002], "velocity": [0, 2.5, 0]},
+        {"position": [0, 0, -10000], "velocity": [0, 3.3, 0]},
     ]
     for i, info in enumerate(infos):
         rock = create_rock(no=i % 7 + 1, name=f'岩石{i + 1}', mass=4.4e10, size_scale=5e2, color=(255, 200, 0),

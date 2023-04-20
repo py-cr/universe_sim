@@ -53,12 +53,35 @@ class UrsinaSimulator(Simulator):
         for i, view in enumerate(self.body_views):
             # pos = tuple(body.position)
             # ursina_view = UrsinaView(body)
+            self.bind_event(view.body)
             view.update()
             self.ursina_views.append(view)
             # planets.append(newPlanet)
             # x += cp[i] * 10
         self.adjust_system_motion_params()
         UrsinaEvent.on_searching_bodies_subscription(type(self).__name__, self.on_searching_bodies)
+
+    def bind_event(self, body):
+
+        def body_look_at(target, rotation_x=None, rotation_y=None, rotation_z=None):
+            """
+            让 body 看向 target 目标天体
+            @param target: 目标天体
+            @param rotation_x: x轴旋转角度（None表示不旋转）
+            @param rotation_y: y轴旋转角度（None表示不旋转）
+            @param rotation_z: z轴旋转角度（None表示不旋转）
+            @return:
+            """
+            if hasattr(target, "planet") and hasattr(body, "planet"):
+                body.planet.main_entity.look_at(target.planet.main_entity)
+                if rotation_x is not None:
+                    body.planet.rotation_x = rotation_x
+                if rotation_y is not None:
+                    body.planet.rotation_y = rotation_y
+                if rotation_z is not None:
+                    body.planet.rotation_z = rotation_z
+
+        body.look_at = body_look_at
 
     # def get_bodies_max_distance(self, body_views):
     #     max_distance = 0

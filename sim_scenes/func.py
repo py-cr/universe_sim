@@ -59,17 +59,29 @@ def mayavi_run(bodies, dt=SECONDS_PER_WEEK,
     mlab.show()
 
 
-def camera_look_at(body, rotation_x=None, rotation_y=None, rotation_z=None):
+def set_camera_parent(target):
+    from ursina import camera
+    if hasattr(target, "planet"):
+        camera.parent = target.planet.main_entity
+    else:
+        camera.parent = target
+
+
+def camera_look_at(target, rotation_x=None, rotation_y=None, rotation_z=None):
     """
     让摄像机看向指定天体
-    @param body: 天体
+    @param target: 天体
     @param rotation_x: x轴旋转角度（None表示不旋转）
     @param rotation_y: y轴旋转角度（None表示不旋转）
     @param rotation_z: z轴旋转角度（None表示不旋转）
     @return:
     """
     from ursina import camera
-    camera.look_at(body.planet)
+    if hasattr(target, "planet"):
+        camera.look_at(target.planet.main_entity)
+    else:
+        camera.look_at(target)
+
     if rotation_x is not None:
         camera.rotation_x = rotation_x
     if rotation_y is not None:
@@ -199,7 +211,7 @@ def create_solar_system_bodies(ignore_mass=False, init_velocity=None):
         Jupiter(name="木星", size_scale=0.3e3),  # 木星放大 300 倍，距离保持不变
         Saturn(name="土星", size_scale=0.3e3),  # 土星放大 300 倍，距离保持不变
         Uranus(name="天王星", size_scale=0.4e3),  # 天王星放大 400 倍，距离保持不变
-        Neptune(name="海王星", size_scale=1e3),  # 海王星放大 1000 倍，距离保持不变
+        Neptune(name="海王星", size_scale=1e3),  # 海王星放大 800 倍，距离保持不变
         Pluto(name="冥王星", size_scale=10e3),  # 冥王星放大 10000 倍，距离保持不变(从太阳系的行星中排除)
     ]
 

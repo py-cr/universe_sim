@@ -16,7 +16,7 @@ from simulators.ursina.ursina_event import UrsinaEvent
 from common.color_utils import adjust_brightness, conv_to_vec4_color, get_inverse_color
 from common.func import find_file
 from simulators.views.body_view import BodyView
-from simulators.ursina.ursina_mesh import create_sphere, create_torus, create_arrow_line
+from simulators.ursina.ursina_mesh import create_sphere, create_torus, create_arrow_line, create_line
 import math
 
 
@@ -101,19 +101,28 @@ class Planet(Entity):
         if hasattr(self.body, "rotate_angle"):
             if self.body.rotate_angle != 0:
                 # 为了给天体增加一个倾斜角，增加了一个Entity
-                self.rotate_angle = self.body.rotate_angle
-                self.main_entity = Entity()
-                self.main_entity.rotation_x = self.rotate_angle
-                self.main_entity.body_view = self.body_view
-                self.main_entity.body = self.body
-                self.parent = self.main_entity
-                self.position = [0, 0, 0]
+                self.create_rotate_entity()
+                # self.rotate_angle = self.body.rotate_angle
+                # self.main_entity = Entity()
+                # self.main_entity.rotation_x = self.rotate_angle
+                # self.main_entity.body_view = self.body_view
+                # self.main_entity.body = self.body
+                # self.parent = self.main_entity
+                # self.position = [0, 0, 0]
             else:
                 self.rotate_angle = 0
                 self.main_entity = self
         else:
             self.rotate_angle = 0
             self.main_entity = self
+
+        # Rotation axis color
+        if hasattr(self.body, "rotate_axis_color"):
+            if self.body.rotate_axis_color is not None:
+                axis_color = self.body.rotate_axis_color
+                axis_color = (axis_color[0] / 255, axis_color[1] / 255, axis_color[2] / 255, 1.0)
+                axis_color = color.rgba(*axis_color)
+                self.create_rotate_line(axis_color)
 
         if hasattr(self.body, "torus_stars"):
             # 星环小天体群（主要模拟小行星群，非一个天体）
@@ -142,6 +151,38 @@ class Planet(Entity):
             if self.body.has_rings:
                 # 创建行星环（目前只有土星环）
                 create_rings(self)
+
+    def create_rotate_entity(self):
+        """
+
+        @return:
+        """
+        self.rotate_angle = self.body.rotate_angle
+        self.main_entity = Entity()
+        self.main_entity.rotation_x = self.rotate_angle
+        self.main_entity.body_view = self.body_view
+        self.main_entity.body = self.body
+        self.parent = self.main_entity
+        self.position = [0, 0, 0]
+
+    def create_rotate_line(self, line_color):
+
+        from_pos = Vec3(0, 1, 0)
+        to_pos = Vec3(0, -1, 0)
+
+        # UrsinaConfig.SCALE_FACTOR * 10000000 = 5
+        # UrsinaConfig.auto_scale_factor = 1
+        # UrsinaConfig.body_size_factor = 1
+        if self.main_entity is self:
+            # 没有偏转角度
+            line_scale = math.pow(self.main_entity.scale_x, 1 / 10) / 1.5
+        else:
+            # 有偏转角度
+            # line_scale = math.pow(self.main_entity.scale_x, 1 / 10)
+            line_scale = self.scale_x
+        # camera.scale_x
+        create_line(from_pos, to_pos, parent=self.main_entity,
+                    len_scale=line_scale, color=line_color, thickness=2)
 
     def change_body_scale(self):
         if hasattr(self.body, "torus_stars"):

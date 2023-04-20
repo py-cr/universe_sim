@@ -316,8 +316,8 @@ class Obj(metaclass=ABCMeta):
         return self.__density
 
     def __repr__(self):
-        return '<%s(%s)> m=%.3e(kg), d=%.3e(kg/m³), p=[%.3e,%.3e,%.3e](km), v=%s(km/s)' % \
-               (self.name, self.__class__.__name__, self.mass, self.density,
+        return '<%s(%s):%s(%s)> m=%.3e(kg), d=%.3e(kg/m³), p=[%.3e,%.3e,%.3e](km), v=%s(km/s)' % \
+               (self.name, self.__class__.__name__, os.path.basename(self.model), os.path.basename(self.texture), self.mass, self.density,
                 self.position[0], self.position[1], self.position[2], self.velocity)
 
     def ignore_gravity_with(self, body):

@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-# title           :地球
-# description     :地球
+# title           :钻石
+# description     :钻石
 # author          :Python超人
 # date            :2023-02-11
 # link            :https://gitcode.net/pythoncr/

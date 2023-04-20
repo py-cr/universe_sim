@@ -199,10 +199,19 @@ def find_texture(texture):
     """
     if os.path.exists(texture):
         return texture
-    paths = [os.path.join('.', 'textures'), os.path.join('..', 'textures'), os.path.join('..', '..', 'textures')]
+    paths = [
+        os.path.join('..', '..', 'textures'),
+        os.path.join('..', '..', 'objs', 'textures'),
+        os.path.join('..', 'textures'),
+        os.path.join('..', 'objs', 'textures'),
+        os.path.join('.', 'textures'),
+        os.path.join('.', 'objs', 'textures')
+    ]
     for path in paths:
         p = os.path.join(path, texture)
         if os.path.exists(p):
+            if p.endswith(".mtl"):
+                p = p[:-4]
             return p
 
     return ""

@@ -15,7 +15,7 @@ if __name__ == '__main__':
     """
     自由落地模拟
     """
-    # 地球在中心位置
+    # 创建一个地球，位于中心位置，初始速度为 0
     earth = Earth(init_position=[0, 0, 0], init_velocity=[0, 0, 0],
                   size_scale=1, texture="earth_hd.jpg")
     # earth.raduis = 6373.22

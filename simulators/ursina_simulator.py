@@ -9,6 +9,8 @@
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
 from ursina import Ursina, window, Entity, Grid, camera, application, color, distance, Audio
 import itertools
+
+from common.image_utils import find_texture
 from simulators.ursina.ursina_event import UrsinaEvent
 # from simulators.ursina.ursina_ui import UrsinaUI
 from simulators.ursina.ui.control_ui import ControlUI
@@ -238,8 +240,10 @@ class UrsinaSimulator(Simulator):
                 # cosmic_bg = '../textures/cosmic1.png'
                 # cosmic_bg = '../textures/cosmic2.jpg'
                 cosmic_bg = '../textures/cosmic3.jpg'
-
-            cosmic_bg = find_file(cosmic_bg)
+            if "textures/" in cosmic_bg:
+                cosmic_bg = find_file(cosmic_bg)
+            else:
+                cosmic_bg = find_texture(cosmic_bg)
 
             if cosmic_bg is not None and os.path.exists(cosmic_bg):
                 self.cosmic_background(cosmic_bg)

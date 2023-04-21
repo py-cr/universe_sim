@@ -33,13 +33,19 @@ if __name__ == '__main__':
         # 随机生成岩石位置和初始速度信息
         pos = [-r * random.randint(120, 200) / 100,
                -r * random.randint(120, 200) / 1000,
-               -r * random.randint(200, 300) / 100]
-        vel = [0, 0, 0]
-        rock = create_rock(no=i % 7 + 1, name=f'岩石{i + 1}', mass=4.4e10, size_scale=1e3, color=(255, 200, 0),
+               -r * random.randint(150, 350) / 100
+               ]
+        # 随机速度
+        vel = [0, -random.randint(90, 200) / 30, 0]
+        size_scale = random.randint(400, 600)
+        rock = create_rock(no=i % 7 + 1, name=f'岩石{i + 1}', mass=4.4e10, size_scale=size_scale, color=(255, 200, 0),
                            init_position=pos,
                            gravity_only_for=[jupiter],
                            init_velocity=vel)
-        # info["rock"] = rock
+        # 岩石随机旋转量
+        rock.rotation = [0, 0, 0]
+        rock.rotation[random.randint(0, 2)] = random.randint(90, 200) / 100
+
         bodies.append(rock)
         rocks.append(rock)
 
@@ -59,6 +65,7 @@ if __name__ == '__main__':
     def on_timer_changed(time_data: TimeData):
         for rock in rocks:
             if rock.visibled:
+                rock.planet.rotation += rock.rotation
                 # 循环判断每个抛出物与木星是否相碰撞
                 if two_bodies_colliding(rock, jupiter):
                     # 如果岩石与木星相碰撞了，则静止不动（岩石停止并忽略引力）
@@ -75,7 +82,6 @@ if __name__ == '__main__':
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
     ursina_run(bodies, SECONDS_PER_HOUR / 6,
-               position=(0, 0, -300000),
-               # show_trail=True,
+               position=(0, 0, -320000),
                show_timer=True,
                view_closely=0.001)

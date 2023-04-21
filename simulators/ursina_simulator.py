@@ -97,7 +97,7 @@ class UrsinaSimulator(Simulator):
                 explosion_file = os.path.join(explosion_file, "explosion")
                 # volume = body.planet.model.volume
                 volume = pow(body.planet.model.get_bounds().volume, 1 / 3) / 2000
-                ani = Animation(explosion_file,
+                explode_ani = Animation(explosion_file,
                           position=body.planet.position,
                           scale=volume * 2, fps=6,
                           loop=False, autoplay=True)
@@ -105,11 +105,15 @@ class UrsinaSimulator(Simulator):
                 if target is not None:
                     if hasattr(target, "planet"):
                         if hasattr(target.planet, "main_entity"):
-                            ani.look_at(target.planet.main_entity)
+                            explode_ani.world_parent = target.planet.main_entity
+                            explode_ani.look_at(target.planet.main_entity)
                         else:
-                            ani.look_at(target.planet)
+                            explode_ani.world_parent = target.planet
+                            explode_ani.look_at(target.planet)
                     else:
-                        ani.look_at(target)
+                        explode_ani.world_parent = target
+                        explode_ani.look_at(target)
+                return explode_ani
 
         body.look_at = body_look_at
         body.set_visible = body_visible

@@ -8,7 +8,7 @@
 # ==============================================================================
 from bodies import Sun, Earth
 from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, AU
-from sim_scenes.func import ursina_run
+from sim_scenes.func import ursina_run, camera_look_at
 from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.ursina_event import UrsinaEvent
 from ursina import camera
@@ -77,15 +77,14 @@ if __name__ == '__main__':
         """
         for e in [earth_1, earth_2, earth_3, earth_4]:
             if term_name == e.name:
-                e.planet.name_text.enabled = False
+                e.name_text.enabled = False
             else:
-                e.planet.name_text.enabled = True
+                e.name_text.enabled = True
 
 
     def on_timer_changed(time_data: TimeData):
         # 摄像机始终看向移动的地球
-        camera.look_at(earth.planet)
-        camera.rotation_z = 0
+        camera_look_at(earth, rotation_z=0)
         # 根据角度范围判断，显示中国农历24节气
         for info in solar_terms_angles:
             if info[1] <= camera.rotation_y < info[2]:
@@ -93,7 +92,7 @@ if __name__ == '__main__':
                 # 控制4个透明地球文本是否显示，防止地球文字的叠加
                 earth_text_dispaly(term_name)
                 # 地球名称文字显示为相应的节气
-                earth.planet.name_text.text = term_name
+                earth.name_text.text = term_name
         # print(camera.rotation_y)
 
 

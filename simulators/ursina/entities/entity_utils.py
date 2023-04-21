@@ -41,6 +41,7 @@ def create_name_text(parent):
     name_text.set_light_off()
     name_text.color = color.rgba(text_color[0], text_color[1], text_color[2], 1)
     parent.name_text = name_text
+    parent.body.name_text = name_text
     return name_text
 
 

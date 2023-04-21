@@ -58,8 +58,6 @@ if __name__ == '__main__':
 
     def on_ready():
         camera_look_at(jupiter, rotation_z=0)
-        UrsinaConfig.trail_length = 150
-        UrsinaConfig.trail_type = "line"
 
 
     def on_timer_changed(time_data: TimeData):
@@ -68,8 +66,6 @@ if __name__ == '__main__':
                 rock.planet.rotation += rock.rotation
                 # 循环判断每个抛出物与木星是否相碰撞
                 if two_bodies_colliding(rock, jupiter):
-                    # 如果岩石与木星相碰撞了，则静止不动（岩石停止并忽略引力）
-                    rock.stop_and_ignore_gravity()
                     # 岩石爆炸
                     rock.explode(jupiter)
 

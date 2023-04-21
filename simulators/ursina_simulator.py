@@ -92,6 +92,8 @@ class UrsinaSimulator(Simulator):
         def body_explode(target=None):
             # from panda3d.core import GeomUtils
             if body.planet.enabled:
+                # 如果爆炸，则静止不动（停止并忽略引力）
+                body.stop_and_ignore_gravity()
                 body.planet.enabled = False
                 explosion_file = find_file("images/explosion")
                 explosion_file = os.path.join(explosion_file, "explosion")

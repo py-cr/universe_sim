@@ -23,7 +23,7 @@ if __name__ == '__main__':
     # 木星在中心位置
     jupiter = Jupiter(init_position=[0, 0, 0], init_velocity=[0, 0, 0],
                       # rotation_speed=0,
-                      size_scale=1)
+                      size_scale=1, texture="jupiter_hd.jpg")
 
     bodies = [jupiter]
     rocks = []

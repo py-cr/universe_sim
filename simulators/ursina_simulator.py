@@ -7,7 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
-from ursina import Ursina, window, Entity, Grid, camera, application, color, distance, Audio
+from ursina import Ursina, window, Entity, Grid, camera, application, color, distance, Audio, Animation
 import itertools
 
 from common.image_utils import find_texture
@@ -81,7 +81,40 @@ class UrsinaSimulator(Simulator):
                 if rotation_z is not None:
                     body.planet.rotation_z = rotation_z
 
+        def body_visible(visible):
+            body.planet.enabled = visible
+
+        @property
+        def body_visibled():
+            return body.planet.enabled
+
+        # Explosion animation
+        def body_explode(target=None):
+            # from panda3d.core import GeomUtils
+            if body.planet.enabled:
+                body.planet.enabled = False
+                explosion_file = find_file("images/explosion")
+                explosion_file = os.path.join(explosion_file, "explosion")
+                # volume = body.planet.model.volume
+                volume = pow(body.planet.model.get_bounds().volume, 1 / 3) / 2000
+                ani = Animation(explosion_file,
+                          position=body.planet.position,
+                          scale=volume * 2, fps=6,
+                          loop=False, autoplay=True)
+
+                if target is not None:
+                    if hasattr(target, "planet"):
+                        if hasattr(target.planet, "main_entity"):
+                            ani.look_at(target.planet.main_entity)
+                        else:
+                            ani.look_at(target.planet)
+                    else:
+                        ani.look_at(target)
+
         body.look_at = body_look_at
+        body.set_visible = body_visible
+        body.explode = body_explode
+        body.visibled = body_visibled
 
     # def get_bodies_max_distance(self, body_views):
     #     max_distance = 0

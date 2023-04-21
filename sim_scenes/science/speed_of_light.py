@@ -8,7 +8,7 @@
 # ==============================================================================
 from sim_scenes.func import ursina_run, create_solar_system_bodies, create_light_ship
 from common.consts import LIGHT_SPEED
-from sim_scenes.solar_system.speed_of_light_init import SpeedOfLightInit
+from sim_scenes.science.speed_of_light_init import SpeedOfLightInit
 
 # TODO: 三种不同的摄像机视角
 camera_follow_light = None  # 摄像机固定，不会跟随光

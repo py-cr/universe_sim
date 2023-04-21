@@ -6,8 +6,8 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
-from bodies import Earth
-from objs import create_rock
+from bodies import Moon, Earth, Body
+from objs import Football
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_MINUTE
 from sim_scenes.func import ursina_run, get_vector2d_velocity, camera_look_at, two_bodies_colliding
 from simulators.ursina.entities.body_timer import TimeData
@@ -25,11 +25,10 @@ def create_ejected_object(velocity, raduis, trail_color, gravity_only_for, angle
     """
     # 根据速度、角度获取矢量速度（vx、vy） -> vx² + vy² = velocity²
     vx, vy = get_vector2d_velocity(velocity, angle=angle)
-    rock = create_rock(name=f'物体速度:{velocity}', mass=500, size_scale=1e3, trail_color=trail_color,
-                       init_position=[0, raduis, 0],
-                       init_velocity=[vx, vy, 0],
-                       gravity_only_for=[gravity_only_for])  # 仅适用于地球的重力，物体之间重力不要受到影响
-    return rock
+    football = Football(name=f'物体速度:{velocity}', mass=500, size_scale=1e3, trail_color=trail_color,
+                        init_position=[0, raduis, 0],
+                        init_velocity=[vx, vy, 0], gravity_only_for=[gravity_only_for])  # 仅适用于地球的重力，物体之间重力不要受到影响
+    return football
 
 
 if __name__ == '__main__':
@@ -38,8 +37,7 @@ if __name__ == '__main__':
     """
     # 地球在中心位置
     earth = Earth(init_position=[0, 0, 0], init_velocity=[0, 0, 0],
-                  rotate_angle=0, rotation_speed=0,
-                  size_scale=1, texture="earth_hd.jpg")
+                  size_scale=1, rotation_speed=0, texture="earth_hd.jpg")
     raduis = earth.raduis + 300
     # TODO: 4个不同的抛出速度  7.5km/s、8.5km/s、10km/s、11.2km/s（第二宇宙速度）
     # 粉色：velocity = 7.5，飞不出地球太远，就落地

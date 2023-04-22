@@ -142,11 +142,34 @@ class System(object):
         with open(json_file_name, "w", encoding='utf-8') as f:
             f.write(json_str)
 
+    def fast_calc(self):
+        """
+        快速计算（对于天体过多会导致性能急速下降，这样就需要使用快速算法）
+        @return: 如果为True，则快速计算成功
+        """
+        # return False
+        if not hasattr(self, "fast_calc_list"):
+            return False
+        if len(self.fast_calc_list) == 0:
+            return
+
+        for body1 in self.fast_calc_list.keys():
+            acceleration = np.zeros(3)
+            for body2 in self.fast_calc_list[body1]:
+                r = body2.position - body1.position
+                if np.linalg.norm(r) > 0.0:
+                    acceleration += (G * body2.mass * r / np.linalg.norm(r) ** 3) / 1e9
+            body1.acceleration = acceleration
+        return True
+
     def calc_bodies_acceleration(self):
         """
         计算加速度
         @return:
         """
+        # 如果快速计算成功，则无需再计算
+        if self.fast_calc():
+            return
 
         def valid_body(body):
             """
@@ -165,7 +188,13 @@ class System(object):
             return True
 
         # self.bodies = list(filter(valid_body, self.bodies))
-        valid_bodies = list(filter(lambda b:not b.ignore_mass, self.bodies))
+        valid_bodies = list(filter(lambda b: not b.ignore_mass, self.bodies))
+
+        # 如果需要计算的天体超过了10个，则启用快速算法
+        if len(valid_bodies) > 10:
+            if not hasattr(self, "fast_calc_list"):
+                self.fast_calc_list = {}
+
         for body1 in valid_bodies:
             # if body1.ignore_mass:
             #     continue
@@ -188,6 +217,17 @@ class System(object):
                     continue
                 elif body1.ignore_gravity_with(body2) or body2.ignore_gravity_with(body1):
                     continue
+
+                if hasattr(self, "fast_calc_list"):
+                    #  构建快速计算列表
+                    if body1 not in self.fast_calc_list:
+                        self.fast_calc_list[body1] = []
+                    # 如果 body2 质量太小了，与 body1 悬殊太大，加速度可以忽略不计
+                    if body1.mass / body2.mass < 1e10:  # 10亿倍的差距
+                        self.fast_calc_list[body1].append(body2)
+                    else:
+                        # print(f"{body2.name}相对{body1.name}质量太小，加速度可以忽略不计！")
+                        continue
 
                 r = body2.position - body1.position
                 # G = 6.67e-11 # 万有引力常数

@@ -29,12 +29,11 @@ if __name__ == '__main__':
     rocks = []
     r = jupiter.raduis
 
-    for i in range(20):
+    for i in range(30):
         # 随机生成岩石位置和初始速度信息
         pos = [-r * random.randint(120, 200) / 100,
                -r * random.randint(120, 200) / 1000,
-               -r * random.randint(150, 350) / 100
-               ]
+               -r * random.randint(150, 350) / 100]
         # 随机速度
         vel = [0, -random.randint(90, 200) / 30, 0]
         size_scale = random.randint(400, 600)

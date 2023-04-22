@@ -40,15 +40,19 @@ if __name__ == '__main__':
     earth = Earth(init_position=[0, 0, 0], init_velocity=[0, 0, 0],
                   size_scale=1, rotation_speed=0, texture="earth_hd.jpg")
     raduis = earth.raduis
-    # TODO: 创建4个不同的抛出速度的物体，速度分别为：7.5km/s、8.5km/s、10km/s、11.2km/s（第二宇宙速度）
-    # 粉色拖尾：velocity = 7.5，飞不出地球太远，就落地（仅适用于地球的重力，物体之间重力不要受到影响）
-    obj0 = create_ejected_object(velocity=7.5, raduis=raduis, trail_color=(255, 0, 255), gravity_only_for=earth)
-    # 红色拖尾：velocity = 8.5，飞不出地球太远，就落地
-    obj1 = create_ejected_object(velocity=8.5, raduis=raduis, trail_color=(255, 0, 0), gravity_only_for=earth)
-    # 绿色拖尾：velocity = 10，能飞出地球很远，但还是无法摆脱地球引力
-    obj2 = create_ejected_object(velocity=10, raduis=raduis, trail_color=(0, 255, 0), gravity_only_for=earth)
-    # 蓝色拖尾：velocity = 11.2，脱离地球引力直接飞出。速度11.2千米/秒为脱离地球引力的速度叫第二宇宙速度
-    obj3 = create_ejected_object(velocity=11.2, raduis=raduis, trail_color=(0, 0, 255), gravity_only_for=earth)
+    # 创建4个不同的抛出速度的物体，速度分别为：7.5km/s、8.5km/s、10km/s、11.2km/s（第二宇宙速度）
+    # velocity = 7.5，飞不出地球太远，就落地（仅适用于地球的重力，物体之间重力不要受到影响）
+    obj0 = create_ejected_object(velocity=7.5, raduis=raduis, trail_color=(255, 0, 255),  # 粉色
+                                 gravity_only_for=earth)  # 被抛物只对该地球引力有效
+    # velocity = 8.5，飞不出地球太远，就落地
+    obj1 = create_ejected_object(velocity=8.5, raduis=raduis, trail_color=(255, 0, 0),  # 红色
+                                 gravity_only_for=earth)  # 被抛物只对该地球引力有效
+    # velocity = 10，能飞出地球很远，但还是无法摆脱地球引力
+    obj2 = create_ejected_object(velocity=10, raduis=raduis, trail_color=(0, 255, 0),  # 绿色
+                                 gravity_only_for=earth)  # 被抛物只对该地球引力有效
+    # velocity = 11.2，脱离地球引力直接飞出。速度11.2千米/秒为脱离地球引力的速度叫第二宇宙速度
+    obj3 = create_ejected_object(velocity=11.2, raduis=raduis, trail_color=(0, 0, 255),  # 蓝色
+                                 gravity_only_for=earth)  # 被抛物只对该地球引力有效
 
     bodies = [earth, obj0, obj1, obj2, obj3]
 

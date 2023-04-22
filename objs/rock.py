@@ -45,7 +45,7 @@ class Rock(Obj):
 
 # 对岩石进行缩放，保证 create_rock 保证创建的岩石大小差异不会过大
 ROCK_SIZE_SCALE_FACTOR = {
-    6: 1e-2,
+    6: 0.5,
     7: 1e-2
 }
 

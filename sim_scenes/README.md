@@ -24,3 +24,6 @@
 ### 三体的场景模拟
 **sim_scenes/tri_bodies**
 
+### 天文奇观模拟
+**sim_scenes/wonders**
+

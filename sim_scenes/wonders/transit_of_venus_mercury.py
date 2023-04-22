@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 # title           :水星、金星凌日
-# description     :水星、金星凌日
+# description     :天象奇观：水星、金星凌日
 # author          :Python超人
 # date            :2023-02-11
 # link            :https://gitcode.net/pythoncr/

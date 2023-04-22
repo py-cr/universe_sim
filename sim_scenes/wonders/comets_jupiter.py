@@ -57,7 +57,7 @@ if __name__ == '__main__':
     comets = []
     r = jupiter.raduis
 
-    for i in range(30):
+    for i in range(20):
         # 随机生成石头
         comet = create_comet(i, gravity_only_for=jupiter)
         bodies.append(comet)

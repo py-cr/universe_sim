@@ -101,6 +101,7 @@ class UrsinaSimulator(Simulator):
                 volume_scale = pow(body.planet.model.get_bounds().volume, 1 / 3)
                 # 根据体积、大小缩放判断爆炸的量
                 scale = 3 * volume_scale * body.size_scale * UrsinaConfig.SCALE_FACTOR
+                print(scale, body)
                 explode_ani = Animation(explosion_file,
                                         position=body.planet.position,
                                         scale=scale, fps=6,

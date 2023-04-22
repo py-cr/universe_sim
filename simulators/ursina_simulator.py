@@ -105,6 +105,7 @@ class UrsinaSimulator(Simulator):
                                         position=body.planet.position,
                                         scale=scale, fps=6,
                                         loop=False, autoplay=True)
+                explode_ani.set_light_off()
 
                 if target is not None:
                     if hasattr(target, "planet"):

@@ -9,7 +9,7 @@
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
 from ursina import Ursina, window, Entity, Mesh, SmoothFollow, Texture, clamp, time, \
     camera, color, mouse, Vec2, Vec3, Vec4, Text, \
-    load_texture, held_keys, destroy, PointLight, distance
+    load_texture, held_keys, destroy, PointLight, DirectionalLight, distance
 
 from simulators.ursina.entities.body_trail import BodyTrail, BodyTrailLine
 from simulators.ursina.ursina_config import UrsinaConfig
@@ -37,7 +37,7 @@ def create_name_text(parent):
     if text_color is None:
         text_color = get_inverse_color(b_color)
     else:
-        text_color = (text_color[0]/255, text_color[1]/255, text_color[2]/255)
+        text_color = (text_color[0] / 255, text_color[1] / 255, text_color[2] / 255)
     name_text.set_light_off()
     name_text.color = color.rgba(text_color[0], text_color[1], text_color[2], 1)
     parent.name_text = name_text
@@ -157,6 +157,33 @@ def create_trail_sphere(parent, pos):
 #     direction = (x / value, y / value, z / value)
 #     # 返回速度大小和速度方向
 #     return value, direction
+
+
+def create_directional_light(position, target=None, shadows=False, light_color=None):
+    """
+    创建平行光(DirectionalLight)
+    @param position: 光源位置
+    @param target: 光源指向目标
+    @param shadows: 是否支持阴影
+    @param light_color: 光的颜色
+    @return:
+    """
+    from ursina.shaders import lit_with_shadows_shader
+    if shadows:
+        Entity.default_shader = lit_with_shadows_shader
+    if light_color is None:
+        light_color = color.white
+    else:
+        light_color = color.rgba(light_color[0] / 255, light_color[1] / 255, light_color[2] / 255, 1)
+    light = DirectionalLight(position=position, intensity=10, range=10, color=light_color)
+    if target is not None:
+        if hasattr(target, "planet"):
+            if hasattr(target.planet, "main_entity"):
+                light.look_at(target.planet.main_entity)
+            else:
+                light.look_at(target.planet)
+        else:
+            light.look_at(target)
 
 
 def create_trail_line(parent, pos):

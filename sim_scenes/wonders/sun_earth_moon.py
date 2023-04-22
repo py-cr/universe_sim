@@ -46,7 +46,8 @@ if __name__ == '__main__':
         camera_look_at(moon, rotation_z=0)
 
 
-    # 订阅计时器事件（定时触发）
+    # 订阅事件后，上面的函数功能才会起作用
+    # 运行中，每时每刻都会触发 on_timer_changed
     UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
 
     # 使用 ursina 查看的运行效果

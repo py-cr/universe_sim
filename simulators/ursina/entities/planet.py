@@ -83,8 +83,9 @@ class Planet(Entity):
             else:
                 model = create_sphere(0.5, subdivisions)
                 rotation = (0, 0, 0)
-
+        # 按键盘的 “O” 重置键会触发 on_reset
         UrsinaEvent.on_reset_subscription(self.on_reset)
+        # 当对天体大小进行缩放的时候会触发 change_body_scale
         UrsinaEvent.on_body_size_changed_subscription(self.change_body_scale)
 
         super().__init__(

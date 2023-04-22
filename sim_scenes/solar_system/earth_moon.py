@@ -37,6 +37,8 @@ if __name__ == '__main__':
         camera_look_at(earth)
 
 
+    # 订阅事件后，上面的函数功能才会起作用
+    # 运行前会触发 on_ready
     UrsinaEvent.on_ready_subscription(on_ready)
 
     # 使用 ursina 查看的运行效果

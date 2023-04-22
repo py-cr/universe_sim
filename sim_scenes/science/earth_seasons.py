@@ -96,7 +96,10 @@ if __name__ == '__main__':
         # print(camera.rotation_y)
 
 
+    # 订阅事件后，上面2个函数功能才会起作用
+    # 运行前会触发 on_ready
     UrsinaEvent.on_ready_subscription(on_ready)
+    # 运行中，每时每刻都会触发 on_timer_changed
     UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
 
     # 使用 ursina 查看的运行效果

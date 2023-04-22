@@ -65,7 +65,10 @@ if __name__ == '__main__':
 
 
     def on_reset():
-        # 重置后恢复所有石头的状态（石头可见、引力有效）
+        """
+        当按键盘的 “O” 键重置后，恢复所有石头的状态（石头可见、引力有效），这样就可以反复观看
+        @return:
+        """
         for comet in comets:
             comet.set_visible(True)
             comet.ignore_mass = False
@@ -91,10 +94,13 @@ if __name__ == '__main__':
                     comet.explode(jupiter)
 
 
-    # 订阅事件
-    UrsinaEvent.on_reset_subscription(on_reset)  # 重置了会触发 on_reset
-    UrsinaEvent.on_ready_subscription(on_ready)  # 运行前会触发 on_ready
-    UrsinaEvent.on_timer_changed_subscription(on_timer_changed)  # 运行中，每时每刻都会触发 on_timer_changed
+    # 订阅事件后，上面3个函数功能才会起作用
+    # 按键盘的 “O” 重置键会触发 on_reset
+    UrsinaEvent.on_reset_subscription(on_reset)
+    # 运行前会触发 on_ready
+    UrsinaEvent.on_ready_subscription(on_ready)
+    # 运行中，每时每刻都会触发 on_timer_changed
+    UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹

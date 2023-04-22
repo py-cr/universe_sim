@@ -94,7 +94,7 @@ class SpeedOfLightInit:
 
     def on_reset(self):
         """
-        点击了重置按钮触发
+        当按键盘的 “O” 键重置后会触发
         @return:
         """
         if hasattr(self, "run_speed_maps"):
@@ -117,9 +117,12 @@ class SpeedOfLightInit:
             raise Exception("请指定 SpeedOfLightInit.bodies")
 
         # 订阅重新开始事件
+        # 按键盘的 “O” 重置键会触发 on_reset
         UrsinaEvent.on_reset_subscription(self.on_reset)
+        # 运行前会触发 on_ready
         UrsinaEvent.on_ready_subscription(self.on_ready)
         # 订阅计时器事件（记录已到达天体列表）
+        # 运行中，每时每刻都会触发 on_timer_changed
         UrsinaEvent.on_timer_changed_subscription(self.on_timer_changed)
 
     def light_body_input(self, key):

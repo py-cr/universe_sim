@@ -66,6 +66,7 @@ class BodyTimer(Singleton):
     def __init__(self):
         if not hasattr(self, "inited"):
             self.velocity_inc = 1e-30  # 理论上数值越小越好，可以使用 1e-300 ，但建议使用：1e-30   # 0.00001
+            # 按键盘的 “O” 重置键会触发 on_reset
             UrsinaEvent.on_reset_subscription(self.reset)
             UrsinaEvent.on_pause_subscription(self.pause)
             UrsinaEvent.on_start_subscription(self.start)

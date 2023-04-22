@@ -8,9 +8,10 @@
 # ==============================================================================
 from ursina import Entity, Grid, color
 from simulators.ursina.ursina_mesh import create_arrow_line
+from common.singleton import Singleton
 
 
-class WorldGrid(Entity):
+class WorldGrid(Singleton, Entity):
     """
     创建一个宇宙网格对象
     """
@@ -33,3 +34,5 @@ class WorldGrid(Entity):
         grid.set_light_off()
 
         # self.draw_axises()
+        if not hasattr(self, "instance"):
+            self.instance = self

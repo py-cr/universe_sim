@@ -6,7 +6,7 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
-from bodies import Sun, Earth, Moon
+from bodies import Body, Sun, Earth, Moon
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
 from sim_scenes.func import ursina_run, camera_look_at
 from bodies.body import AU
@@ -27,16 +27,46 @@ if __name__ == '__main__':
              init_velocity=[-1.03, 0, 0], size_scale=1e1)  # 月球放大 10 倍，距离保持不变
     ]
 
+    from ursina.shaders import lit_with_shadows_shader
+    from ursina import Vec2, Vec4, Entity
+
+    shader = lit_with_shadows_shader
+    shader.default_input = {
+        'texture_scale': Vec2(1, 1),
+        'texture_offset': Vec2(0, 0),
+        'shadow_color': Vec4(0.1, 0.1, 0.1, .5),
+    }
+    Entity.default_shader = shader
 
     def on_ready():
+
+        Entity.body = Entity(model="sphere", texture='../textures/transparent.png', y=0, x=0, z=0,scale=10)
         # 运行前触发
         # 运行开始前，将摄像机指向地球
         earth = bodies[0]
         moon = bodies[1]
         # 摄像机看向地球
         camera_look_at(earth)
+        e_pos = earth.planet.position
+        from ursina.lights import DirectionalLight
+        sun = DirectionalLight(shadow_map_resolution=(1024, 1024), position=earth.planet.position)
+        sun.look_at(moon.planet.position)
+        sun.rotation_x = 0
+        Entity.sun = sun
+        sun._light.show_frustum()
+        # 创建太阳光
+        shadows_shader = create_directional_light(position=(200, 0, -300), target=earth, shadows=True)
+        earth.planet.shadows = shadows_shader
+        moon.planet.shadows = shadows_shader
 
 
+    def on_timer_changed(time_data):
+        Entity.sun.update_bounds()
+        # Entity.sun.update_bounds(bodies[1].planet)
+        pass
+
+
+    UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
     UrsinaEvent.on_ready_subscription(on_ready)
 
     # 使用 ursina 查看的运行效果

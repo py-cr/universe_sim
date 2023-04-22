@@ -234,7 +234,7 @@ class UrsinaSimulator(Simulator):
 
         from ursina import Sky
         sky = Sky(texture=texture, scale=sky_scale)
-
+        Sky.instance = sky
         # sky = SphereSky(texture=texture, scale=sky_scale)
         sky.scale = sky_scale
         camera.sky = sky
@@ -320,7 +320,6 @@ class UrsinaSimulator(Simulator):
         if self.show_timer:
             self.create_timer()
 
-        EditorCamera(ignore_paused=True)
         # 防止打开中文输入法
         # self.switch_to_english_input_method()
         #     file: 指定音乐文件的路径
@@ -346,6 +345,8 @@ class UrsinaSimulator(Simulator):
         if os.path.exists(bg_music):
             audio = Audio(bg_music, pitch=1, loop=True, autoplay=True)
             audio.volume = 0.3
+
+        EditorCamera(ignore_paused=True)
 
         if self.show_timer:
             UrsinaEvent.on_reset()

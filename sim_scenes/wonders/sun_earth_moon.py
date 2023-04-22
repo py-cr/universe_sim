@@ -14,7 +14,7 @@ from simulators.ursina.ursina_event import UrsinaEvent
 
 if __name__ == '__main__':
     """
-    地球、月球
+    地月场景模拟
     """
     # 地球的Y方向初始速度
     EARTH_INIT_VELOCITY = 0  # 0km/s

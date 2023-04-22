@@ -169,6 +169,16 @@ def create_directional_light(position, target=None, shadows=False, light_color=N
     @return:
     """
     from ursina.shaders import lit_with_shadows_shader
+    from ursina import Vec2, Vec4, Entity
+
+    shader = lit_with_shadows_shader
+    shader.default_input = {
+        'texture_scale': Vec2(1, 1),
+        'texture_offset': Vec2(0, 0),
+        'shadow_color': Vec4(0.1, 0.1, 0.1, .5),
+    }
+    Entity.default_shader = shader
+
     if shadows:
         Entity.default_shader = lit_with_shadows_shader
     if light_color is None:

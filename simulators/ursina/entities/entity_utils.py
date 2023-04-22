@@ -171,13 +171,13 @@ def create_directional_light(position, target=None, shadows=False, light_color=N
     from ursina.shaders import lit_with_shadows_shader
     from ursina import Vec2, Vec4, Entity
 
-    shader = lit_with_shadows_shader
-    shader.default_input = {
-        'texture_scale': Vec2(1, 1),
-        'texture_offset': Vec2(0, 0),
-        'shadow_color': Vec4(0.1, 0.1, 0.1, .5),
-    }
-    Entity.default_shader = shader
+    # shader = lit_with_shadows_shader
+    # shader.default_input = {
+    #     'texture_scale': Vec2(1, 1),
+    #     'texture_offset': Vec2(0, 0),
+    #     'shadow_color': Vec4(0.1, 0.1, 0.1, .5),
+    # }
+    # Entity.default_shader = shader
 
     if shadows:
         Entity.default_shader = lit_with_shadows_shader
@@ -185,6 +185,7 @@ def create_directional_light(position, target=None, shadows=False, light_color=N
         light_color = color.white
     else:
         light_color = color.rgba(light_color[0] / 255, light_color[1] / 255, light_color[2] / 255, 1)
+
     light = DirectionalLight(position=position, intensity=10, range=10, color=light_color)
 
     if shadows:

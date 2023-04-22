@@ -13,6 +13,7 @@ from sim_scenes.func import ursina_run, camera_look_at, two_bodies_colliding
 from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.entities.entity_utils import create_directional_light
 from simulators.ursina.ursina_event import UrsinaEvent
+import random
 
 
 def create_comet(index, gravity_only_for):
@@ -47,8 +48,6 @@ if __name__ == '__main__':
     """
     彗木相撞模拟
     """
-    import random
-
     # 木星在中心位置
     jupiter = Jupiter(init_position=[0, 0, 0], init_velocity=[0, 0, 0],
                       size_scale=1, texture="jupiter_hd.jpg")

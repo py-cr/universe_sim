@@ -53,7 +53,7 @@ if __name__ == '__main__':
         sun.look_at(moon.planet.position)
         sun.rotation_x = 0
         Entity.sun = sun
-        sun._light.show_frustum()
+        # sun._light.show_frustum()
         # 创建太阳光
         shadows_shader = create_directional_light(position=(200, 0, -300), target=earth, shadows=True)
         earth.planet.shadows = shadows_shader

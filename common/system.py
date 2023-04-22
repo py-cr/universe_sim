@@ -226,7 +226,7 @@ class System(object):
                     if body1.mass / body2.mass < 1e10:  # 10亿倍的差距
                         self.fast_calc_list[body1].append(body2)
                     else:
-                        # print(f"{body2.name}相对{body1.name}质量太小，加速度可以忽略不计！")
+                        print(f"{body2.name}相对{body1.name}质量太小，加速度可以忽略不计！")
                         continue
 
                 r = body2.position - body1.position

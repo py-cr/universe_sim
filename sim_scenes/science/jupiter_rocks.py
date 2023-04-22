@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-# title           :岩石坠落木星
-# description     :岩石坠落木星
+# title           :彗木相撞模拟
+# description     :天象奇观：彗木相撞模拟
 # author          :Python超人
 # date            :2023-04-09
 # link            :https://gitcode.net/pythoncr/
@@ -11,18 +11,16 @@ from objs import RockSnow, Rock, create_rock
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY
 from sim_scenes.func import ursina_run, camera_look_at, two_bodies_colliding
 from simulators.ursina.entities.body_timer import TimeData
-from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
 
 if __name__ == '__main__':
     """
-    岩石坠落木星
+    彗木相撞模拟
     """
     import random
 
     # 木星在中心位置
     jupiter = Jupiter(init_position=[0, 0, 0], init_velocity=[0, 0, 0],
-                      # rotation_speed=0,
                       size_scale=1, texture="jupiter_hd.jpg")
 
     bodies = [jupiter]
@@ -33,14 +31,15 @@ if __name__ == '__main__':
         # 随机生成岩石位置和初始速度信息
         pos = [-r * random.randint(120, 200) / 100,
                -r * random.randint(120, 200) / 1000,
-               -r * random.randint(150, 350) / 100]
+               -r * random.randint(100, 300) / 100]
         # 随机速度
         vel = [0, -random.randint(90, 200) / 30, 0]
-        size_scale = random.randint(400, 600)
-        rock = create_rock(no=i % 7 + 1, name=f'岩石{i + 1}', mass=4.4e10, size_scale=size_scale, color=(255, 200, 0),
-                           init_position=pos,
+        size_scale = random.randint(600, 1200)
+        rock = create_rock(no=i % 8 + 1, name=f'岩石{i + 1}', mass=4.4e10,
+                           size_scale=size_scale, color=(255, 200, 0),
+                           init_position=pos, init_velocity=vel,
                            gravity_only_for=[jupiter],
-                           init_velocity=vel)
+                           )
         # 岩石随机旋转量
         rock.rotation = [0, 0, 0]
         rock.rotation[random.randint(0, 2)] = random.randint(90, 200) / 100

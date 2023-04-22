@@ -97,12 +97,14 @@ class UrsinaSimulator(Simulator):
                 body.planet.enabled = False
                 explosion_file = find_file("images/explosion")
                 explosion_file = os.path.join(explosion_file, "explosion")
-                # volume = body.planet.model.volume
-                volume = pow(body.planet.model.get_bounds().volume, 1 / 3) / 2000
+                # 获取体积数据（开三次方）
+                volume_scale = pow(body.planet.model.get_bounds().volume, 1 / 3)
+                # 根据体积、大小缩放判断爆炸的量
+                scale = 3 * volume_scale * body.size_scale * UrsinaConfig.SCALE_FACTOR
                 explode_ani = Animation(explosion_file,
-                          position=body.planet.position,
-                          scale=volume * 2, fps=6,
-                          loop=False, autoplay=True)
+                                        position=body.planet.position,
+                                        scale=scale, fps=6,
+                                        loop=False, autoplay=True)
 
                 if target is not None:
                     if hasattr(target, "planet"):

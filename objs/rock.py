@@ -43,15 +43,28 @@ class Rock(Obj):
         super().__init__(**params)
 
 
-def create_rock(no: str = None, **kwargs):
+# 对岩石进行缩放，保证 create_rock 保证创建的岩石大小差异不会过大
+ROCK_SIZE_SCALE_FACTOR = {
+    6: 1e-2,
+    7: 1e-2
+}
+
+
+def create_rock(no: int = None, **kwargs):
     if no is not None:
         kwargs["model"] = f"rock{no}.obj"
         kwargs["texture"] = f"rock{no}.png"
+    if "size_scale" in kwargs:
+        kwargs["size_scale"] = kwargs["size_scale"] * ROCK_SIZE_SCALE_FACTOR.get(no, 1.0)
+    else:
+        kwargs["size_scale"] = ROCK_SIZE_SCALE_FACTOR.get(no, 1.0)
+
     rock = Rock(**kwargs)
+    # print(rock)
     return rock
 
 
 if __name__ == '__main__':
     for i in range(10):
-        rock = create_rock(no=i % 7 + 1, name=f'岩石{i + 1}')
+        rock = create_rock(no=i % 8 + 1, name=f'岩石{i + 1}')
         print(rock)

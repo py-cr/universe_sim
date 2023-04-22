@@ -49,7 +49,6 @@ if __name__ == '__main__':
             camera.sky.scale = 800
             camera.clip_plane_near = 0.1
             camera.clip_plane_far = 1000000
-            # camera.fov = 40
 
 
     def on_timer_changed(time_data: TimeData):

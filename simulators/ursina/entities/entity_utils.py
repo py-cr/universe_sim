@@ -57,8 +57,16 @@ def trail_init(parent, scale):
     trail_color = conv_to_vec4_color(parent.body_view.body.trail_color)
     trail_color = adjust_brightness(trail_color, 0.4)
     parent.trail_color = color.rgba(trail_color[0], trail_color[1], trail_color[2], 0.6)
-    # 拖尾球体的大小为该天体的 1/5
-    parent.trail_scale = scale / 5
+
+    if hasattr(parent.body, "trail_scale_factor"):
+        if parent.body.trail_scale_factor is not None:
+            parent.trail_scale = parent.body.trail_scale_factor * scale
+        else:
+            # 拖尾球体的大小为该天体的 1/5
+            parent.trail_scale = scale / 5
+    else:
+        # 拖尾球体的大小为该天体的 1/5
+        parent.trail_scale = scale / 5
     if parent.trail_scale < 1:
         # 如果太小，则
         pass

@@ -23,7 +23,7 @@ class Obj(metaclass=ABCMeta):
     def __init__(self, name, mass, init_position, init_velocity,
                  density=5e3, color=(125 / 255, 125 / 255, 125 / 255),
                  texture=None, size_scale=1.0, distance_scale=1.0,
-                 parent=None, ignore_mass=False,
+                 parent=None, ignore_mass=False, trail_scale_factor=1.0,
                  trail_color=None, show_name=False,
                  rotation=None,
                  gravity_only_for=[], model=None):
@@ -95,6 +95,7 @@ class Obj(metaclass=ABCMeta):
         self.light_disable = False
 
         self.__has_rings = False
+        self.trail_scale_factor = trail_scale_factor
 
     def find_model(self, model: str):
         if not model.endswith(".obj"):
@@ -317,7 +318,8 @@ class Obj(metaclass=ABCMeta):
 
     def __repr__(self):
         return '<%s(%s):%s(%s)> m=%.3e(kg), d=%.3e(kg/m³), p=[%.3e,%.3e,%.3e](km), v=%s(km/s), s=%.3e' % \
-               (self.name, self.__class__.__name__, os.path.basename(self.model), os.path.basename(self.texture), self.mass, self.density,
+               (self.name, self.__class__.__name__, os.path.basename(self.model), os.path.basename(self.texture),
+                self.mass, self.density,
                 self.position[0], self.position[1], self.position[2], self.velocity, self.size_scale)
 
     def ignore_gravity_with(self, body):

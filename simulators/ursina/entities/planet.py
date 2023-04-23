@@ -16,7 +16,7 @@ from simulators.ursina.ursina_event import UrsinaEvent
 from common.color_utils import adjust_brightness, conv_to_vec4_color, get_inverse_color
 from common.func import find_file
 from simulators.views.body_view import BodyView
-from simulators.ursina.ursina_mesh import create_sphere, create_torus, create_arrow_line, create_line
+from simulators.ursina.ursina_mesh import create_sphere, create_torus, create_arrow_line, create_line, create_label
 import math
 
 
@@ -97,6 +97,7 @@ class Planet(Entity):
             collider=collider,
             position=pos,
             rotation=rotation,
+            ignore_paused=True,
             double_sided=True
         )
         if hasattr(self.body, "rotate_angle"):
@@ -294,3 +295,20 @@ class Planet(Entity):
         self.body_view.appeared = False
         # 最后删除自己
         destroy(self)
+
+    def input(self, key):
+        if self.hovered:
+            if key == 'left mouse down':
+                # print(key, self)
+                self.show_name()
+
+    def show_name(self):
+        if hasattr(self, "label_name"):
+            destroy(self.label_name)
+            delattr(self, "label_name")
+        else:
+            self.label_name = create_label(parent=self,
+                         label=self.body.name,
+                         pos=Vec3(-0.5, -0.5, -0.5),
+                         color=color.red)
+            self.label_name.set_light_off()

@@ -11,11 +11,25 @@ from common.consts import SECONDS_PER_WEEK, SECONDS_PER_MINUTE, SECONDS_PER_HALF
 from common.func import calculate_distance
 from common.system import System
 from bodies import Body
-from simulators.ursina.ursina_config import UrsinaConfig
-from simulators.ursina.ursina_event import UrsinaEvent
 from common.consts import LIGHT_SPEED
 import math
 import numpy as np
+
+
+def calc_run(bodies, dt=SECONDS_PER_WEEK, on_init=None, **kwargs):
+    from simulators.calc_simulator import CalcSimulator
+    import copy
+    if on_init is not None:
+        _bodies = copy.deepcopy(bodies)
+        _bodies = on_init(_bodies)
+        if _bodies is None:
+            _bodies = bodies
+    else:
+        _bodies = bodies
+
+    body_sys = System(_bodies)
+    simulator = CalcSimulator(body_sys)
+    simulator.run(dt, **kwargs)
 
 
 def mayavi_run(bodies, dt=SECONDS_PER_WEEK,
@@ -147,6 +161,8 @@ def ursina_run(bodies,
                 ursina_view.update()
 
     import sys
+    from simulators.ursina.ursina_config import UrsinaConfig
+    from simulators.ursina.ursina_event import UrsinaEvent
     sys.modules["__main__"].update = callback_update
     if show_trail:
         UrsinaConfig.show_trail = show_trail
@@ -254,6 +270,7 @@ def create_light_ship(size_scale, init_position, speed=LIGHT_SPEED):
 def create_text_panel(width=0.35, height=.5):
     # 创建一个 Panel 组件
     from ursina import Text, Panel, color, camera, Vec3
+    from simulators.ursina.ursina_config import UrsinaConfig
     panel = Panel(
         parent=None,
         model='quad',

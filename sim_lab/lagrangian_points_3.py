@@ -97,12 +97,9 @@ https://baike.baidu.com/pic/%E6%8B%89%E6%A0%BC%E6%9C%97%E6%97%A5%E7%82%B9/731078
 from bodies import Sun, Earth, Moon
 from objs import Satellite, Satellite2
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
-from sim_scenes.func import ursina_run, camera_look_at
+from sim_scenes.func import calc_run
 from bodies.body import AU
-from simulators.ursina.entities.body_timer import TimeData
-from simulators.ursina.entities.entity_utils import create_directional_light
-from simulators.ursina.ursina_event import UrsinaEvent
-from simulators.ursina.ursina_mesh import create_line
+from simulators.calc_simulator import CalcSimulator
 
 
 def compute_barycenter(masses, positions):
@@ -146,66 +143,112 @@ if __name__ == '__main__':
     地球、月球
     """
     OFFSETTING = 0
-    # TODO: 可以抵消月球带动地球的力，保持地球在原地
-    # OFFSETTING = 0.01265
     bodies = [
         Earth(init_position=[0, 0, 0], texture="earth_hd.jpg",
               init_velocity=[OFFSETTING, 0, 0], size_scale=0.5e1),  # 地球放大 5 倍，距离保持不变
         Moon(init_position=[0, 0, 363104],  # 距地距离约: 363104 至 405696 km
-             init_velocity=[-1.03, 0, 0], size_scale=1e1)  # 月球放大 10 倍，距离保持不变
-    ]
+             init_velocity=[-1.054152222, 0, 0], size_scale=1e1)  # 月球放大 10 倍，距离保持不变
+    ]  # -1.0543 <  -1.05435 <  -1.0545   ？-1.4935  OK：-1.05918
+    #  -1.05415<    <-1.05425
+    # 1047.4197364163992
     earth = bodies[0]
     moon = bodies[1]
-
+    # -1.0648500185012806  -1.05435
+    # 1.0544061918995067 3.02326384371554e-06 <月球(Moon)> m=7.342e+22(kg), r|d=1.737e+03|3.474e+03(km), v=2.196e+10(km³), d=3.344e+03(kg/m³), p=[-3.796e+03,0.000e+00,3.631e+05](km), v=[-1.05435     0.         -0.01088375](km/s)
+    # 1.0544608857544382 3.023593683297842e
     points = get_lagrangian_points(earth.mass, moon.mass, 363104)
-    offset_points = [
-        [0, 0, 0], # [0, 0, 21590],  # 调整加速度为0
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0],
-    ]
-    velocities = [
-        [-0.872, 0, 0],
-        [-1.265, 0, 0],
-        [1.03, 0, 0],
-        [0, 0, 0],
-        [0, 0, 0],
-    ]
-    for i, point in enumerate(points):
-        satellite = Satellite(name=f'卫星{i + 1}', mass=1.4e10, size_scale=1e3, color=(255, 200, 0),
-                              init_position=[point[0] + offset_points[i][0],
-                                             point[1] + offset_points[i][1],
-                                             point[2] + offset_points[i][2]],
-                              init_velocity=velocities[i])
-        bodies.append(satellite)
+    velocities = []
+    for i in range(30):
+        v = round(-0.846 - (i / 10000), 4)
+        velocities.append([v, 0, 0])
+
+    satellites = []
+    point = points[0]
+    for j, velocitie in enumerate(velocities):
+        satellite = Satellite(name=f'卫星{j + 1}', mass=1.4e10, size_scale=1e3, color=(255, 200, 0),
+                              init_position=[point[0],
+                                             point[1],
+                                             point[2]],
+                              init_velocity=velocities[j])
+        # bodies.append(satellite)
+        satellites.append(satellite)
+
+    CalcSimulator.init_velocity_x = moon.init_velocity[0]
+    CalcSimulator.offset_rate_x = 0.0001
+    CalcSimulator.accelerations = []
+    CalcSimulator.velocities = []
 
 
-    def on_ready():
-        # 运行前触发
-        # 运行开始前，将摄像机指向地球
-
-        # 摄像机看向地球
-        camera_look_at(moon)
+    def on_init(bodies):
+        return bodies
 
 
-    def on_timer_changed(time_data: TimeData):
-        from ursina import destroy
-        if hasattr(earth, "line"):
-            destroy(earth.line)
-        earth.line = create_line(from_pos=earth.planet.position, to_pos=moon.planet.main_entity.position)
+    def on_ready(simulator):
+        pass
 
 
-    # 订阅事件后，上面的函数功能才会起作用
-    # 运行前会触发 on_ready
-    UrsinaEvent.on_ready_subscription(on_ready)
-    # 运行中，每时每刻都会触发 on_timer_changed
-    UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
+    def evolve_next(simulator):
+        if not hasattr(simulator, "loop"):
+            simulator.loop = 1000
+        else:
+            simulator.loop -= 1
+        # print(simulator.bodies_sys.bodies)
+        moon = simulator.bodies_sys.bodies[1]
 
-    # 使用 ursina 查看的运行效果
-    # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
-    # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_HOUR*10,
-               position=(-300000, 1500000, -100),
-               show_timer=True,
-               show_trail=True)
+        from simulators.ursina.entities.entity_utils import get_value_direction_vectors
+
+        velocity = get_value_direction_vectors(moon.velocity)
+        acceleration = get_value_direction_vectors(moon.acceleration)
+        vel_value = velocity[0]  # km/s
+        acc_value = acceleration[0]  # km/s²
+        print(vel_value, acc_value, moon)
+
+        CalcSimulator.accelerations.append(acc_value)
+        CalcSimulator.velocities.append(vel_value)
+
+        # if not hasattr(simulator, "init_acc_value") and acc_value > 0:
+        #     simulator.init_acc_value = acc_value
+        # elif hasattr(simulator, "init_acc_value"):
+        #     if simulator.loop == 1:
+        #         diff = acc_value - simulator.init_acc_value
+        #         if CalcSimulator.init_velocity_x > 0:
+        #             d = 1
+        #         else:
+        #             d = -1
+        #         if abs(diff) < 1e-10:
+        #             print("完成", CalcSimulator.init_velocity_x)
+        #             exit(0)
+        #         elif diff > 0:
+        #             CalcSimulator.init_velocity_x += CalcSimulator.offset_rate_x * d
+        #             print("慢慢靠近", CalcSimulator.init_velocity_x)
+        #         else:
+        #             CalcSimulator.init_velocity_x -= CalcSimulator.offset_rate_x * d
+        #             print("慢慢远离", CalcSimulator.init_velocity_x)
+
+        return simulator.loop > 0
+
+
+    loop = 1
+    while loop > 0:
+        moon.init_velocity = [CalcSimulator.init_velocity_x, moon.init_velocity[1], moon.init_velocity[2]]
+        calc_run(bodies, SECONDS_PER_HOUR,
+                 on_init=on_init,
+                 on_ready=on_ready,
+                 evolve_next=evolve_next)
+        loop -= 1
+
+    import matplotlib.pyplot as plt
+
+    plt.figure(figsize=(8, 6))
+    max_value = max(CalcSimulator.accelerations[1:])
+    min_value = min(CalcSimulator.accelerations[1:])
+    x = []
+    for i in range(len(CalcSimulator.accelerations)):
+        x.append(i)
+    plt.title("%s max:%.4f mix:%.4f diff:%.4f" % (moon.init_velocity[0], max_value*1e6, min_value*1e6, (max_value - min_value)*1e6))
+    plt.ylim(2.95e-6, 3.06e-6)
+    plt.plot(x[1:], CalcSimulator.accelerations[1:], label="accelerations")
+    # plt.plot(x, CalcSimulator.velocities, label="velocities")
+
+    plt.legend()
+    plt.show()

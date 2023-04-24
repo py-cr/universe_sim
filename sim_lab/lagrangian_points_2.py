@@ -152,14 +152,14 @@ if __name__ == '__main__':
         Earth(init_position=[0, 0, 0], texture="earth_hd.jpg",
               init_velocity=[OFFSETTING, 0, 0], size_scale=0.5e1),  # 地球放大 5 倍，距离保持不变
         Moon(init_position=[0, 0, 363104],  # 距地距离约: 363104 至 405696 km
-             init_velocity=[-1.05435, 0, 0], size_scale=1e1)  # 月球放大 10 倍，距离保持不变
+             init_velocity=[-1.054152222, 0, 0], size_scale=1e1)  # 月球放大 10 倍，距离保持不变
     ]  # -1.0543 <  -1.05435 <  -1.0545
     earth = bodies[0]
     moon = bodies[1]
 
     points = get_lagrangian_points(earth.mass, moon.mass, 363104)
     offset_points = [
-        [0, 0, 0],  # 调整加速度为0
+        [0, 0, 3301.05],  # TODO:调整
         [0, 0, 0],
         [0, 0, 0],
         [0, 0, 0],
@@ -177,20 +177,20 @@ if __name__ == '__main__':
         [-0.879, 0, 0],
         [-0.869, 0, 0],
     ]
-    velocities=[]
-    for i in range(30):
-        v = round(-0.846-(i/10000),4)
+    velocities = []
+    for i in range(10):
+        v = round(-0.890205 - (i / 1000000), 20)  # TODO:调整
         print(v)
         velocities.append([v, 0, 0])
 
     satellites = []
     for i, point in enumerate(points[0:1]):
-        for j,velocitie in enumerate(velocities):
+        for j, velocitie in enumerate(velocities):
             satellite = Satellite(name=f'卫星{j + 1}', mass=1.4e10, size_scale=1e3, color=(255, 200, 0),
                                   init_position=[point[0] + offset_points[i][0],
                                                  point[1] + offset_points[i][1],
                                                  point[2] + offset_points[i][2]],
-                                  init_velocity=velocities[j])
+                                  init_velocity=velocities[j], gravity_only_for=[earth, moon])
             bodies.append(satellite)
             satellites.append(satellite)
 
@@ -221,7 +221,7 @@ if __name__ == '__main__':
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_HOUR*10,
+    ursina_run(bodies, SECONDS_PER_HOUR * 10,
                position=(-5000, 500000, -10),
                show_timer=True,
                show_trail=True)

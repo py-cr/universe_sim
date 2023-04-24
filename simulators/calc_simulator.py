@@ -7,7 +7,6 @@
 # python_version  :3.8
 # mayavi version  :4.8.1
 # ==============================================================================
-from mayavi import mlab
 from simulators.simulator import Simulator
 from common.system import System
 from simulators.views.body_view import BodyView

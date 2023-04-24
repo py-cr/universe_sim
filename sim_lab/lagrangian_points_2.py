@@ -159,7 +159,8 @@ if __name__ == '__main__':
 
     points = get_lagrangian_points(earth.mass, moon.mass, 363104)
     offset_points = [
-        [0, 0, 3301.05],  # TODO:调整
+        [0, 0, 3301.0505],  # TODO:调整
+        # [0, 0, 3299],  # TODO:调整 3299
         [0, 0, 0],
         [0, 0, 0],
         [0, 0, 0],
@@ -179,10 +180,13 @@ if __name__ == '__main__':
     ]
     velocities = []
     for i in range(10):
-        v = round(-0.890205 - (i / 1000000), 20)  # TODO:调整
+        v = round(-0.890211 - (i / 10000000), 20)  # TODO:调整
+        # TODO: v = -0.8902112
         print(v)
         velocities.append([v, 0, 0])
 
+    #
+    #
     satellites = []
     for i, point in enumerate(points[0:1]):
         for j, velocitie in enumerate(velocities):

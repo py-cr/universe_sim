@@ -14,6 +14,8 @@ from common.consts import AU
 import copy
 import os
 
+from simulators.ursina.entities.entity_utils import get_value_direction_vectors
+
 
 class Obj(metaclass=ABCMeta):
     """
@@ -196,6 +198,36 @@ class Obj(metaclass=ABCMeta):
         """
         self.__position = value
         self.__record_history()
+
+    def acceleration_value(self):
+        """
+        获取加速度的值（km/s²）
+        @return:
+        """
+        direction_vectors = get_value_direction_vectors(self.acceleration)
+        return direction_vectors[0]  # km/s²
+
+    def velocity_value(self):
+        """
+        获取速度的值（km/s）
+        @return:
+        """
+        direction_vectors = get_value_direction_vectors(self.velocity)
+        return direction_vectors[0]  # km/s
+
+    def acceleration_value_direction(self):
+        """
+        获取加速度的值（km/s²）和方向
+        @return: 值[0]，方向[1]
+        """
+        return get_value_direction_vectors(self.acceleration)
+
+    def velocity_value_direction(self):
+        """
+        获取速度的值（km/s）和方向
+        @return: 值[0]，方向[1]
+        """
+        return get_value_direction_vectors(self.velocity)
 
     @property
     def acceleration(self):

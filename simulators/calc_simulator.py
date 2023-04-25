@@ -38,6 +38,17 @@ class CalcContext(Singleton):
             # 存放参数字典数据,通过 get_param 获取
             self._params = {}
 
+    def init_param(self, key, value):
+        """
+        只会初始化一次（除非删除掉）
+        @param key:
+        @param value:
+        @return:
+        """
+        if key not in self._params:
+            self.put_param(key, value)
+        return self
+
     @property
     def bodies(self) -> []:
         return self.simulator.bodies_sys.bodies
@@ -52,6 +63,7 @@ class CalcContext(Singleton):
 
     def put_param(self, key, data):
         self._params[key] = data
+        return self
 
     def get_param(self, key):
         """

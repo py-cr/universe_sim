@@ -7,10 +7,8 @@
 # python_version  :3.8
 # ==============================================================================
 from bodies import Body, Sun, Earth, Moon
-from objs import Obj
-from objs import Satellite, Satellite2
+from objs import Obj, Satellite, Satellite2
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
-from sim_scenes.func import calc_run
 from bodies.body import AU
 
 
@@ -41,27 +39,30 @@ bodies = [
 ]
 earth = bodies[0]
 moon = bodies[1]
-points = get_lagrangian_points(earth.mass, moon.mass, 363104)
-L1_point = points[0]
-point_z = L1_point[2] + 3301.0505  # 越大，离月球越近
+L1_p, L2_p, L3_p, L4_p, L5_p = get_lagrangian_points(earth.mass, moon.mass, 363104)
+point_z = L1_p[2] + 3301.0505  # 越大，离月球越近
 init_velocity = [-0.890211, 0, 0]
 satellite = Satellite(name=f'卫星', mass=1.4e10, size_scale=1e3, color=(255, 200, 0),
-                      init_position=[L1_point[0], L1_point[1], point_z],
+                      init_position=[L1_p[0], L1_p[1], point_z],
                       init_velocity=init_velocity, gravity_only_for=[earth, moon])
 bodies.append(satellite)
 
 
-def calc_simulator():
+def calc_simulator(target):
+    from sim_scenes.func import calc_run
     from simulators.calc_simulator import CalcSimulator, CalcContext
+
+    CalcSimulator.init(True)
+
     def evolve_next(context: CalcContext):
         return context.evolve_count < 500
 
     def after_evolve(dt, context: CalcContext):
-        target: Body = context.bodies[1]
-        # target: Obj = context.bodies[2]
+        # target: Body = context.bodies[1]  # 月球
+        # target: Obj = context.bodies[2]  # 卫星
 
-        context.init_param("acc_values", []).params["acc_values"].append(target.acceleration_value())
-        context.init_param("vel_values", []).params["vel_values"].append(target.velocity_value())
+        context.init_param("acc_values", []).append(target.acceleration_value())
+        context.init_param("vel_values", []).append(target.velocity_value())
 
         print(satellite.acceleration_value(), satellite.velocity_value())
 
@@ -80,7 +81,7 @@ def calc_simulator():
         ax1.set_ylabel('加速度', fontdict={'weight': 'normal', 'size': 15, 'color': 'blue'})
         # ax1.set_title("加速度/速度", fontdict={'weight': 'normal', 'size': 15})
         plt.title("%s max:%.4f mix:%.4f diff:%.4f" % (
-            moon.init_velocity[0], max_value * 1e6, min_value * 1e6, (max_value - min_value) * 1e6))
+            vel_values[0], max_value * 1e6, min_value * 1e6, (max_value - min_value) * 1e6))
         l1 = ax1.legend(loc='lower left', labels=['加速度'])
 
         ax2 = ax1.twinx()  # this is the important function
@@ -132,5 +133,7 @@ def ursina_simulator():
 
 
 if __name__ == '__main__':
-    calc_simulator()
+    calc_simulator(earth)
+    calc_simulator(moon)
+    calc_simulator(satellite)
     # ursina_simulator()

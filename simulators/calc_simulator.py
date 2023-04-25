@@ -30,7 +30,7 @@ class CalcView(BodyView):
         pass
 
 
-class CalcContext(Singleton):
+class CalcContext:
     def __init__(self, simulator):
         self.simulator = simulator
         self.evolve_count = 0
@@ -47,7 +47,7 @@ class CalcContext(Singleton):
         """
         if key not in self._params:
             self.put_param(key, value)
-        return self
+        return self.params[key]
 
     @property
     def bodies(self) -> []:
@@ -87,8 +87,8 @@ class CalcSimulator(Simulator):
     """
 
     @staticmethod
-    def init():
-        if hasattr(CalcSimulator, "on_reset_funcs"):
+    def init(reset=False):
+        if hasattr(CalcSimulator, "on_reset_funcs") and not reset:
             return
         # 重启运行的订阅事件
         CalcSimulator.on_reset_funcs = []
@@ -178,6 +178,8 @@ class CalcSimulator(Simulator):
             c.evolve_count = 0
 
         CalcSimulator.on_reset_subscription(on_reset)
+        CalcSimulator.on_ready_subscription(on_reset)
+
         context = CalcContext(self)
 
         CalcSimulator.on_ready(context)

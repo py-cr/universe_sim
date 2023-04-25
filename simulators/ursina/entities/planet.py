@@ -7,7 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
-from ursina import Entity, camera, color, Vec3, Text, load_texture, destroy, PointLight
+from ursina import application,Entity, camera, color, Vec3, Text, load_texture, destroy, PointLight
 
 from simulators.ursina.entities.entity_utils import create_name_text, create_trails, clear_trails, create_rings, \
     trail_init, create_fixed_star_lights
@@ -201,6 +201,9 @@ class Planet(Entity):
 
     def update(self):
         self.change_body_scale()
+
+        if application.paused:
+            return
 
         pos = self.body_view.position * UrsinaConfig.SCALE_FACTOR
         if self.body.parent is None:

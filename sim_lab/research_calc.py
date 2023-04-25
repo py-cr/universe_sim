@@ -31,21 +31,60 @@ def get_lagrangian_points(m1, m2, r):
     return l1, l2, l3, l4, l5
 
 
+def create_satellite(name, init_position, init_velocity):
+    satellite = Satellite(name=name, mass=1.4e10, size_scale=3e3, color=(255, 200, 0),
+                          init_position=init_position,
+                          init_velocity=init_velocity, gravity_only_for=[earth, moon])
+    return satellite
+
+
 bodies = [
     Earth(init_position=[0, 0, 0], texture="earth_hd.jpg",
           init_velocity=[0, 0, 0], size_scale=0.5e1),  # 地球放大 5 倍，距离保持不变
     Moon(init_position=[0, 0, 363104],  # 距地距离约: 363104 至 405696 km
          init_velocity=[-1.054152222, 0, 0], size_scale=1e1)  # 月球放大 10 倍，距离保持不变
 ]
+import math
+
 earth = bodies[0]
 moon = bodies[1]
-L1_p, L2_p, L3_p, L4_p, L5_p = get_lagrangian_points(earth.mass, moon.mass, 363104)
-point_z = L1_p[2] + 3301.0505  # 越大，离月球越近
-init_velocity = [-0.890211, 0, 0]
-satellite = Satellite(name=f'卫星', mass=1.4e10, size_scale=1e3, color=(255, 200, 0),
-                      init_position=[L1_p[0], L1_p[1], point_z],
-                      init_velocity=init_velocity, gravity_only_for=[earth, moon])
-bodies.append(satellite)
+# L1_p, L2_p, L3_p, L4_p, L5_p = get_lagrangian_points(earth.mass, moon.mass, 363104)
+# point_z = L4_p[2] + 0  # 越大，离月球越近
+# L4_vel = 1.048
+# init_velocity = [-math.sin(math.pi * 30 / 180)*L4_vel, 0, math.cos(math.pi * 30 / 180)*L4_vel]
+
+# point_z = L1_p[2] + 3301.48891  # 越大，离月球越近  3301.48891
+# init_velocity = [-0.890136271716, 0, 0]  # -0.890136271716 画图比较好
+# L1：point=[0,0,308536.70059015526]  velocity=[-0.890136271716, 0, 0]
+satelliteL1 = create_satellite(name=f'卫星L1', init_position=[0, 0, 308536.672],
+                               init_velocity=[-0.890136271716, 0, 0])
+bodies.append(satelliteL1)
+
+# point_z = L2_p[2] + 2365.72  # 越大，离月球越近
+# init_velocity = [-1.24, 0, 0]
+# L2：point=[0,0, 423338.5083198447]  velocity=[-1.24, 0, 0]
+satelliteL2 = create_satellite(name=f'卫星L2', init_position=[0, 0, 423338.5083198447],
+                               init_velocity=[-1.24, 0, 0])
+bodies.append(satelliteL2)
+
+# L3：point=[0,0, -364941.3043941873]  velocity=[1.039 , 0, 0]
+satelliteL3 = create_satellite(name=f'卫星L3', init_position=[0, 0, -364941.3043941873],
+                               init_velocity=[1.048, 0, 0])
+bodies.append(satelliteL3)
+
+L4_vel = 1.048
+L4_init_velocity = [-math.sin(math.pi * 30 / 180) * L4_vel, 0, math.cos(math.pi * 30 / 180) * L4_vel]
+# L4：point=[0,0, 177142.46945395062]  velocity=[1.039 , 0, 0]
+satelliteL4 = create_satellite(name=f'卫星L4', init_position=[314457.2882157448, 0, 177142.46945395062],
+                               init_velocity=L4_init_velocity)
+bodies.append(satelliteL4)
+
+L5_vel = 1.048
+L5_init_velocity = [-math.sin(math.pi * 30 / 180) * L5_vel, 0, -math.cos(math.pi * 30 / 180) * L5_vel]
+# L4：point=[0,0, 177142.46945395062]  velocity=[1.039 , 0, 0]
+satelliteL5 = create_satellite(name=f'卫星L5', init_position=[-314457.2882157448, 0, 177142.46945395062],
+                               init_velocity=L5_init_velocity)
+bodies.append(satelliteL5)
 
 
 def calc_simulator(target):
@@ -117,11 +156,24 @@ def ursina_simulator():
         # 摄像机看向地球
         camera_look_at(moon)
 
+    def create_connecting_lines(satellites_list):
+        lines = []
+        for satellites in satellites_list:
+            line = create_line(from_pos=satellites[0].planet.position, to_pos=satellites[1].planet.position, alpha=0.3)
+            lines.append(line)
+        return lines
+
     def on_timer_changed(time_data: TimeData):
         from ursina import destroy
-        if hasattr(earth, "line"):
-            destroy(earth.line)
-        earth.line = create_line(from_pos=earth.planet.position, to_pos=moon.planet.main_entity.position)
+        if hasattr(earth, "lines"):
+            for line in earth.lines:
+                destroy(line)
+
+        earth.lines = create_connecting_lines([[satelliteL2, satelliteL3],
+                                    [satelliteL4, satelliteL1], [satelliteL5, satelliteL1],
+                                    [satelliteL4, satelliteL2], [satelliteL5, satelliteL2],
+                                    [satelliteL4, satelliteL3], [satelliteL5, satelliteL3],
+                                    ])
 
     # 订阅事件后，上面的函数功能才会起作用
     # 运行前会触发 on_ready
@@ -135,11 +187,12 @@ def ursina_simulator():
     ursina_run(bodies, SECONDS_PER_HOUR * 10,
                position=(-300000, 1500000, -100),
                show_timer=True,
-               show_trail=True)
+               # show_trail=True
+               )
 
 
 if __name__ == '__main__':
-    calc_simulator(earth)
-    calc_simulator(moon)
-    calc_simulator(satellite)
-    # ursina_simulator()
+    # calc_simulator(earth)
+    # calc_simulator(moon)
+    # calc_simulator(satellite)
+    ursina_simulator()

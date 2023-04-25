@@ -30,60 +30,163 @@ class CalcView(BodyView):
         pass
 
 
+class CalcContext(Singleton):
+    def __init__(self, simulator):
+        self.simulator = simulator
+        self.evolve_count = 0
+        if not hasattr(self, "_params"):
+            # 存放参数字典数据,通过 get_param 获取
+            self._params = {}
+
+    @property
+    def bodies(self) -> []:
+        return self.simulator.bodies_sys.bodies
+
+    @property
+    def system(self) -> System:
+        return self.simulator.bodies_sys
+
+    @property
+    def params(self):
+        return self._params
+
+    def put_param(self, key, data):
+        self._params[key] = data
+
+    def get_param(self, key):
+        """
+        获取参数值
+        @param key:
+        @return:
+        """
+        if self._params is None or len(self._params) == 0:
+            return None
+
+        if key not in self._params.keys():
+            return None
+
+        return self._params[key]
+
+
 class CalcSimulator(Simulator):
     """
     计算运行模拟器（无界面）
     主要用于天体测试数据计算
     """
 
+    @staticmethod
+    def init():
+        if hasattr(CalcSimulator, "on_reset_funcs"):
+            return
+        # 重启运行的订阅事件
+        CalcSimulator.on_reset_funcs = []
+        # 运行准备的订阅事件
+        CalcSimulator.on_ready_funcs = []
+        # 运行结束的订阅事件
+        CalcSimulator.on_finished_funcs = []
+        # 演变前触发的订阅事件
+        CalcSimulator.on_before_evolve_funcs = []
+        # 演变后触发的订阅事件
+        CalcSimulator.on_after_evolve_funcs = []
+
+    @staticmethod
+    def on_before_evolve_subscription(fun):
+        CalcSimulator.on_before_evolve_funcs.append(fun)
+
+    @staticmethod
+    def on_before_evolve_unsubscription(fun):
+        CalcSimulator.on_before_evolve_funcs.remove(fun)
+
+    @staticmethod
+    def on_before_evolve(dt, context):
+        for f in CalcSimulator.on_before_evolve_funcs:
+            f(dt, context)
+
+    @staticmethod
+    def on_after_evolve_subscription(fun):
+        CalcSimulator.on_after_evolve_funcs.append(fun)
+
+    @staticmethod
+    def on_after_evolve_unsubscription(fun):
+        CalcSimulator.on_after_evolve_funcs.remove(fun)
+
+    @staticmethod
+    def on_after_evolve(dt, context):
+        for f in CalcSimulator.on_after_evolve_funcs:
+            f(dt, context)
+
+    @staticmethod
+    def on_finished_subscription(fun):
+        CalcSimulator.on_finished_funcs.append(fun)
+
+    @staticmethod
+    def on_finished_unsubscription(fun):
+        CalcSimulator.on_finished_funcs.remove(fun)
+
+    @staticmethod
+    def on_finished(context):
+        for f in CalcSimulator.on_finished_funcs:
+            f(context)
+
+    @staticmethod
+    def on_reset_subscription(fun):
+        CalcSimulator.on_reset_funcs.append(fun)
+
+    @staticmethod
+    def on_reset_unsubscription(fun):
+        CalcSimulator.on_reset_funcs.remove(fun)
+
+    @staticmethod
+    def on_reset(context):
+        for f in CalcSimulator.on_reset_funcs:
+            f(context)
+
+    @staticmethod
+    def on_ready_subscription(fun):
+        CalcSimulator.on_ready_funcs.append(fun)
+
+    @staticmethod
+    def on_ready_unsubscription(fun):
+        CalcSimulator.on_ready_funcs.remove(fun)
+
+    @staticmethod
+    def on_ready(context):
+        for f in CalcSimulator.on_ready_funcs:
+            f(context)
+
     def __init__(self, bodies_sys: System):
         super().__init__(bodies_sys, CalcView)
 
     def run(self, dt, **kwargs):
-        on_finished = None
-        if "on_finished" in kwargs:
-            on_finished = kwargs["on_finished"]
-
-        on_ready = None
-        if "on_ready" in kwargs:
-            on_ready = kwargs["on_ready"]
-
         evolve_next = None
         if "evolve_next" in kwargs:
             evolve_next = kwargs["evolve_next"]
 
-        after_evolve = None
-        if "after_evolve" in kwargs:
-            after_evolve = kwargs["after_evolve"]
+        def on_reset(c):
+            c.evolve_count = 0
 
-        before_evolve = None
-        if "before_evolve" in kwargs:
-            before_evolve = kwargs["before_evolve"]
+        CalcSimulator.on_reset_subscription(on_reset)
+        context = CalcContext(self)
 
-        if on_ready is not None:
-            on_ready(self)
+        CalcSimulator.on_ready(context)
 
         if evolve_next is None:
-            if before_evolve is not None:
-                before_evolve(self)
-
+            # 至少会执行一遍（如果需要执行多遍，需要实现 evolve_next）
+            CalcSimulator.on_before_evolve(dt, context)
             self.evolve(dt)
-
-            if after_evolve is not None:
-                after_evolve(self)
+            context.evolve_count += 1
+            CalcSimulator.on_after_evolve(dt, context)
         else:
-            while evolve_next(self):
-                if before_evolve is not None:
-                    before_evolve(self)
-
+            while evolve_next(context):
+                CalcSimulator.on_before_evolve(dt, context)
                 self.evolve(dt)
+                context.evolve_count += 1
+                CalcSimulator.on_after_evolve(dt, context)
 
-                if after_evolve is not None:
-                    after_evolve(self)
+        CalcSimulator.on_finished(context)
 
-        if on_finished is not None:
-            on_finished(self)
 
+CalcSimulator.init()
 
 if __name__ == '__main__':
     from sim_scenes.func import calc_run
@@ -105,34 +208,11 @@ if __name__ == '__main__':
     ]
 
 
-    def on_finished(simulator):
-        print(simulator)
-
-
-    def on_ready(simulator):
-        print(simulator)
-
-
-    def after_evolve(simulator):
-        print(simulator)
-
-
-    def before_evolve(simulator):
-        print(simulator)
-
-
-    def evolve_next(simulator):
-        if not hasattr(simulator, "loop"):
-            simulator.loop = 10
-        else:
-            simulator.loop -= 1
+    def evolve_next(context: CalcContext):
+        simulator = context.simulator
         print(simulator.bodies_sys.bodies)
-        return simulator.loop > 0
+        return context.evolve_count < 2
 
 
     calc_run(bodies, SECONDS_PER_WEEK,
-             on_ready=on_ready,
-             on_finished=on_finished,
-             after_evolve=after_evolve,
-             before_evolve=before_evolve,
              evolve_next=evolve_next)

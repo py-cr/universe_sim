@@ -54,16 +54,20 @@ def calc_simulator(target):
 
     CalcSimulator.init(True)
 
+    def on_ready(context: CalcContext):
+        for body in bodies:
+            body.reset()
+
     def evolve_next(context: CalcContext):
-        return context.evolve_count < 500
+        return context.evolve_count < 1000
 
     def after_evolve(dt, context: CalcContext):
         # target: Body = context.bodies[1]  # 月球
         # target: Obj = context.bodies[2]  # 卫星
-
+        context.init_param("init_vel", target.init_velocity[0])
         context.init_param("acc_values", []).append(target.acceleration_value())
         context.init_param("vel_values", []).append(target.velocity_value())
-        print(target.acceleration_value(), target.velocity_value())
+        print(target.name, target.acceleration_value(), target.velocity_value())
 
     def on_finished(context: CalcContext):
         import matplotlib.pyplot as plt
@@ -79,8 +83,9 @@ def calc_simulator(target):
         ax1.plot(acc_values, 'blue', label='加速度')
         ax1.set_ylabel('加速度', fontdict={'weight': 'normal', 'size': 15, 'color': 'blue'})
         # ax1.set_title("加速度/速度", fontdict={'weight': 'normal', 'size': 15})
-        plt.title("%s max:%.4f mix:%.4f diff:%.4f" % (
-            vel_values[0], max_value * 1e6, min_value * 1e6, (max_value - min_value) * 1e6))
+        plt.title("%s(%.4f) max:%.4f min:%.4f diff:%.4f" % (target.name,
+                                                            context.get_param("init_vel"), max_value * 1e6,
+                                                            min_value * 1e6, (max_value - min_value) * 1e6))
         l1 = ax1.legend(loc='lower left', labels=['加速度'])
 
         ax2 = ax1.twinx()  # this is the important function
@@ -91,6 +96,7 @@ def calc_simulator(target):
         l2 = ax2.legend(loc='upper right', labels=['速度'])
         plt.show()
 
+    CalcSimulator.on_ready_subscription(on_ready)
     CalcSimulator.on_after_evolve_subscription(after_evolve)
     CalcSimulator.on_finished_subscription(on_finished)
 

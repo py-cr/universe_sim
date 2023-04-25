@@ -63,8 +63,7 @@ def calc_simulator(target):
 
         context.init_param("acc_values", []).append(target.acceleration_value())
         context.init_param("vel_values", []).append(target.velocity_value())
-
-        print(satellite.acceleration_value(), satellite.velocity_value())
+        print(target.acceleration_value(), target.velocity_value())
 
     def on_finished(context: CalcContext):
         import matplotlib.pyplot as plt
@@ -104,6 +103,7 @@ def ursina_simulator():
     from simulators.ursina.entities.entity_utils import create_directional_light
     from simulators.ursina.ursina_event import UrsinaEvent
     from simulators.ursina.ursina_mesh import create_line
+
     def on_ready():
         # 运行前触发
         # 运行开始前，将摄像机指向地球

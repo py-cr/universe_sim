@@ -120,7 +120,7 @@ if __name__ == '__main__':
     # position = 左-右+、上+下-、前+后-
     ursina_run(bodies, SECONDS_PER_HOUR * 5,
                # position=(-300000, 1500000, -100),
-               position=(0, 1500000,0),
+               position=(0, 1500000, 0),
                show_timer=True,
                # show_trail=True
                )

@@ -26,7 +26,7 @@ if __name__ == '__main__':
 
     bodies = [
         Sun(size_scale=0.8e2),    # 太阳放大 80 倍
-        Dancer(size_scale=2e3),   # 舞者放大 2000 倍
+        Dancer(size_scale=5e3),   # 舞者放大 5000 倍
         Jupiter(size_scale=5e2),  # 木星放大 500 倍
     ]
     sun, dancer, jupiter = bodies[0], bodies[1], bodies[2]

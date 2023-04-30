@@ -19,7 +19,7 @@ class Football(Obj):
                  init_velocity=[0, 0, 0],
                  texture="football.jpg", size_scale=1.0, distance_scale=1.0,
                  ignore_mass=False, density=1e3, color=(7, 0, 162),
-                 trail_color=None, show_name=False,
+                 trail_color=None, trail_scale_factor=0.2, show_name=False,
                  parent=None, gravity_only_for=[]):
         params = {
             "name": name,
@@ -33,6 +33,7 @@ class Football(Obj):
             "distance_scale": distance_scale,
             "ignore_mass": ignore_mass,
             "trail_color": trail_color,
+            "trail_scale_factor": trail_scale_factor,
             "show_name": show_name,
             "parent": parent,
             "gravity_only_for": gravity_only_for,

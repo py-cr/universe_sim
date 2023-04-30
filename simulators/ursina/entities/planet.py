@@ -303,7 +303,8 @@ class Planet(Entity):
         if self.hovered:
             if key == 'left mouse down':
                 # print(key, self)
-                self.show_name()
+                # self.show_name()
+                pass
 
     def show_name(self):
         if hasattr(self, "label_name"):

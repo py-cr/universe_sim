@@ -20,7 +20,7 @@ class Satellite(Obj):
                  texture="satellite.png", size_scale=1.0, distance_scale=1.0,
                  ignore_mass=False, density=1e3, color=(7, 0, 162),
                  trail_color=(255, 255, 255), show_name=False,
-                 trail_scale_factor=5.0, model="satellite.obj",
+                 trail_scale_factor=1.0, model="satellite.obj",
                  parent=None, gravity_only_for=[]):
         params = {
             "name": name,

@@ -167,7 +167,7 @@ def create_trail_sphere(parent, pos):
 #     return value, direction
 
 
-def create_directional_light(position, target=None, shadows=False, light_color=None):
+def create_directional_light(position, target=None, shadows=False, light_num=1, light_color=None):
     """
     创建平行光(DirectionalLight)
     @param position: 光源位置
@@ -194,19 +194,24 @@ def create_directional_light(position, target=None, shadows=False, light_color=N
     else:
         light_color = color.rgba(light_color[0] / 255, light_color[1] / 255, light_color[2] / 255, 1)
 
-    light = DirectionalLight(position=position, intensity=10, range=10, color=light_color)
+    lights = []
+    for i in range(light_num):
+        light = DirectionalLight(position=position, intensity=10, range=10, color=light_color)
+        lights.append(light)
 
     if shadows:
-        light.shadows = lit_with_shadows_shader
+        for light in lights:
+            light.shadows = lit_with_shadows_shader
 
     if target is not None:
-        if hasattr(target, "planet"):
-            if hasattr(target.planet, "main_entity"):
-                light.look_at(target.planet.main_entity)
+        for light in lights:
+            if hasattr(target, "planet"):
+                if hasattr(target.planet, "main_entity"):
+                    light.look_at(target.planet.main_entity)
+                else:
+                    light.look_at(target.planet)
             else:
-                light.look_at(target.planet)
-        else:
-            light.look_at(target)
+                light.look_at(target)
 
     if shadows:
         return lit_with_shadows_shader

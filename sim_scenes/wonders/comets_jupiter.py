@@ -88,7 +88,7 @@ if __name__ == '__main__':
     def on_ready():
         # 运行前触发
         # 为了较好的立体效果，可以增加太阳光线，光线指向木星（target=jupiter）
-        create_directional_light(position=(200, 0, -300), target=jupiter)
+        create_directional_light(position=(200, 0, -300), light_num=3, target=jupiter)
         # 摄像机看向木星
         camera_look_at(jupiter, rotation_z=0)
 

@@ -2,7 +2,7 @@
 # title           :地月场景模拟
 # description     :地月场景模拟（月球对地球的扰动）
 # author          :Python超人
-# date            :2023-02-11
+# date            :2023-05-01
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================

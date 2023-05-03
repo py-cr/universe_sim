@@ -23,6 +23,9 @@ if __name__ == '__main__':
                   init_velocity=[OFFSETTING, 0, 0], size_scale=0.5e1)  # 地球放大 5 倍，距离保持不变
     moon = Moon(init_position=[0, 0, 363104],  # 距地距离约: 363104 至 405696 km
                 init_velocity=[-1.03, 0, 0], size_scale=1e1)  # 月球放大 10 倍，距离保持不变
+
+    earth.rotation_speed /= 10
+
     bodies = [earth, moon]
 
 
@@ -43,5 +46,4 @@ if __name__ == '__main__':
     # position = 左-右+、上+下-、前+后-
     ursina_run(bodies, SECONDS_PER_WEEK,
                position=(-300000, 1500000, -1000),
-               show_timer=True,
                show_trail=True)

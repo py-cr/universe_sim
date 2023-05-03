@@ -18,7 +18,7 @@ if __name__ == '__main__':
     """
     # 地球在中心位置
     earth = Earth(init_position=[0, 0, 0], init_velocity=[0, 0, 0],
-                  rotation_speed=0, texture="earth_hd.jpg")
+                  texture="earth_hd.jpg")
     D = earth.diameter * 1.2
     init_vel = 5.116
     # 在地球周围创建 6 个月球（初速度为0）

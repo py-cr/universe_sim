@@ -31,8 +31,6 @@ if __name__ == '__main__':
 
     def on_ready():
         # 运行前触发
-        # 运行开始前，将摄像机指向地球
-
         # 摄像机看向地球
         camera_look_at(earth)
 

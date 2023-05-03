@@ -98,7 +98,7 @@ def create_label(parent, label, pos, color, scale=50, alpha=1.0):
     return text
 
 
-def create_line(from_pos, to_pos, parent=None, alpha=1.0, len_scale=1,set_light_off=True,
+def create_line(from_pos, to_pos, parent=None, alpha=1.0, len_scale=1, set_light_off=True,
                 color=color.white, thickness=1):
     line = Entity(parent=parent,
                   model=Mesh(vertices=(from_pos * len_scale, to_pos * len_scale),
@@ -152,6 +152,62 @@ def create_arrow_line(from_pos, to_pos, parent=None, label=None,
         text = None
 
     return arrow, line, text
+
+
+def get_obj_planet_position(obj):
+    """
+    获取对象的位置坐标
+    @param obj:
+    @return:
+    """
+    if hasattr(obj, "planet"):
+        if hasattr(obj.planet, "main_entity"):
+            pos1 = obj.planet.main_entity.position
+        else:
+            pos1 = obj.planet.position
+    else:
+        pos1 = obj.position
+    return pos1
+
+
+def create_connecting_line(obj1, obj2, line_color=color.white, alpha=0.3):
+    """
+    创建物体之间的连接线
+    @param obj1:
+    @param obj2:
+    @param line_color: 线条颜色
+    @param alpha: 透明度（默认0.3）
+    @return:
+    """
+    if isinstance(line_color, tuple) or isinstance(line_color, list):
+        line_color = color.rgba(line_color[0] / 255, line_color[1] / 255, line_color[2] / 255, alpha)
+    pos1 = get_obj_planet_position(obj1)
+    pos2 = get_obj_planet_position(obj2)
+    line = create_line(from_pos=pos1, color=line_color, to_pos=pos2, alpha=alpha)
+    return line
+
+
+def create_connecting_lines(objs_list, line_color=color.white, alpha=0.3):
+    """
+    创建物体之间的连接线。(多条线)
+    样例如下: <br>
+    create_connecting_lines([
+            [obj1, obj2],
+            [obj3, obj4],
+            ......
+        ])
+    @param objs_list:
+    @param color: 线条颜色
+    @param alpha: 透明度（默认0.3）
+    @return: 被创建的连接线列表
+    """
+    if isinstance(line_color, tuple) or isinstance(line_color, list):
+        line_color = color.rgba(line_color[0] / 255, line_color[1] / 255, line_color[2] / 254, alpha)
+    lines = []
+    for objs in objs_list:
+        line = create_connecting_line(objs[0], objs[1], line_color=line_color, alpha=alpha)
+        lines.append(line)
+    return lines
 
 
 def create_pyramid():

@@ -17,7 +17,7 @@ if __name__ == '__main__':
     """
     earth = Earth(texture="earth_hd.jpg",
                   init_position=[0, 0, 0], init_velocity=[0, 0, 0],
-                  size_scale=1).set_ignore_gravity()
+                  size_scale=1).set_ignore_gravity()  # 忽略引力
 
     # 创建带有云层的地球
     earth_with_clouds = Earth(texture="earth_hd.jpg",

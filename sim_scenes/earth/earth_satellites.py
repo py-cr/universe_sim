@@ -32,7 +32,7 @@ if __name__ == '__main__':
         {"position": [0, 0, -10000], "velocity": [0, 6.3, 0]},
     ]
     for i, info in enumerate(satellite_infos):
-        satellite = Satellite(name=f'卫星{i + 1}', mass=4.4e10, size_scale=2e2, color=(255, 200, 0),
+        satellite = Satellite(name=f'卫星{i + 1}', mass=4.4e10, size_scale=1e2, color=(255, 200, 0),
                               init_position=info["position"],
                               init_velocity=info["velocity"])
         info["satellite"] = satellite

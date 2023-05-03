@@ -33,6 +33,7 @@ if __name__ == '__main__':
         {"position": [0, 0, -10000], "velocity": [0, 6.3, 0]},
     ]
     for i, info in enumerate(satellite_infos):
+        # Satellite Satellite2
         satellite = Satellite(name=f'卫星{i + 1}', mass=4.4e10,
                               size_scale=1e2, color=(255, 200, 0),
                               init_position=info["position"],
@@ -42,7 +43,6 @@ if __name__ == '__main__':
 
 
     def on_ready():
-        camera_look_at(earth, rotation_z=0)
         UrsinaConfig.trail_length = 150
         UrsinaConfig.trail_type = "line"
         pass
@@ -50,7 +50,7 @@ if __name__ == '__main__':
 
     def on_timer_changed(time_data: TimeData):
         for info in satellite_infos:
-            info["satellite"].planet.look_at(earth.planet)
+            info["satellite"].look_at(earth)
 
 
     # 订阅事件后，上面2个函数功能才会起作用
@@ -63,7 +63,7 @@ if __name__ == '__main__':
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
     ursina_run(bodies, SECONDS_PER_HOUR / 2,
-               position=(30000, 10000, -20000),
+               position=(0, 0, -3 * earth.diameter),
                show_trail=True,
                show_timer=True,
                view_closely=0.001)  # 近距离观看 view_closely=True或0.001

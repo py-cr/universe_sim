@@ -6,9 +6,9 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
-from bodies import Moon, Earth, Body
+from bodies import Earth
 from objs import Satellite, Satellite2
-from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
+from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY
 from sim_scenes.func import mayavi_run, ursina_run, camera_look_at
 from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.ursina_config import UrsinaConfig
@@ -19,7 +19,8 @@ if __name__ == '__main__':
     地球和卫星模拟
     """
     # 地球在中心位置
-    earth = Earth(init_position=[0, 0, 0], size_scale=1, texture="earth_hd.jpg", init_velocity=[0, 0, 0])
+    earth = Earth(init_position=[0, 0, 0], init_velocity=[0, 0, 0],
+                  size_scale=1, texture="earth_hd.jpg")
 
     bodies = [earth]
     # 卫星位置和初始速度信息
@@ -32,7 +33,8 @@ if __name__ == '__main__':
         {"position": [0, 0, -10000], "velocity": [0, 6.3, 0]},
     ]
     for i, info in enumerate(satellite_infos):
-        satellite = Satellite(name=f'卫星{i + 1}', mass=4.4e10, size_scale=1e2, color=(255, 200, 0),
+        satellite = Satellite(name=f'卫星{i + 1}', mass=4.4e10,
+                              size_scale=1e2, color=(255, 200, 0),
                               init_position=info["position"],
                               init_velocity=info["velocity"])
         info["satellite"] = satellite

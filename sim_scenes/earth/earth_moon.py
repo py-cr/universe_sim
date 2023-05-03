@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 # title           :地月场景模拟
-# description     :地月场景模拟
+# description     :地月场景模拟（月球对地球的扰动）
 # author          :Python超人
 # date            :2023-02-11
 # link            :https://gitcode.net/pythoncr/
@@ -13,7 +13,7 @@ from simulators.ursina.ursina_event import UrsinaEvent
 
 if __name__ == '__main__':
     """
-    地球、月球
+    月球对地球的扰动
     """
     OFFSETTING = 0
     # TODO: 可以抵消月球带动地球的力，保持地球在原地

@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
 # title           :地月场景模拟
-# description     :地月场景模拟（月球对地球的扰动）
+# description     :地月场景模拟（月球始终一面朝向地球、月球对地球的扰动）
 # author          :Python超人
 # date            :2023-05-01
 # link            :https://gitcode.net/pythoncr/
@@ -14,6 +14,7 @@ from simulators.ursina.ursina_event import UrsinaEvent
 
 if __name__ == '__main__':
     """
+    月球始终一面朝向地球
     月球对地球的扰动
     """
     OFFSETTING = 0

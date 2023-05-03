@@ -64,4 +64,4 @@ if __name__ == '__main__':
                position=(30000, 10000, -20000),
                show_trail=True,
                show_timer=True,
-               view_closely=0.001)
+               view_closely=0.001)  # 近距离观看 view_closely=True或0.001

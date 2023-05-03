@@ -35,4 +35,4 @@ if __name__ == '__main__':
     ursina_run(bodies, SECONDS_PER_HOUR / 2,
                position=(1.5 * earth.raduis, 0, -30000),
                show_grid=False,
-               view_closely=0.001)
+               view_closely=0.001)   # 近距离观看 view_closely=True或0.001

@@ -314,9 +314,7 @@ class UrsinaSimulator(Simulator):
             if cosmic_bg is not None and os.path.exists(cosmic_bg):
                 self.cosmic_background(cosmic_bg)
 
-        # ui = UrsinaUI()
-        ctl = ControlUI(ControlHandler(), position=(0.6, 0.5))
-        ControlUI.current_ui = ctl
+
         if self.show_timer:
             self.create_timer()
 
@@ -352,6 +350,10 @@ class UrsinaSimulator(Simulator):
             UrsinaEvent.on_reset()
 
         UrsinaEvent.on_ready()
+
+        # ui = UrsinaUI()
+        ctl = ControlUI(ControlHandler(), position=(0.6, 0.5))
+        ControlUI.current_ui = ctl
 
         UrsinaEvent.after_ready()
 

@@ -9,6 +9,7 @@
 from bodies import Earth, Moon
 from common.consts import SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
 from sim_scenes.func import ursina_run, camera_look_at
+from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
 
 if __name__ == '__main__':
@@ -24,24 +25,13 @@ if __name__ == '__main__':
     moon = Moon(init_position=[0, 0, 363104],  # 距地距离约: 363104 至 405696 km
                 init_velocity=[-1.03, 0, 0], size_scale=1e1)  # 月球放大 10 倍，距离保持不变
 
-    earth.rotation_speed /= 10
+    earth.rotation_speed /= 50  # 地球的转速降低50倍
 
     bodies = [earth, moon]
-
-
-    def on_ready():
-        # 运行前触发
-        # 摄像机看向地球
-        camera_look_at(earth)
-
-
-    # 订阅事件后，上面的函数功能才会起作用
-    # 运行前会触发 on_ready
-    UrsinaEvent.on_ready_subscription(on_ready)
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
     ursina_run(bodies, SECONDS_PER_WEEK,
-               position=(-300000, 1500000, -1000),
+               position=(0, 100000, -1000000),
                show_trail=True)

@@ -7,7 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 import matplotlib.pyplot as plt
-from common.consts import SECONDS_PER_WEEK, SECONDS_PER_MINUTE, SECONDS_PER_HALF_DAY
+from common.consts import SECONDS_PER_WEEK, SECONDS_PER_MINUTE, SECONDS_PER_HALF_DAY, AU
 from common.func import calculate_distance
 from common.system import System
 from bodies import Body
@@ -214,13 +214,16 @@ def create_solar_system_bodies(ignore_mass=False, init_velocity=None):
     以下展示的效果为太阳系真实的距离
     @return:
     """
-    from bodies import Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto
+    from bodies import Sun, Mercury, Venus, Earth, Moon, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto
+
     sun = Sun(name="太阳", size_scale=0.5e2)  # 太阳放大 50 倍，距离保持不变
     bodies = [
         sun,
         Mercury(name="水星", size_scale=0.3e3),  # 水星放大 300 倍，距离保持不变
         Venus(name="金星", size_scale=0.3e3),  # 金星放大 300 倍，距离保持不变
         Earth(name="地球", size_scale=0.3e3),  # 地球放大 300 倍，距离保持不变
+        Moon(name="月球",  init_position=[0, 0, 363104 + AU],
+             size_scale=0.3e3),  # 月球放大 300 倍，距离保持不变
         Mars(name="火星", size_scale=0.3e3),  # 火星放大 300 倍，距离保持不变
         # Asteroids(name="小行星群", size_scale=3.2e2,
         #           parent=sun),  # 小行星群模拟(仅 ursina 模拟器支持)

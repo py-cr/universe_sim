@@ -207,7 +207,7 @@ class SpeedOfLightInit:
                 {"au": 0.724, "secs": 1},  # [00:06:00] 到达 [金星] 0.721 AU
                 {"au": "?", "secs": SECONDS_PER_MINUTE * 5},
                 {"au": 1.0, "secs": 1},
-                {"au": 1.002, "secs": 1},  # [00:08:19] 到达 [地球] 1.0 AU
+                {"au": 1.006, "secs": 1},  # [00:08:19] 到达 [地球、月球] 1.0 AU
                 {"au": "?", "secs": SECONDS_PER_MINUTE * 5},
                 {"au": 1.52, "secs": 1},
                 {"au": 1.522, "secs": 1},  # [00:12:39] 到达 [火星] 1.52 AU

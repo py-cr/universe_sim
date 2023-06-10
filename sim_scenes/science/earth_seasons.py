@@ -43,6 +43,10 @@ if __name__ == '__main__':
                   text_color=[255, 255, 255], rotation_speed=0.5,  # 为演示效果，自转角速度取0.5度/小时，实际为15度/小时
                   init_position=[-1 * AU, 0, 0], init_velocity=[0, 0, -29.79])
 
+    # 地球立春的位置和速度
+    earth.init_position = [-9.1507536e+07, 0.0000000e+00, 1.1907757e+08]
+    earth.init_velocity = [-23.550875, 0., -18.05398]
+
     earth.rotate_axis_color = (255, 255, 50)
     earth.rotate_axis_scale = 0.75
 
@@ -70,7 +74,7 @@ if __name__ == '__main__':
         earth_4.planet.rotation_y -= 145  # 冬至
 
 
-    def earth_text_dispaly(term_name):
+    def earth_text_display(term_name):
         """
         控制4个透明地球文本是否显示，防止地球文字的叠加
         @param term_name:
@@ -91,9 +95,13 @@ if __name__ == '__main__':
             if info[1] <= camera.rotation_y < info[2]:
                 term_name = info[0]
                 # 控制4个透明地球文本是否显示，防止地球文字的叠加
-                earth_text_dispaly(term_name)
+                earth_text_display(term_name)
                 # 地球名称文字显示为相应的节气
                 earth.name_text.text = term_name
+                # if term_name == "立春": # 找到立春的位置和速度
+                #     print("position", earth.position)
+                #     print("velocity", earth.velocity)
+
         # print(camera.rotation_y)
 
 

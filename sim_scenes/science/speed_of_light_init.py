@@ -59,7 +59,7 @@ class SpeedOfLightInit:
             self.show_trail = True
             self.light_size_scale = 2e6
             self.light_init_position = [AU / 8, AU / 10, 0]
-            self.auto_control_speed = True
+            # self.auto_control_speed = True
         else:
             # 摄像机位置 = 左-右+、上+下-、前+后-
             self.camera_position = (0, AU, -6 * AU)

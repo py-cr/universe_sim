@@ -6,14 +6,15 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
+import math
+
 from bodies import Earth, Moon
-from objs import Satellite, Satellite2
-from common.consts import SECONDS_PER_HOUR, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
+from common.consts import SECONDS_PER_HOUR
+from objs import Satellite
 from sim_scenes.func import ursina_run, camera_look_at
-from simulators.ursina.entities.body_timer import TimeData
+from simulators.ursina.entities.body_timer import TimeData, BodyTimer
 from simulators.ursina.ursina_event import UrsinaEvent
 from simulators.ursina.ursina_mesh import create_connecting_lines
-import math
 
 # 月球绕地球的半径
 R = 363104
@@ -73,7 +74,7 @@ if __name__ == '__main__':
         if hasattr(earth, "lines"):
             for line in earth.lines:
                 destroy(line)
-        if int(time_data.total_hours) % 3 == 0:
+        if int(time_data.total_hours) % 8 == 0:
             # 创建连接线（将卫星列表用线条连接起来）
             earth.lines = create_connecting_lines([
                 [satelliteL2, satelliteL3],
@@ -88,7 +89,8 @@ if __name__ == '__main__':
     UrsinaEvent.on_ready_subscription(on_ready)
     # 运行中，每时每刻都会触发 on_timer_changed
     UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
-
+    # 设置计时器的最小时间单位为分钟
+    BodyTimer().min_unit = BodyTimer.MIN_UNIT_MINUTES
     bodies = [earth, moon,
               satelliteL1, satelliteL2, satelliteL3, satelliteL4, satelliteL5]
     # 使用 ursina 查看的运行效果

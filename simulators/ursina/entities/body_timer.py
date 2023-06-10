@@ -33,16 +33,24 @@ class TimeData:
         self.seconds = int(seconds)
         self.min_unit = min_unit
 
-        if days > 1 or years >= 1 or self.min_unit in [BodyTimer.MIN_UNIT_DAYS, BodyTimer.MIN_UNIT_YEARS]:
-            s_days = str(days).rjust(3, " ")
-            if self.min_unit in [BodyTimer.MIN_UNIT_YEARS]:
-                self.time_text = f'{self.years}年'
-            elif days >= 20 or years >= 1 or self.min_unit in [BodyTimer.MIN_UNIT_DAYS]:
-                self.time_text = f'{self.years}年{s_days}天'
-            else:
-                self.time_text = f'{self.days}天 {self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}'
+        s_days = str(days).rjust(3, " ")
+
+        if self.min_unit in [BodyTimer.MIN_UNIT_YEARS]:
+            self.time_text = f'{self.years}年'
+        elif self.min_unit in [BodyTimer.MIN_UNIT_DAYS]:
+            self.time_text = f'{self.years}年{s_days}天'
+        elif self.min_unit in [BodyTimer.MIN_UNIT_MINUTES]:
+            self.time_text = f'{self.days}天 {self.hours:02d}:{self.minutes:02d}'
+        elif self.min_unit in [BodyTimer.MIN_UNIT_HOURS]:
+            self.time_text = f'{self.days}天 {self.hours:02d}时'
         else:
-            self.time_text = f'{self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}'
+            if days > 1 or years >= 1:
+                if days >= 20 or years >= 1:
+                    self.time_text = f'{self.years}年{s_days}天'
+                else:
+                    self.time_text = f'{self.days}天 {self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}'
+            else:
+                self.time_text = f'{self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}'
 
     @property
     def total_minutes(self):
@@ -65,6 +73,8 @@ class BodyTimer(Singleton):
        最后通过公式： 时间 = 距离 / 速度， 从而得到天体运行了多长时间
     """
     MIN_UNIT_SECONDS = "seconds"
+    MIN_UNIT_MINUTES = "minutes"
+    MIN_UNIT_HOURS = "hours"
     MIN_UNIT_DAYS = "days"
     MIN_UNIT_YEARS = "years"
 

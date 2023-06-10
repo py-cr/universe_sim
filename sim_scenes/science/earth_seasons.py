@@ -6,12 +6,13 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
+from ursina import camera
+
 from bodies import Sun, Earth
-from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, AU
+from common.consts import SECONDS_PER_DAY, AU
 from sim_scenes.func import ursina_run, camera_look_at
 from simulators.ursina.entities.body_timer import TimeData, BodyTimer
 from simulators.ursina.ursina_event import UrsinaEvent
-from ursina import camera
 
 
 def create_earth(name, text_color, position):
@@ -101,6 +102,7 @@ if __name__ == '__main__':
     UrsinaEvent.on_ready_subscription(on_ready)
     # 运行中，每时每刻都会触发 on_timer_changed
     UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
+    # 设置计时器的最小时间单位为天
     BodyTimer().min_unit = BodyTimer.MIN_UNIT_DAYS
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹

@@ -209,14 +209,14 @@ class UrsinaSimulator(Simulator):
             evolve_dt = evolve_dt * self.interval_fator
             super().evolve(evolve_dt)
 
-            if self.show_timer:
+            if self.show_timer or self.timer_enabled:
                 timer = BodyTimer()
                 timer.calc_time(evolve_dt)
 
-    def create_timer(self):
+    def create_timer(self, show=True):
         from simulators.ursina.entities.timer import Timer
         # 创建一个文本对象来显示计时器的时间
-        self.timer = Timer()
+        self.timer = Timer(show)
         return self.timer
 
     def cosmic_background(self, texture='../textures/cosmic2.jpg'):
@@ -261,6 +261,10 @@ class UrsinaSimulator(Simulator):
         self.show_timer = False
         if "show_timer" in kwargs:
             self.show_timer = kwargs["show_timer"]
+
+        self.timer_enabled = False
+        if "timer_enabled" in kwargs:
+            self.timer_enabled = kwargs["timer_enabled"]
 
         if view_closely:
             # 近距离查看
@@ -314,9 +318,13 @@ class UrsinaSimulator(Simulator):
             if cosmic_bg is not None and os.path.exists(cosmic_bg):
                 self.cosmic_background(cosmic_bg)
 
-
         if self.show_timer:
-            self.create_timer()
+            self.timer_enabled = True
+            # 创建和显示计时器
+            self.create_timer(True)
+        elif self.timer_enabled:
+            # 创建计时器，但是不显示
+            self.create_timer(False)
 
         # 防止打开中文输入法
         # self.switch_to_english_input_method()
@@ -346,7 +354,7 @@ class UrsinaSimulator(Simulator):
 
         EditorCamera(ignore_paused=True)
 
-        if self.show_timer:
+        if self.show_timer or self.timer_enabled:
             UrsinaEvent.on_reset()
 
         UrsinaEvent.on_ready()

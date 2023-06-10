@@ -115,6 +115,7 @@ def ursina_run(bodies,
                show_trail=False,
                show_name=False,
                show_timer=False,
+               timer_enabled=False,
                save_as_json=None,
                view_closely=False):
     """
@@ -128,6 +129,7 @@ def ursina_run(bodies,
     @param show_trail: 是否显示拖尾
     @param show_name: 是否显示天体名称
     @param show_timer: 是否显示计时器
+    @param timer_enabled: 计时器是否有效
     @param save_as_json: 将所有天体的信息保存为 json 文件
     @param view_closely: 是否近距离查看天体
     @return:
@@ -170,6 +172,7 @@ def ursina_run(bodies,
                   cosmic_bg=cosmic_bg,
                   show_grid=show_grid,
                   show_timer=show_timer,
+                  timer_enabled=timer_enabled,
                   bg_music=bg_music,
                   view_closely=view_closely)
 
@@ -222,7 +225,7 @@ def create_solar_system_bodies(ignore_mass=False, init_velocity=None):
         Mercury(name="水星", size_scale=0.3e3),  # 水星放大 300 倍，距离保持不变
         Venus(name="金星", size_scale=0.3e3),  # 金星放大 300 倍，距离保持不变
         Earth(name="地球", size_scale=0.3e3),  # 地球放大 300 倍，距离保持不变
-        Moon(name="月球",  init_position=[0, 0, 363104 + AU],
+        Moon(name="月球", init_position=[0, 0, 363104 + AU],
              size_scale=0.3e3),  # 月球放大 300 倍，距离保持不变
         Mars(name="火星", size_scale=0.3e3),  # 火星放大 300 倍，距离保持不变
         # Asteroids(name="小行星群", size_scale=3.2e2,

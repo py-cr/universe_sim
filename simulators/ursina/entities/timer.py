@@ -16,12 +16,14 @@ from simulators.ursina.ursina_event import UrsinaEvent
 
 class Timer(Text):
 
-    def __init__(self):
+    def __init__(self, show=True):
         # 创建一个文本对象来显示计时器的时间
         super().__init__(text='                                 ', position=(0.70, -0.465),
                          origin=(-0.5, 0.5),
                          font=UrsinaConfig.CN_FONT, background=True)
         UrsinaEvent.on_timer_changed_subscription(self.on_timer_changed)
+        if not show:
+            self.enabled = False
 
     def on_timer_changed(self, time_data: TimeData):
         self.text = time_data.time_text

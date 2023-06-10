@@ -34,7 +34,7 @@ def create_satellite(name, init_position, init_velocity):
     @param init_velocity:
     @return:
     """
-    satellite = Satellite(name=name, mass=1.4e10, size_scale=2e3, color=(255, 200, 0),
+    satellite = Satellite(name=name, mass=1.4e10, size_scale=3.2e3, color=(255, 200, 0),
                           init_position=init_position,
                           init_velocity=init_velocity, gravity_only_for=[earth, moon])
     return satellite

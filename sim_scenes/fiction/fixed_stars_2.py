@@ -60,5 +60,6 @@ if __name__ == '__main__':
     #             M：摄像机移动加速  N:摄像机移动减速
     # position = (左-右+、上+下-、前+后-)
     ursina_run(bodies, SECONDS_PER_WEEK,
+               show_grid=False,
                position=(0, 30000, -AU / 500),
                show_name=True, bg_music="sounds/universe_03.mp3")

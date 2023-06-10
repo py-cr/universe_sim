@@ -22,28 +22,37 @@ if __name__ == '__main__':
     #  =====================================================================
     #  以下展示的效果为太阳系真实的距离
     #  由于宇宙空间尺度非常大，如果按照实际的天体大小，则无法看到天体，因此需要对天体的尺寸进行放大
-    sun = Sun(name="太阳", size_scale=0.8e2)       # 太阳放大 80 倍，距离保持不变
+    sun = Sun(name="太阳", size_scale=0.8e2)  # 太阳放大 80 倍，距离保持不变
     bodies = [
         sun,
-        Mercury(name="水星", size_scale=4e3),      # 水星放大 4000 倍，距离保持不变
-        Venus(name="金星", size_scale=4e3),        # 金星放大 4000 倍，距离保持不变
-        Earth(name="地球", size_scale=4e3),        # 地球放大 4000 倍，距离保持不变
-        Mars(name="火星", size_scale=4e3),         # 火星放大 4000 倍，距离保持不变
+        Mercury(name="水星", size_scale=4e3),  # 水星放大 4000 倍，距离保持不变
+        Venus(name="金星", size_scale=4e3),  # 金星放大 4000 倍，距离保持不变
+        Earth(name="地球", size_scale=4e3),  # 地球放大 4000 倍，距离保持不变
+        Mars(name="火星", size_scale=4e3),  # 火星放大 4000 倍，距离保持不变
         # Asteroids(name="小行星群", size_scale=3.2e2,
         #           parent=sun),                     # 小行星群模拟(仅 ursina 模拟器支持)
-        Jupiter(name="木星", size_scale=0.8e3),    # 木星放大 800 倍，距离保持不变
-        Saturn(name="土星", size_scale=0.8e3),     # 土星放大 800 倍，距离保持不变
-        Uranus(name="天王星", size_scale=0.8e3),   # 天王星放大 800 倍，距离保持不变
-        Neptune(name="海王星", size_scale=1e3),    # 海王星放大 1000 倍，距离保持不变
-        Pluto(name="冥王星", size_scale=10e3),     # 冥王星放大 10000 倍，距离保持不变(从太阳系的行星中排除)
+        Jupiter(name="木星", size_scale=0.8e3),  # 木星放大 800 倍，距离保持不变
+        Saturn(name="土星", size_scale=0.8e3),  # 土星放大 800 倍，距离保持不变
+        Uranus(name="天王星", size_scale=0.8e3),  # 天王星放大 800 倍，距离保持不变
+        Neptune(name="海王星", size_scale=1e3),  # 海王星放大 1000 倍，距离保持不变
+        Pluto(name="冥王星", size_scale=10e3),  # 冥王星放大 10000 倍，距离保持不变(从太阳系的行星中排除)
     ]
 
     # 循环为每个恒星的初始位置进行赋值，方便演示
     for idx, body in enumerate(bodies):
         body.rotation_speed /= 200  # 恒星的旋转速度减小10倍
 
+
     def on_timer_changed(time_data: TimeData):
-        sun.planet.init_scale = sun.planet.init_scale + 0.2
+        # 模拟要爆炸的样子
+        if int(time_data.total_hours) % 3 == 0:
+            scale_val = (sun.planet.scale_x / 100)
+        elif int(time_data.total_hours) % 5 == 0:
+            scale_val = - 2 * (sun.planet.scale_x / 100)
+        else:
+            scale_val = 0
+
+        sun.planet.init_scale += scale_val
 
 
     #

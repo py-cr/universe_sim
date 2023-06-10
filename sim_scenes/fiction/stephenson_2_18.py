@@ -25,7 +25,9 @@ if __name__ == '__main__':
               init_position=[-2896.9165, 2896.9165, 0]),
         Sun(size_scale=SIZE_SCALE, ignore_mass=True,
             init_position=[-316397.06, 316397.06, 386345.72]),  # 太阳
-        Stephenson_2_18(size_scale=SIZE_SCALE, color=(28, 2, 1), ignore_mass=True,
+        Stephenson_2_18(size_scale=SIZE_SCALE,
+                        # color=(28, 2, 1),
+                        ignore_mass=True,
                         init_position=[-10e+08, 6.802537e+08, 8.234898e+08])  # 史蒂文森2-18 质量倍数 40.0   半径倍数 2150
     ]
 

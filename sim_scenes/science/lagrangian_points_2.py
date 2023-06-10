@@ -73,13 +73,14 @@ if __name__ == '__main__':
         if hasattr(earth, "lines"):
             for line in earth.lines:
                 destroy(line)
-        # 创建连接线（将卫星列表用线条连接起来）
-        earth.lines = create_connecting_lines([
-            [satelliteL2, satelliteL3],
-            [satelliteL4, satelliteL1], [satelliteL5, satelliteL1],
-            [satelliteL4, satelliteL2], [satelliteL5, satelliteL2],
-            [satelliteL4, satelliteL3], [satelliteL5, satelliteL3],
-        ])
+        if int(time_data.total_hours) % 3 == 0:
+            # 创建连接线（将卫星列表用线条连接起来）
+            earth.lines = create_connecting_lines([
+                [satelliteL2, satelliteL3],
+                [satelliteL4, satelliteL1], [satelliteL5, satelliteL1],
+                [satelliteL4, satelliteL2], [satelliteL5, satelliteL2],
+                [satelliteL4, satelliteL3], [satelliteL5, satelliteL3],
+            ])
 
 
     # 订阅事件后，上面的函数功能才会起作用

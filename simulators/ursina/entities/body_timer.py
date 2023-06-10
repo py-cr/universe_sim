@@ -17,7 +17,7 @@ from simulators.ursina.ursina_event import UrsinaEvent
 
 
 class TimeData:
-    def __init__(self, seconds):
+    def __init__(self, seconds, min_unit):
         self.total_seconds = seconds
         # 获取到 seconds 后，通过下面的计算得到时分秒、年、天
         hours, remainder = divmod(seconds, 3600)
@@ -31,10 +31,13 @@ class TimeData:
         self.hours = int(hours)
         self.minutes = int(minutes)
         self.seconds = int(seconds)
+        self.min_unit = min_unit
 
-        if days > 1:
+        if days > 1 or years >= 1 or self.min_unit in [BodyTimer.MIN_UNIT_DAYS, BodyTimer.MIN_UNIT_YEARS]:
             s_days = str(days).rjust(3, " ")
-            if days >= 20 or years >= 1:
+            if self.min_unit in [BodyTimer.MIN_UNIT_YEARS]:
+                self.time_text = f'{self.years}年'
+            elif days >= 20 or years >= 1 or self.min_unit in [BodyTimer.MIN_UNIT_DAYS]:
                 self.time_text = f'{self.years}年{s_days}天'
             else:
                 self.time_text = f'{self.days}天 {self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}'
@@ -49,7 +52,6 @@ class TimeData:
     def total_hours(self):
         return self.total_seconds / 3600
 
-
     @property
     def total_days(self):
         return self.total_hours / 24
@@ -62,6 +64,9 @@ class BodyTimer(Singleton):
        通过公式： 速度 * 时间 = 距离，获取到累计距离， self.position_sum += self.velocity_inc * dt
        最后通过公式： 时间 = 距离 / 速度， 从而得到天体运行了多长时间
     """
+    MIN_UNIT_SECONDS = "seconds"
+    MIN_UNIT_DAYS = "days"
+    MIN_UNIT_YEARS = "years"
 
     def __init__(self):
         if not hasattr(self, "inited"):
@@ -71,6 +76,7 @@ class BodyTimer(Singleton):
             UrsinaEvent.on_pause_subscription(self.pause)
             UrsinaEvent.on_start_subscription(self.start)
             self.inited = True
+            self.min_unit = BodyTimer.MIN_UNIT_SECONDS
 
     def pause(self):
         pass
@@ -107,7 +113,7 @@ class BodyTimer(Singleton):
         #     time_text = f'{int(hours):02d}:{int(minutes):02d}:{int(seconds):02d}'
 
         # print(self.text)
-        UrsinaEvent.on_timer_changed(TimeData(seconds))
+        UrsinaEvent.on_timer_changed(TimeData(seconds, self.min_unit))
 
     def ignore_gravity(self, body):
         return True

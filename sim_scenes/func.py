@@ -117,6 +117,7 @@ def ursina_run(bodies,
                show_timer=False,
                timer_enabled=False,
                save_as_json=None,
+               save_as_video=False,
                view_closely=False):
     """
     ursina 模拟器运行天体
@@ -155,12 +156,19 @@ def ursina_run(bodies,
     view_azimuth = 0  # 暂时未用
     player = UrsinaPlayer(position, view_azimuth, simulator.ursina_views)
 
+    if save_as_video:
+        from common.video_recorder import VideoRecorder
+        vr = VideoRecorder()
+
     def callback_update():
         UrsinaEvent.on_application_run()
         for ursina_view in simulator.ursina_views:
             simulator.check_and_evolve()
             if ursina_view.appeared:
                 ursina_view.update()
+
+        if save_as_video:
+            vr.screenshot()
 
     import sys
     from simulators.ursina.ursina_config import UrsinaConfig

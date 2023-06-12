@@ -8,7 +8,7 @@
 # ==============================================================================
 from bodies import Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto, Moon, Asteroids
 from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, SECONDS_PER_YEAR, AU
-from sim_scenes.func import mayavi_run, ursina_run
+from sim_scenes.func import mayavi_run, ursina_run, two_bodies_colliding
 from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
@@ -42,6 +42,8 @@ if __name__ == '__main__':
     for idx, body in enumerate(bodies):
         body.rotation_speed /= 200  # 恒星的旋转速度减小10倍
 
+    planets = bodies[1:]
+
 
     def on_timer_changed(time_data: TimeData):
         # 模拟要爆炸的样子
@@ -51,6 +53,16 @@ if __name__ == '__main__':
             scale_val = - 2 * (sun.planet.scale_x / 100)
         else:
             scale_val = 0
+
+        # 必须 range(len(planets) - 1, -1, -1) ，才能 remove
+        for idx in range(len(planets) - 1, -1, -1):
+            planet = planets[idx]
+            # 判断行星与太阳是否相碰撞
+            if two_bodies_colliding(planet, sun):
+                planet.explode(sun)
+                # 必须 range(len(planets) - 1, -1, -1) ，才能 remove
+                planets.remove(planet)
+                scale_val = 0
 
         sun.planet.init_scale += scale_val
 

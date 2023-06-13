@@ -62,10 +62,12 @@ satelliteL5 = create_satellite(name=f'卫星L5', init_position=[-314457.28821574
 
 
 if __name__ == '__main__':
+    from ursina import camera
     def on_ready():
         # 运行前触发
         # 摄像机看向地球
         camera_look_at(earth)
+        camera.rotation_y = -90
 
 
     def on_timer_changed(time_data: TimeData):

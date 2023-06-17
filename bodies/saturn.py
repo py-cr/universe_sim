@@ -43,7 +43,12 @@ class Saturn(Body):
             "trail_color": trail_color,
             "show_name": show_name
         }
+        self.__has_rings = True
         super().__init__(**params)
+
+    def show_rings(self, value):
+        self.__has_rings = value
+        return self
 
     @property
     def has_rings(self):
@@ -51,7 +56,7 @@ class Saturn(Body):
         土星带光环的天体
         @return:
         """
-        return True
+        return self.__has_rings
 
     @property
     def rings_color(self):

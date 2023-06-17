@@ -17,13 +17,14 @@ from simulators.ursina.ursina_event import UrsinaEvent
 FACTOR = 10
 # 地球和月球之间的距离常量，距地距离约: 363104 至 405696 km，平均距离 384000 km
 E_M_DISTANCE = 405696 * FACTOR
-earth = Earth("地球", size_scale=FACTOR, init_position=[0, 0, 0])
+earth1 = Earth("地球1", size_scale=FACTOR, init_position=[0, 0, 0])
 moon = Moon("月球", size_scale=FACTOR, init_position=[E_M_DISTANCE, 0, 0])
-
+earth2 = Earth("地球2", texture="earth2.jpg", size_scale=FACTOR)
 bodies = [
-    earth, moon,
+    earth1, moon,
     Mercury(name="水星", size_scale=FACTOR),
     Venus(name="金星", size_scale=FACTOR),
+    earth2,
     Mars(name="火星", size_scale=FACTOR),
     Jupiter(name="木星", size_scale=FACTOR),
     Saturn(name="土星", size_scale=FACTOR).show_rings(False),
@@ -37,20 +38,24 @@ index = 2
 last_total_hours = 0
 
 if __name__ == '__main__':
-    last_diameter = earth.diameter * FACTOR / 2
+    last_diameter = earth1.diameter * FACTOR / 2
     plant_positions = []
     for i, body in enumerate(bodies):
+        body.rotation_speed /= 10  # 星体的旋转速度减小10倍
         body.ignore_mass = True
         body.init_velocity = [0, 0, 0]
         if i >= 2:  # 从第三个星球（水星）开始
             plant_positions.append([(body.diameter * FACTOR / 2) + last_diameter, 0, 0])
             last_diameter += body.diameter * FACTOR
+            # print(body)
 
 
     def on_ready():
         # 运行前触发
         # 为了较好的立体效果，可以增加太阳光线，光线直射地球（target=earth）
-        create_directional_light(position=(E_M_DISTANCE / 2, 0, -E_M_DISTANCE * 100), light_num=3, target=earth)
+        create_directional_light(position=(E_M_DISTANCE / 2, E_M_DISTANCE * 20, -E_M_DISTANCE * 100),
+                                 light_num=3,
+                                 target=earth1)
 
 
     def on_timer_changed(time_data: TimeData):
@@ -59,6 +64,7 @@ if __name__ == '__main__':
         if index >= len(bodies):
             return
         total_hours = int(time_data.total_hours)
+        # 每间隔3个小时，将行星按顺序进行摆放在地球和月球之间
         if total_hours % 3 == 0 and last_total_hours != total_hours:
             last_total_hours = total_hours
             bodies[index].init_position = plant_positions[index - 2]

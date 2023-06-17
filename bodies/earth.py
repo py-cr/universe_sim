@@ -26,7 +26,7 @@ class Earth(Body):
     def __init__(self, name="地球", mass=5.97237e24, rotate_angle=23.44,
                  init_position=[0, 0, 1 * AU],
                  init_velocity=[-29.79, 0, 0],
-                 color=(7, 0, 162), texture="earth1.jpg",text_color=None,
+                 color=(7, 0, 162), texture="earth1.jpg", text_color=None,
                  size_scale=1.0, distance_scale=1.0,
                  rotation_speed=15, ignore_mass=False,
                  trail_color=None, show_name=False,

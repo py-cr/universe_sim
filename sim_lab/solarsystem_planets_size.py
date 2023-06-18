@@ -72,7 +72,12 @@ if __name__ == '__main__':
                   (1800000, 0, -E_M_DISTANCE),  # 土星
                   (3000000, 0, -E_M_DISTANCE),  # 天王星
                   (3800000, 0, -E_M_DISTANCE),  # 海王星
-                  (4000000, 0, -E_M_DISTANCE / 10),  # 冥王星
+                  (4000000, 0, -E_M_DISTANCE / 6),  # 冥王星
+                  (4000000, 0, -E_M_DISTANCE / 3),
+                  (3900000, 0, -E_M_DISTANCE / 1.5),
+                  (3600000, 0, -E_M_DISTANCE / 1.2),
+                  (3000000, 0, -E_M_DISTANCE / 1.1),
+                  (E_M_DISTANCE / 2, 0, -E_M_DISTANCE),
                   ]
     ursina_kps = [Vec3(point) * UrsinaConfig.SCALE_FACTOR for point in key_points]
 

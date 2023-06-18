@@ -18,6 +18,13 @@ from simulators.ursina.ursina_event import UrsinaEvent
 
 class TimeData:
     def __init__(self, seconds, min_unit):
+        from ursina import time
+        if not hasattr(TimeData, "app_start_time"):
+            setattr(TimeData, "app_start_time", time.time())
+            self.app_time = 0
+        else:
+            self.app_time = time.time() - getattr(TimeData, "app_start_time")
+
         self.total_seconds = seconds
         # 获取到 seconds 后，通过下面的计算得到时分秒、年、天
         hours, remainder = divmod(seconds, 3600)
@@ -63,6 +70,52 @@ class TimeData:
     @property
     def total_days(self):
         return self.total_hours / 24
+
+
+class AppTimeUtil:
+    """
+    应用计数器工具类
+    """
+    def __init__(self):
+        self.arrival_time = -1
+        self.current_time = 0
+        self.params = {}
+
+    def is_first_arrival(self, target_time, time_data: TimeData):
+        """
+        是否是第一次到达时间
+        @param target_time: 目标时间
+        @param time_data: 计时器数据
+        @return:
+        """
+        self.current_time = int(time_data.app_time)
+        if self.current_time == self.arrival_time:
+            return False
+
+        if self.current_time >= int(target_time):
+            self.arrival_time = self.current_time
+            return True
+
+        return False
+
+    def update(self, time_data: TimeData):
+        self.current_time = int(time_data.app_time)
+
+    def clear(self):
+        self.arrival_time = -1
+
+    def set_param(self, param_name, val):
+        self.params[param_name] = val
+
+    def get_param(self, param_name, default_val=None):
+        if param_name in self.params.keys():
+            return self.params[param_name]
+        self.set_param(param_name, default_val)
+        return default_val
+
+    def inc_param(self, param_name, inc_val=1, init_val=0):
+        val = self.params.get(param_name, init_val)
+        self.set_param(param_name, val + inc_val)
 
 
 class BodyTimer(Singleton):

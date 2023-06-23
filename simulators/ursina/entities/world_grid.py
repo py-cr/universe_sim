@@ -26,11 +26,16 @@ class WorldGrid(Singleton, Entity):
         arrow_y, line_y, text_y = create_arrow_line((0, 0, 0), (0, 10, 0), label="Y", color=color.green)
         arrow_z, line_z, text_z = create_arrow_line((0, 0, 0), (0, 0, 10), label="Z", color=color.yellow)
 
-    def __init__(self):
+    def __init__(self, position=None, scale=None):
         super().__init__()
-        s = 120
+        if scale is None:
+            s = 120
+        else:
+            s = scale
+        if position is None:
+            position = (0, -80, 0)
         grid = Entity(model=Grid(s, s), scale=s * 60, color=color.rgba(255, 255, 255, 20), rotation_x=90,
-                      position=(0, -80, 0))
+                      position=position)
         grid.set_light_off()
 
         # self.draw_axises()

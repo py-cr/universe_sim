@@ -10,7 +10,7 @@ from bodies import Sun, Earth, Moon
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
 from sim_scenes.func import mayavi_run, ursina_run, camera_look_at, two_bodies_colliding, set_camera_parent
 from bodies.body import AU
-from simulators.ursina.entities.body_timer import BodyTimer
+from simulators.ursina.entities.body_timer import BodyTimer, TimeData
 from simulators.ursina.ui.control_ui import ControlUI
 from simulators.ursina.ursina_event import UrsinaEvent
 from ursina import application, camera, Vec3
@@ -27,9 +27,8 @@ if __name__ == '__main__':
     """
     # 地球的Y方向初始速度
     EARTH_INIT_VELOCITY = 0  # 0km/s
-    sun = Sun(init_position=[AU/math.sqrt(2),0, AU/math.sqrt(2)], size_scale=1)
-    sun = Sun(init_position=[0, 0, AU], size_scale=1)
-    earth = Earth(init_position=[0, 0, 0],
+    sun = Sun(init_position=[0, 0, 0], size_scale=1)
+    earth = Earth(init_position=[0, 0, -AU],
                   init_velocity=[0, EARTH_INIT_VELOCITY, 0],
                   size_scale=1).set_light_disable(True)
     bodies = [
@@ -40,28 +39,20 @@ if __name__ == '__main__':
 
     def on_ready():
         # 运行前触发
-        application.time_scale = 0.01
+        application.time_scale = 0.00001
         camera.fov = 50
 
 
-    def on_timer_changed(time_data):
+    def on_timer_changed(time_data: TimeData):
 
-        if time_data.total_days < 18:
-            fov_offset = 0.1
-        elif time_data.total_days < 30:
-            fov_offset = 0.04
-        elif time_data.total_days < 40:
-            fov_offset = 0.02
-        else:
-            fov_offset = 0
-
-        if time_data.total_minutes % 3 == 0 and camera.fov > 1.5:
-            camera.fov -= fov_offset
-        camera_look_at(earth,rotation_z=0)
+        camera_look_at(earth, rotation_z=0)
+        earth_pos = earth.planet.world_position
+        camera.world_position = Vec3(earth_pos[0], earth_pos[1] + 0.01, earth_pos[2] - 0.1)
 
         if two_bodies_colliding(sun, earth):
             ControlUI.current_ui.show_message("地球已到达太阳表面", close_time=-1)
             application.pause()
+
 
     # 设置计时器的最小时间单位为分钟
     BodyTimer().min_unit = BodyTimer.MIN_UNIT_HOURS
@@ -76,6 +67,6 @@ if __name__ == '__main__':
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
     # position=(0, 0, 0) 的位置是站在地球视角，可以观看月相变化的过程
-    ursina_run(bodies, SECONDS_PER_DAY, position=(0, 0.002 * AU, -0.002 * AU),
+    ursina_run(bodies, SECONDS_PER_DAY, position=(0, 0.0001 * AU, -0.002 * AU),
                show_timer=True,
                show_grid=True)

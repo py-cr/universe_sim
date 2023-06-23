@@ -302,7 +302,17 @@ class UrsinaSimulator(Simulator):
 
         if "show_grid" in kwargs:
             if kwargs["show_grid"]:
-                WorldGrid()
+                if "grid_scale" in kwargs:
+                    grid_scale = kwargs["grid_scale"]
+                else:
+                    grid_scale = None
+
+                if "grid_position" in kwargs:
+                    grid_position = kwargs["grid_position"]
+                else:
+                    grid_position = None
+
+                WorldGrid(grid_position, grid_scale)
 
         if "cosmic_bg" in kwargs:
             cosmic_bg = kwargs["cosmic_bg"]

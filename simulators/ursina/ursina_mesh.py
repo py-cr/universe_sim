@@ -109,6 +109,18 @@ def create_line(from_pos, to_pos, parent=None, alpha=1.0, len_scale=1, set_light
     return line
 
 
+def create_circle(parent=None, pos=Vec3(0, 0, 0), thickness=1, scale=1, color=color.white, alpha=1):
+    circle = Entity(parent=parent, model="circle", thickness=thickness, scale=scale, position=pos,
+                    color=color, alpha=alpha)
+    return circle
+
+
+def create_circle_line(parent=None, pos=Vec3(0, 0, 0), thickness=1, scale=1, color=color.white, alpha=1):
+    circle = Entity(parent=parent, model="circle", thickness=thickness, scale=scale, position=pos,
+                    color=color, alpha=alpha)
+    return circle
+
+
 def create_arrow_line(from_pos, to_pos, parent=None, label=None,
                       set_light_off=True, alpha=1.0, len_scale=0.5,
                       color=color.white, thickness=2,

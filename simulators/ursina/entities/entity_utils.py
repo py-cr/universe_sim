@@ -33,7 +33,7 @@ def create_name_text(parent):
                      origin=(0, 0))
     name_text.background.color = color.rgba(b_color[0], b_color[1], b_color[2], 0.3)
     name_text.resolution = 24
-    # self.name_text.scale = self.scale
+    # parent.name_text.scale = parent.scale
     if text_color is None:
         text_color = get_inverse_color(b_color)
     else:
@@ -239,7 +239,7 @@ def create_trail_line(parent, pos):
     return trail
 
 
-def create_rings(self):
+def create_rings(parent):
     """
     创建行星环（使用土星贴图）
     @return:
@@ -248,34 +248,34 @@ def create_rings(self):
     rings_texture = find_file(rings_texture)
 
     # 行星环偏移角度
-    # self.ring_rotation_x = 80
+    # parent.ring_rotation_x = 80
     # 创建行星环
-    # self.ring = Entity(parent=self.planet, model='circle', texture=rings_texture, scale=3.5,
-    #                    rotation=(self.ring_rotation_x, 0, 0), double_sided=True)
+    # parent.ring = Entity(parent=parent.planet, model='circle', texture=rings_texture, scale=3.5,
+    #                    rotation=(parent.ring_rotation_x, 0, 0), double_sided=True)
 
     # 行星环偏移角度
-    self.ring_rotation_x = 80
+    parent.ring_rotation_x = 80
     # 创建行星环
     torus = create_torus(0.7, 1.2, 64)
-    self.ring = Entity(parent=self, model=torus, texture=rings_texture, scale=1,
-                       rotation=(self.ring_rotation_x, 0, 0), double_sided=True)
+    parent.ring = Entity(parent=parent, model=torus, texture=rings_texture, scale=1,
+                       rotation=(parent.ring_rotation_x, 0, 0), double_sided=True)
 
     # 设置行星环不受灯光影响，否则看不清行星环
-    self.ring.set_light_off()
+    parent.ring.set_light_off()
 
 
-def clear_trails(self):
+def clear_trails(parent):
     """
 
-    @param self:
+    @param parent:
     @return:
     """
-    if not hasattr(self, "trails"):
+    if not hasattr(parent, "trails"):
         return
     # 删除拖尾
-    for entity, pos in self.trails.items():
+    for entity, pos in parent.trails.items():
         destroy(entity)
-    self.trails.clear()
+    parent.trails.clear()
 
 
 def create_fixed_star_lights(fixed_star):

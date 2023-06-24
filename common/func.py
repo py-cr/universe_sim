@@ -108,6 +108,26 @@ def calculate_distance(pos1, pos2=[0, 0, 0]):
             pow(np.array(pos1[2]) - np.array(pos2[2]), 2), 1 / 2)
     return d
 
+
+def get_acceleration_info(acc_value):
+    """
+
+    @param acc_value: 加速度的值（km/s²）
+    @return:
+    """
+
+    acc_m = acc_value * 1000  # 加速度的值（m/s²）
+
+    if acc_m >= 0.01:
+        acc_info = "%.2f m/s²" % (acc_m)
+    elif acc_m >= 0.00001:
+        acc_info = "%.2f mm/s²" % (acc_m * 1000)
+    # elif acc_m >= 0.00000001:
+    #     acc_info = "%.2fμm/s²" % (acc_m * 1000 * 1000)
+    else:
+        acc_info = "0 m/s²"
+    return acc_info
+
 #
 # def calculate_velocity(mass, semimajor_axis, eccentricity):
 #     """
@@ -244,16 +264,16 @@ def calculate_distance(pos1, pos2=[0, 0, 0]):
 #     r = 363104*1000
 #     m = 5.97e24
 #     print(get_v(M, m, r))
-    # import math
-    #
-    # G = 6.67e-11  # 引力常数，单位为N·m²/kg²
-    # M = 1.99e30  # 太阳质量，单位为kg
-    # # m = 5.97e24  # 地球质量，单位为kg
-    # r = 1.5e11  # 地球到太阳的距离，单位为米
-    #
-    # v = math.sqrt(G * M / r)  # 计算地球的线速度，单位为米/秒
-    #
-    # print("天体的线速度为：%.2f 公里/秒" % (v / 1000))
+# import math
+#
+# G = 6.67e-11  # 引力常数，单位为N·m²/kg²
+# M = 1.99e30  # 太阳质量，单位为kg
+# # m = 5.97e24  # 地球质量，单位为kg
+# r = 1.5e11  # 地球到太阳的距离，单位为米
+#
+# v = math.sqrt(G * M / r)  # 计算地球的线速度，单位为米/秒
+#
+# print("天体的线速度为：%.2f 公里/秒" % (v / 1000))
 #     # print(calculate_distance([6, 8, 0], [3, 4, 0]))
 #     # print(find_file("common/func.py"))
 #

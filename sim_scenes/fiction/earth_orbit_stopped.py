@@ -33,7 +33,7 @@ class EarthOrbitStoppedSim:
 
     def __init__(self):
         self.sun = Sun(init_position=[0, 0, 0], size_scale=1)
-        self.earth = Earth(init_position=[0, 0, -AU],
+        self.earth = Earth(init_position=[0, 0, -AU], texture="earth2.jpg",
                            init_velocity=[0, self.EARTH_INIT_VELOCITY, 0],
                            size_scale=1).set_light_disable(True)
 
@@ -43,7 +43,7 @@ class EarthOrbitStoppedSim:
         self.mercury = Mercury(name="水星",
                                # init_position=[0, 0, -self.mercury_radius],  # 和地球插肩而过的位置，用于找到下面的速度
                                init_position=[49311300., 0, 28075956.],  # 设置的初始位置和初始速度使得与地球插肩而过
-                               init_velocity=[-24.307, 0, 41.9264],
+                               init_velocity=[-24.28, 0, 41.91],
                                size_scale=1).set_light_disable(True)
         # 金星： [-98608848.         0. -42909512.] [-13.869937   0.        32.247845]
         self.venus = Venus(name="金星",
@@ -106,15 +106,42 @@ class EarthOrbitStoppedSim:
             application.pause()
             return
 
-        if time_data.days in [40, 41]:
+        slow_speed_ranges = [
+            (41.2, 41.35, 0.01),  # (40, 41.2, 0.1), (41.2, 42.2, 0.1), (39, 40.2, 0.5), (42, 43, 0.5),
+            (56.85, 57.05, 0.01),  # (55, 56.9, 0.1), (57, 58.05, 0.1), (54, 55.2, 0.5), (58.2, 59, 0.5),
+            (64.3, 67, 0.01),  # (63, 64.4, 0.1), (64, 64.5, 0.5),
+        ]
+
+        venus_range = slow_speed_ranges[0]
+        mercury_range = slow_speed_ranges[1]
+
+        if mercury_range[0] - 2 < time_data.total_days < mercury_range[1]:
+            self.mercury_orbit_line.enabled = True
+        else:
+            self.mercury_orbit_line.enabled = False
+
+        if venus_range[0] - 2 < time_data.total_days < venus_range[1]:
             self.venus_orbit_line.enabled = True
         else:
             self.venus_orbit_line.enabled = False
 
-        if time_data.days in [56, 57]:
-            self.mercury_orbit_line.enabled = True
-        else:
-            self.mercury_orbit_line.enabled = False
+        run_speed_factor = 2
+
+        for r in slow_speed_ranges:
+            if r[0] < time_data.total_days < r[1]:
+                run_speed_factor = r[2]
+            elif (r[0] - 2) < time_data.total_days < (r[1] + 5):
+                if time_data.total_days <= r[0]:
+                    run_speed_factor = UrsinaConfig.run_speed_factor - 0.01
+                    if run_speed_factor < 0.01:
+                        run_speed_factor = 0.01
+                elif time_data.total_days >= r[1]:
+                    run_speed_factor = UrsinaConfig.run_speed_factor + 0.05
+                    if run_speed_factor > 2:
+                        run_speed_factor = 2
+                break
+
+        UrsinaConfig.run_speed_factor = run_speed_factor
 
         if abs(self.earth.position[2]) < 0.721 * AU and not self.arrived_venus_orbit_line:
             self.arrived_venus_orbit_line = True
@@ -185,6 +212,6 @@ if __name__ == '__main__':
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
     # position=(0, 0, 0) 的位置是站在地球视角，可以观看月相变化的过程
-    ursina_run(sim.bodies, SECONDS_PER_DAY, position=(0, 0.0001 * AU, -0.2 * AU),
+    ursina_run(sim.bodies, SECONDS_PER_DAY, position=(0, 0.0001 * AU, -0.8 * AU),
                show_timer=True,
                show_grid=True)

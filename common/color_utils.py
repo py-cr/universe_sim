@@ -21,6 +21,17 @@ def conv_to_vec4_color(colour: tuple, alpha=1):
     elif len(colour) == 4:
         return Vec4(colour[0], colour[1], colour[2], colour[3]) / 255
     raise Exception("colour错误")
+    # if len(color) == 4:
+    #     r, g, b, a = color
+    #     a = color[3]
+    # elif len(color) == 3:
+    #     r, g, b = color
+    #     a = alpha
+    # else:
+    #     r, g, b, a = 1.0, 1.0, 1.0, 1.0
+    # if r>1 or g>1 or b>1 or isinstance(r,int) or isinstance(g,int) or isinstance(b,int):
+    #     r, g, b = r/255, g/255, b/255
+    # color = ursina_color.rgba(r, g, b, a)
 
 
 def adjust_brightness(color, target_brightness: float = 0.6):

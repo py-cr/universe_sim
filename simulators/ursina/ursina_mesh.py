@@ -7,11 +7,15 @@
 # python_version  :3.8
 # ==============================================================================
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
-from ursina import Ursina, window, Entity, Mesh, EditorCamera, color, mouse, Vec2, Vec3, load_texture, Texture, Text
+from ursina import Ursina, window, Entity, Mesh, EditorCamera, color, mouse, Vec2, Vec3, load_texture, Texture, Text, \
+    Cylinder
+import ursina.color as ursina_color
 from math import pi, sin, cos
 import numpy as np
 import math
 
+from common.color_utils import conv_to_vec4_color
+from simulators.ursina.entities.circle_line import CircleLine
 from simulators.ursina.ursina_config import UrsinaConfig
 
 
@@ -115,10 +119,19 @@ def create_circle(parent=None, pos=Vec3(0, 0, 0), thickness=1, scale=1, color=co
     return circle
 
 
-def create_circle_line(parent=None, pos=Vec3(0, 0, 0), thickness=1, scale=1, color=color.white, alpha=1):
-    circle = Entity(parent=parent, model="circle", thickness=thickness, scale=scale, position=pos,
-                    color=color, alpha=alpha)
-    return circle
+def create_circle_line(parent=None, radius=1, position=None, segments=100, thickness=0.1, color=color.white, alpha=1):
+    if isinstance(color, tuple) or isinstance(color, list):
+        color = conv_to_vec4_color(color)
+    if alpha < 1:
+        color[3] = alpha
+
+    circle_line = CircleLine(position=position, radius=radius, segments=segments, thickness=thickness, color=color,
+                             alpha=alpha)
+    if parent is not None:
+        if hasattr(parent, "planet"):
+            parent = parent.planet
+        circle_line.parent = parent
+    return circle_line
 
 
 def create_arrow_line(from_pos, to_pos, parent=None, label=None,
@@ -395,7 +408,9 @@ if __name__ == '__main__':
     # arrow = Entity(model=create_arrow(), color=color.yellow)
     # arrow.set_light_off()
 
-    arrow, line, text = create_arrow_line((0, 0, 0), (10, 0, 0))
+    # arrow, line, text = create_arrow_line((0, 0, 0), (10, 0, 0))
+
+    create_circle_line()
 
     EditorCamera()
     app.run()

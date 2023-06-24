@@ -13,6 +13,7 @@ from sim_scenes.func import mayavi_run, ursina_run, camera_look_at, two_bodies_c
     create_text_panel
 from bodies.body import AU
 from simulators.ursina.entities.body_timer import BodyTimer, TimeData
+from simulators.ursina.entities.entity_utils import get_value_direction_vectors
 from simulators.ursina.ui.control_ui import ControlUI
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
@@ -89,7 +90,8 @@ class EarthOrbitStoppedSim:
         earth_pos = self.earth.planet.world_position
         camera.world_position = Vec3(earth_pos[0], earth_pos[1] + 0.01, earth_pos[2] - 0.1)
 
-        acceleration_info = get_acceleration_info(self.earth.acceleration[2])
+        acceleration_info = get_acceleration_info(self.earth.acceleration)
+        velocity, _ = get_value_direction_vectors(self.earth.velocity)
 
         if two_bodies_colliding(self.sun, self.earth):
             self.arrived_sun = True
@@ -98,7 +100,7 @@ class EarthOrbitStoppedSim:
             self.text_panel.text = self.arrived_info. \
                                        replace("${distance}", "0 km"). \
                                        replace("${acceleration}", "%s" % acceleration_info). \
-                                       replace("${speed}", "%s km/s" % round(self.earth.velocity[2], 2)) \
+                                       replace("${speed}", "%s km/s" % round(velocity, 2)) \
                                    + "\n\n" + msg
             ControlUI.current_ui.show_message(msg, close_time=-1)
             application.pause()
@@ -146,7 +148,7 @@ class EarthOrbitStoppedSim:
         self.text_panel.text = self.arrived_info. \
             replace("${distance}", "%s km" % distance_str). \
             replace("${acceleration}", "%s" % acceleration_info). \
-            replace("${speed}", "%s km/s" % round(self.earth.velocity[2], 2))
+            replace("${speed}", "%s km/s" % round(velocity, 2))
 
 
 if __name__ == '__main__':
@@ -183,6 +185,6 @@ if __name__ == '__main__':
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
     # position=(0, 0, 0) 的位置是站在地球视角，可以观看月相变化的过程
-    ursina_run(sim.bodies, SECONDS_PER_DAY, position=(0, 0.0001 * AU, -0.02 * AU),
+    ursina_run(sim.bodies, SECONDS_PER_DAY, position=(0, 0.0001 * AU, -0.2 * AU),
                show_timer=True,
                show_grid=True)

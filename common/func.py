@@ -109,12 +109,17 @@ def calculate_distance(pos1, pos2=[0, 0, 0]):
     return d
 
 
-def get_acceleration_info(acc_value):
+def get_acceleration_info(acceleration):
     """
 
-    @param acc_value: 加速度的值（km/s²）
+    @param acceleration: 加速度的值（km/s²）
     @return:
     """
+    if isinstance(acceleration, list) or isinstance(acceleration, np.ndarray):
+        from simulators.ursina.entities.entity_utils import get_value_direction_vectors
+        acc_value, direction = get_value_direction_vectors(acceleration)
+    else:
+        acc_value = acceleration
 
     acc_m = acc_value * 1000  # 加速度的值（m/s²）
 

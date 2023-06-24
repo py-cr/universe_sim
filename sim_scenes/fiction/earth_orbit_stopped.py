@@ -43,7 +43,7 @@ class EarthOrbitStoppedSim:
         self.mercury = Mercury(name="水星",
                                # init_position=[0, 0, -self.mercury_radius],  # 和地球插肩而过的位置，用于找到下面的速度
                                init_position=[49311300., 0, 28075956.],  # 设置的初始位置和初始速度使得与地球插肩而过
-                               init_velocity=[-24.28, 0, 41.91],
+                               init_velocity=[-24.282, 0, 41.913],
                                size_scale=1).set_light_disable(True)
         # 金星： [-98608848.         0. -42909512.] [-13.869937   0.        32.247845]
         self.venus = Venus(name="金星",

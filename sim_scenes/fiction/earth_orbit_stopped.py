@@ -40,16 +40,14 @@ class EarthOrbitStoppedSim:
         self.venus_radius = 0.721 * AU
         # 水星： [49311300.        0. 28075956.] [ 24.30735    0.       -41.926445]
         self.mercury = Mercury(name="水星",
-                               # init_position=[0, 0, self.mercury_radius],
-                               # init_position=[0, 0, -self.mercury_radius],  # 和地球同一方向
-                               init_position=[49311300., 0, 28075956.],
+                               # init_position=[0, 0, -self.mercury_radius],  # 和地球插肩而过的位置，用于找到下面的速度
+                               init_position=[49311300., 0, 28075956.],  # 设置的初始位置和初始速度使得与地球插肩而过
                                init_velocity=[-24.307, 0, 41.9264],
                                size_scale=1).set_light_disable(True)
         # 金星： [-98608848.         0. -42909512.] [-13.869937   0.        32.247845]
         self.venus = Venus(name="金星",
-                           # init_position=[0, 0, self.venus_radius],
-                           # init_position=[0, 0, -self.venus_radius],  # 和地球同一方向
-                           init_position=[-98608848., 0, -42909512.],  # 和地球同一方向
+                           # init_position=[0, 0, -self.venus_radius],  # 和地球插肩而过的位置，用于找到下面的速度
+                           init_position=[-98608848., 0, -42909512.],  # 设置的初始位置和初始速度使得与地球插肩而过
                            init_velocity=[13.869937, 0, -32.247845],
                            size_scale=1).set_light_disable(True)
 
@@ -87,14 +85,6 @@ class EarthOrbitStoppedSim:
         earth_pos = self.earth.planet.world_position
         camera.world_position = Vec3(earth_pos[0], earth_pos[1] + 0.01, earth_pos[2] - 0.1)
 
-        # 当地球停止公转，如果没有向外的向心力来抵消向内的引力，地球将开始朝着太阳坠落。
-        # 据美国康奈尔大学的天文学家戴夫 · 罗斯坦（Dave Rothstein)的计算，
-        # 地球将在65天后与太阳相撞，期间在第41天穿过金星的轨道，在第57天，我们将穿过水星的轨道
-
-        # 地球[41天 07时]到达金星轨道
-        # 地球[57天 01时]到达水星轨道
-        # 地球[64天 13时]到达太阳表面
-
         if two_bodies_colliding(self.sun, self.earth):
             self.arrived_sun = True
             msg = "地球在[%s]到达太阳表面" % time_data.time_text
@@ -116,11 +106,6 @@ class EarthOrbitStoppedSim:
             self.mercury_orbit_line.enabled = True
         else:
             self.mercury_orbit_line.enabled = False
-
-        # if time_data.days in [41, 57, 64]:
-        #     UrsinaConfig.run_speed_factor = 0.1
-        # else:
-        #     UrsinaConfig.run_speed_factor = 1
 
         if abs(self.earth.position[2]) < 0.721 * AU and not self.arrived_venus_orbit_line:
             self.arrived_venus_orbit_line = True
@@ -163,7 +148,16 @@ if __name__ == '__main__':
     https://www.zhihu.com/question/310815418
     如果地球停止公转，那它需要多久才会掉进太阳？
     https://www.guokr.com/article/440341
+    如果地球停止公转坠向太阳，人类还能活多久？
+    https://www.sohu.com/a/303263431_498139
     
+    当地球停止公转，如果没有向外的向心力来抵消向内的引力，地球将开始朝着太阳坠落。
+    据美国康奈尔大学的天文学家戴夫 · 罗斯坦（Dave Rothstein)的计算，
+    地球将在65天后与太阳相撞，期间在第41天穿过金星的轨道，在第57天，我们将穿过水星的轨道
+    
+    地球[41天 07时]到达金星轨道
+    地球[57天 01时]到达水星轨道
+    地球[64天 13时]到达太阳表面
     """
 
     # 设置计时器的最小时间单位为分钟
@@ -184,6 +178,3 @@ if __name__ == '__main__':
     ursina_run(sim.bodies, SECONDS_PER_DAY, position=(0, 0.0001 * AU, -0.02 * AU),
                show_timer=True,
                show_grid=True)
-    # ursina_run(bodies, SECONDS_PER_DAY, position=(0, 2*AU, 0),
-    #            show_timer=True,
-    #            show_grid=True)

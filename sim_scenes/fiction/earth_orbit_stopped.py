@@ -8,7 +8,9 @@
 # ==============================================================================
 from bodies import Sun, Earth, Mercury, Venus
 from common.consts import SECONDS_PER_HOUR, SECONDS_PER_HALF_DAY, SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
-from sim_scenes.func import mayavi_run, ursina_run, camera_look_at, two_bodies_colliding, set_camera_parent
+from common.func import calculate_distance
+from sim_scenes.func import mayavi_run, ursina_run, camera_look_at, two_bodies_colliding, set_camera_parent, \
+    create_text_panel
 from bodies.body import AU
 from simulators.ursina.entities.body_timer import BodyTimer, TimeData
 from simulators.ursina.ui.control_ui import ControlUI
@@ -57,6 +59,7 @@ class EarthOrbitStoppedSim:
         self.arrived_sun = None
         self.arrived_mercury_orbit_line = None
         self.arrived_venus_orbit_line = None
+        self.arrived_info = "距离太阳表面：${distance}\n\n地球当前速度：${speed}"
 
     def create_orbit_line(self, radius, color):
         orbit_line = create_circle_line(parent=self.sun, radius=radius, thickness=5, color=color, alpha=0.3)
@@ -68,6 +71,8 @@ class EarthOrbitStoppedSim:
         # 运行前触发
         application.time_scale = 0.00001
         camera.fov = 50
+        self.text_panel = create_text_panel()
+        self.text_panel.text = self.arrived_info.replace("${distance}", "1 AU").replace("${speed}", "0")
         # 创建水星轨道线
         self.mercury_orbit_line = self.create_orbit_line(
             radius=self.mercury_radius * UrsinaConfig.SCALE_FACTOR,
@@ -92,10 +97,15 @@ class EarthOrbitStoppedSim:
 
         if two_bodies_colliding(self.sun, self.earth):
             self.arrived_sun = True
-            msg = "地球[%s]到达太阳表面" % time_data.time_text
+            msg = "地球在[%s]到达太阳表面" % time_data.time_text
             print(msg)
+            self.text_panel.text = self.arrived_info. \
+                                       replace("${distance}", "0 公里"). \
+                                       replace("${speed}", "%s 公里/秒" % round(self.earth.velocity[2], 2)) \
+                                   + "\n\n" + msg
             ControlUI.current_ui.show_message(msg, close_time=-1)
             application.pause()
+            return
 
         if time_data.days in [40, 41]:
             self.venus_orbit_line.enabled = True
@@ -114,17 +124,36 @@ class EarthOrbitStoppedSim:
 
         if abs(self.earth.position[2]) < 0.721 * AU and not self.arrived_venus_orbit_line:
             self.arrived_venus_orbit_line = True
-            msg = "地球[%s]到达金星轨道" % time_data.time_text
+            msg = "地球在[%s]穿过金星轨道" % time_data.time_text
             print(msg)
+            self.arrived_info = self.arrived_info + "\n\n" + msg
             print("金星：", self.venus.position, self.venus.velocity)
             ControlUI.current_ui.show_message(msg, close_time=5)
 
         if abs(self.earth.position[2]) < 0.384 * AU and not self.arrived_mercury_orbit_line:
             self.arrived_mercury_orbit_line = True
-            msg = "地球[%s]到达水星轨道" % time_data.time_text
+            msg = "地球在[%s]穿过水星轨道" % time_data.time_text
             print(msg)
+            self.arrived_info = self.arrived_info + "\n\n" + msg
             print("水星：", self.mercury.position, self.mercury.velocity)
             ControlUI.current_ui.show_message(msg, close_time=5)
+
+        distance = calculate_distance(self.earth.position, self.sun.position)
+
+        distance = distance - self.sun.raduis - self.earth.raduis
+
+        if distance > 10000000:
+            distance_str = "%s 千万" % round(distance / 10000000.0, 3)
+        elif distance > 1000000:
+            distance_str = "%s 百万" % round(distance / 1000000.0, 2)
+        elif distance > 10000:
+            distance_str = "%s 万" % round(distance / 10000.0, 2)
+        else:
+            distance_str = round(distance, 2)
+
+        self.text_panel.text = self.arrived_info. \
+            replace("${distance}", "%s公里" % distance_str). \
+            replace("${speed}", "%s 公里/秒" % round(self.earth.velocity[2], 2))
 
 
 if __name__ == '__main__':

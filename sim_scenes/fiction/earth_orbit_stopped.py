@@ -70,7 +70,11 @@ class EarthOrbitStoppedSim:
         application.time_scale = 0.00001
         camera.fov = 50
         self.text_panel = create_text_panel()
-        self.text_panel.text = self.arrived_info.replace("${distance}", "1 AU").replace("${speed}", "0")
+        self.text_panel.text = self.arrived_info. \
+            replace("${distance}", "1 AU"). \
+            replace("${speed}", "0"). \
+            replace("${acceleration}", "0")
+
         # 创建水星轨道线
         self.mercury_orbit_line = self.create_orbit_line(
             radius=self.mercury_radius * UrsinaConfig.SCALE_FACTOR,
@@ -131,7 +135,7 @@ class EarthOrbitStoppedSim:
         distance = distance - self.sun.raduis - self.earth.raduis
 
         if distance > 10000000:
-            distance_str = "%s千万" % round(distance / 10000000.0, 3)
+            distance_str = "%s千万" % round(distance / 10000000.0, 2)
         elif distance > 1000000:
             distance_str = "%s百万" % round(distance / 1000000.0, 2)
         elif distance > 10000:

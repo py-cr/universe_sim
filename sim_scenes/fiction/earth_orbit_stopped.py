@@ -22,30 +22,30 @@ import math
 from simulators.ursina.ursina_mesh import create_circle_line
 from ursina import color
 
-mercury_line = None
-# 42天到达
-venus_line = None
-
 
 class EarthOrbitStoppedSim:
+    """
+    地球停止公转模拟类
+    """
     # 地球的Y方向初始速度
     EARTH_INIT_VELOCITY = 0  # 0km/s
 
     def __init__(self):
         self.sun = Sun(init_position=[0, 0, 0], size_scale=1)
-        self.earth = Earth(init_position=[0, 0, -AU], texture="earth2.jpg",
+        self.earth = Earth(init_position=[0, 0, -AU], # texture="earth2.jpg",
                            init_velocity=[0, self.EARTH_INIT_VELOCITY, 0],
                            size_scale=1).set_light_disable(True)
-
+        # 水星轨道半径
         self.mercury_radius = 0.384 * AU
+        # 金星轨道半径
         self.venus_radius = 0.721 * AU
-        # 水星： [49311300.        0. 28075956.] [ 24.30735    0.       -41.926445]
+        # 计算得到水星的初始位置和初始速度： [49311300.        0. 28075956.] [ 24.30735    0.       -41.926445]
         self.mercury = Mercury(name="水星",
                                # init_position=[0, 0, -self.mercury_radius],  # 和地球插肩而过的位置，用于找到下面的速度
                                init_position=[49311300., 0, 28075956.],  # 设置的初始位置和初始速度使得与地球插肩而过
                                init_velocity=[-24.282, 0, 41.913],
                                size_scale=1).set_light_disable(True)
-        # 金星： [-98608848.         0. -42909512.] [-13.869937   0.        32.247845]
+        # 计算得到金星的初始位置和初始速度： [-98608848.         0. -42909512.] [-13.869937   0.        32.247845]
         self.venus = Venus(name="金星",
                            # init_position=[0, 0, -self.venus_radius],  # 和地球插肩而过的位置，用于找到下面的速度
                            init_position=[-98608848., 0, -42909512.],  # 设置的初始位置和初始速度使得与地球插肩而过
@@ -55,25 +55,37 @@ class EarthOrbitStoppedSim:
         self.bodies = [
             self.sun, self.mercury, self.venus, self.earth
         ]
-        self.arrived_sun = None
-        self.arrived_mercury_orbit_line = None
-        self.arrived_venus_orbit_line = None
-        self.arrived_info = "　距离太阳表面：${distance}\n\n　地球当前速度：${speed}\n\n地球当前加速度：${acceleration}\n\n"
+        # 是否已经到达太阳
+        self.arrived_sun = False
+        # 是否已经到达水星的轨道
+        self.arrived_mercury_orbit_line = False
+        # 是否已经到达金星的轨道
+        self.arrived_venus_orbit_line = False
+        # 显示板信息模板
+        self.arrived_info = "　距离太阳：${distance}\n\n　地球速度：${velocity}\n\n地球加速度：${acceleration}\n\n"
 
     def create_orbit_line(self, radius, color):
+        """
+        创建行星轨道线
+        @param radius: 以太阳中心为中心点的半径
+        @param color: 颜色
+        @return:
+        """
         orbit_line = create_circle_line(parent=self.sun, radius=radius, thickness=5, color=color, alpha=0.3)
         orbit_line.rotation_x = 90
-        orbit_line.enabled = False
+        orbit_line.enabled = False # 默认不显示
         return orbit_line
 
     def on_ready(self):
-        # 运行前触发
+        # 运行前触发一次
+        # 应用的时间缩放越小，视频更近顺滑（低速运行比较重要）
         application.time_scale = 0.00001
+        # FOV是摄像机的视场角，即Field of view（FOV），它的大小决定了摄像机的视野范围。
         camera.fov = 50
         self.text_panel = create_text_panel()
         self.text_panel.text = self.arrived_info. \
             replace("${distance}", "1 AU"). \
-            replace("${speed}", "0"). \
+            replace("${velocity}", "0"). \
             replace("${acceleration}", "0")
 
         # 创建水星轨道线
@@ -86,26 +98,45 @@ class EarthOrbitStoppedSim:
             color=self.venus.color)
 
     def on_timer_changed(self, time_data: TimeData):
+        # 摄像机时时刻刻看向地球
         camera_look_at(self.earth, rotation_z=0)
+        # 获取地球当前的位置，让摄像机跟随地球
         earth_pos = self.earth.planet.world_position
         camera.world_position = Vec3(earth_pos[0], earth_pos[1] + 0.01, earth_pos[2] - 0.1)
 
         acceleration_info = get_acceleration_info(self.earth.acceleration)
         velocity, _ = get_value_direction_vectors(self.earth.velocity)
 
+        # 计算地球和太阳中心点之间的距离
+        distance = calculate_distance(self.earth.position, self.sun.position)
+        # 减去太阳和地球的半径，得到地球表面和太阳表面的距离
+        distance = distance - self.sun.raduis - self.earth.raduis
+
+        if distance > 100000000:
+            distance_str = "%s亿" % round(distance / 100000000.0, 2)
+        # elif distance > 10000000:
+        #     distance_str = "%s千万" % round(distance / 10000000.0, 2)
+        # elif distance > 1000000:
+        #     distance_str = "%s百万" % round(distance / 1000000.0, 2)
+        elif distance > 10000:
+            distance_str = "%s万" % round(distance / 10000.0, 2)
+        else:
+            distance_str = round(distance, 2)
+
         if two_bodies_colliding(self.sun, self.earth):
             self.arrived_sun = True
-            msg = "地球在[%s]到达太阳表面" % time_data.time_text
+            msg = "地球在[%s]到达太阳" % time_data.time_text
             print(msg)
             self.text_panel.text = self.arrived_info. \
                                        replace("${distance}", "0 km"). \
                                        replace("${acceleration}", "%s" % acceleration_info). \
-                                       replace("${speed}", "%s km/s" % round(velocity, 2)) \
+                                       replace("${velocity}", "%s km/s" % round(velocity, 2)) \
                                    + "\n\n" + msg
             ControlUI.current_ui.show_message(msg, close_time=-1)
             application.pause()
             return
 
+        # 定义慢速运行的范围，这样才可以清楚的看到地球接近金星、水星、太阳的情景
         slow_speed_ranges = [
             (41.2, 41.35, 0.01),  # (40, 41.2, 0.1), (41.2, 42.2, 0.1), (39, 40.2, 0.5), (42, 43, 0.5),
             (56.85, 57.05, 0.01),  # (55, 56.9, 0.1), (57, 58.05, 0.1), (54, 55.2, 0.5), (58.2, 59, 0.5),
@@ -115,27 +146,34 @@ class EarthOrbitStoppedSim:
         venus_range = slow_speed_ranges[0]
         mercury_range = slow_speed_ranges[1]
 
+        # 进入了水星轨道附近，才显示水星轨道线
         if mercury_range[0] - 2 < time_data.total_days < mercury_range[1]:
             self.mercury_orbit_line.enabled = True
         else:
             self.mercury_orbit_line.enabled = False
 
+        # 进入了金星轨道附近，才显示金星轨道线
         if venus_range[0] - 2 < time_data.total_days < venus_range[1]:
             self.venus_orbit_line.enabled = True
         else:
             self.venus_orbit_line.enabled = False
 
+        # 默认运行速度因子为2倍
         run_speed_factor = 2
 
         for r in slow_speed_ranges:
             if r[0] < time_data.total_days < r[1]:
+                # 进入了慢速范围，用指定的运行速度因子
                 run_speed_factor = r[2]
             elif (r[0] - 2) < time_data.total_days < (r[1] + 5):
+                # 距离慢速范围还有2天或者超出5天，逐步调整运行速度因子
                 if time_data.total_days <= r[0]:
+                    # 快要进入慢速范围（2天内），逐步减小运行速度因子，速度越来越慢，直到0.01倍
                     run_speed_factor = UrsinaConfig.run_speed_factor - 0.01
                     if run_speed_factor < 0.01:
                         run_speed_factor = 0.01
                 elif time_data.total_days >= r[1]:
+                    # 超出了慢速范围（5天内），逐步增加运行速度因子，速度越来越快，直到2倍
                     run_speed_factor = UrsinaConfig.run_speed_factor + 0.05
                     if run_speed_factor > 2:
                         run_speed_factor = 2
@@ -143,39 +181,30 @@ class EarthOrbitStoppedSim:
 
         UrsinaConfig.run_speed_factor = run_speed_factor
 
-        if abs(self.earth.position[2]) < 0.721 * AU and not self.arrived_venus_orbit_line:
-            self.arrived_venus_orbit_line = True
+        if abs(self.earth.position[2]) < self.venus_radius and not self.arrived_venus_orbit_line:
+            # 地球的位置小于金星轨道半径，则显示消息
+            self.arrived_venus_orbit_line = True  # arrived_venus_orbit_line 保证只会运行一次
             msg = "地球在[%s]穿过金星轨道" % time_data.time_text
             print(msg)
             self.arrived_info = self.arrived_info + "\n\n" + msg
             print("金星：", self.venus.position, self.venus.velocity)
+            # 显示 “地球在[某个时间]穿过金星轨道” 的消息
             ControlUI.current_ui.show_message(msg, close_time=5)
 
-        if abs(self.earth.position[2]) < 0.384 * AU and not self.arrived_mercury_orbit_line:
-            self.arrived_mercury_orbit_line = True
+        if abs(self.earth.position[2]) < self.mercury_radius and not self.arrived_mercury_orbit_line:
+            # 地球的位置小于水星轨道半径，则显示消息
+            self.arrived_mercury_orbit_line = True  # arrived_mercury_orbit_line 保证只会运行一次
             msg = "地球在[%s]穿过水星轨道" % time_data.time_text
             print(msg)
             self.arrived_info = self.arrived_info + "\n\n" + msg
             print("水星：", self.mercury.position, self.mercury.velocity)
+            # 显示 “地球在[某个时间]穿过水星轨道” 的消息
             ControlUI.current_ui.show_message(msg, close_time=5)
-
-        distance = calculate_distance(self.earth.position, self.sun.position)
-
-        distance = distance - self.sun.raduis - self.earth.raduis
-
-        if distance > 10000000:
-            distance_str = "%s千万" % round(distance / 10000000.0, 2)
-        elif distance > 1000000:
-            distance_str = "%s百万" % round(distance / 1000000.0, 2)
-        elif distance > 10000:
-            distance_str = "%s万" % round(distance / 10000.0, 2)
-        else:
-            distance_str = round(distance, 2)
 
         self.text_panel.text = self.arrived_info. \
             replace("${distance}", "%s km" % distance_str). \
             replace("${acceleration}", "%s" % acceleration_info). \
-            replace("${speed}", "%s km/s" % round(velocity, 2))
+            replace("${velocity}", "%s km/s" % round(velocity, 2))
 
 
 if __name__ == '__main__':

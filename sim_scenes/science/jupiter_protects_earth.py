@@ -16,7 +16,7 @@ from simulators.ursina.ursina_event import UrsinaEvent
 import random
 
 
-def create_comet(index, raduis):
+def create_comet(index, raduis, gravity_only_for):
     """
     随机生成石头（随机位置、随机初始速度、随机大小、随机旋转）
     @param index: 索引号
@@ -37,7 +37,7 @@ def create_comet(index, raduis):
     rock = create_rock(
         no=index % 8 + 1, name=f'岩石{index + 1}', mass=4.4e10,
         size_scale=size_scale, color=(255, 200, 0),
-        init_position=pos, init_velocity=vel,
+        init_position=pos, init_velocity=vel, gravity_only_for=gravity_only_for
     )
 
     # 给石头一个随机旋转的方向和值
@@ -45,6 +45,8 @@ def create_comet(index, raduis):
     rock.rotation[random.randint(0, 2)] = random.randint(90, 200) / 100
     return rock
 
+
+colliding_count = [0, 0, 0]
 
 if __name__ == '__main__':
     """
@@ -56,13 +58,13 @@ if __name__ == '__main__':
     bodies = [sun, jupiter, earth]
 
     for body in bodies:
-        body.rotation_speed /= 20  # 自转速度降低100倍
+        body.rotation_speed /= 10  # 自转速度降低10倍
 
     comets = []
 
-    for i in range(15):
-        # 随机生成石头
-        comet = create_comet(i, jupiter.position[2] * 2)
+    for i in range(50):
+        # 随机生成50石头
+        comet = create_comet(i, jupiter.position[2] * 2, gravity_only_for=[sun, jupiter, earth])
         bodies.append(comet)
         comets.append(comet)
 
@@ -70,19 +72,24 @@ if __name__ == '__main__':
     def on_timer_changed(time_data: TimeData):
         # 运行中，每时每刻都会触发
         for comet in comets:
-            if comet.visibled:
+            if comet.planet.enabled:
                 # 如果是否可见，则旋转石头
                 comet.planet.rotation += comet.rotation
                 # 循环判断每个石头与木星是否相碰撞，如果相碰撞就爆炸
                 if two_bodies_colliding(comet, jupiter):
                     # 将石头隐藏、设置引力无效后，展示爆炸效果
                     comet.explode(jupiter)
+                    colliding_count[1] += 1
                 elif two_bodies_colliding(comet, sun):
                     # 将石头隐藏、设置引力无效后，展示爆炸效果
                     comet.explode(sun)
+                    colliding_count[0] += 1
                 elif two_bodies_colliding(comet, earth):
                     # 将石头隐藏、设置引力无效后，展示爆炸效果
                     comet.explode(earth)
+                    colliding_count[2] += 1
+
+        print("Sun:%s Jupiter:%s Earth:%s" % (colliding_count[0], colliding_count[1], colliding_count[2]))
 
         # def on_reset():
         """

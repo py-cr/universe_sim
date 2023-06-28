@@ -7,6 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 from bodies import Sun, Jupiter, Earth
+from common.func import calculate_distance
 from objs import RockSnow, Rock, create_rock
 from common.consts import SECONDS_PER_MONTH, SECONDS_PER_YEAR
 from sim_scenes.func import ursina_run, camera_look_at, two_bodies_colliding, create_text_panel
@@ -35,41 +36,37 @@ class JupiterProtectsEarthSim:
 
         self.comets = []
 
-        self.comet_radius = self.jupiter.position[2] * 1.5
-
         for i in range(comet_num):
             # 随机生成 comet_num 个石头
-            comet = self.create_comet(i, self.comet_radius, gravity_only_for=[self.sun, self.jupiter, self.earth])
+            comet = self.create_comet(i, gravity_only_for=[self.sun, self.jupiter, self.earth])
             self.bodies.append(comet)
             self.comets.append(comet)
 
         # 显示板信息模板
         self.colliding_info = "太阳碰撞：%s次（%s）\n\n木星碰撞：%s次（%s）\n\n地球碰撞：%s次（%s）\n\n木星保护：%s次\n\n"
 
-    def random_pos_vel(self, radius):
+    def random_pos_vel(self):
         # 随机生成石头的位置和初始速度信息
-        # pos = [-radius * random.randint(120, 200) / 100,
-        #        -radius * random.randint(120, 200) / 1000,
-        #        -radius * random.randint(100, 300) / 100]
-
+        radius = calculate_distance(self.jupiter.position, self.sun.position) * 2
         x = radius * math.cos(random.uniform(0, 2 * math.pi)) * (random.randint(100, 150) / 100)
         z = radius * math.sin(random.uniform(0, 2 * math.pi)) * (random.randint(100, 150) / 100)
-        pos = [x, 0, z]
+        sun_pos = self.sun.position
+        pos = [x + sun_pos[0], 0 + sun_pos[1], z + sun_pos[2]]
 
         # 随机速度
         vel = [-random.randint(90, 200) / 300, 0, 0]
         return pos, vel
 
-    def create_comet(self, index, radius, gravity_only_for):
+    def create_comet(self, index, gravity_only_for):
         """
+
         随机生成石头（随机位置、随机初始速度、随机大小、随机旋转）
         @param index: 索引号
-        @param radius: 木星的半径，保证生成的石头在木星半径外
-        @param gravity_only_for: 指定一个天体，石头只对该天体引力有效
+        @param gravity_only_for: 指定多个天体，石头只对该天体引力有效
         @return:
         """
         # 随机生成石头的位置和初始速度信息
-        pos, vel = self.random_pos_vel(radius)
+        pos, vel = self.random_pos_vel()
 
         # vel = [0, 0, 0]
         # 石头随机大小
@@ -122,7 +119,7 @@ class JupiterProtectsEarthSim:
                     collided = True
                 if collided:
                     # 如果碰撞了，则该石头重复再利用，这样才保证有无限个石头可用
-                    pos, vel = self.random_pos_vel(self.comet_radius)
+                    pos, vel = self.random_pos_vel()
                     comet.init_position = pos
                     comet.init_velocity = vel
                     comet.set_visible(True)

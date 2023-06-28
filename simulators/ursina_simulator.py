@@ -23,7 +23,7 @@ from simulators.simulator import Simulator
 from common.system import System
 from simulators.ursina.entities.world_grid import WorldGrid
 from simulators.ursina.entities.sphere_sky import SphereSky
-from common.func import find_file
+from common.func import find_file, find_intersection
 import datetime
 import os
 from ursina import EditorCamera
@@ -92,6 +92,19 @@ class UrsinaSimulator(Simulator):
         def body_explode(target=None):
             # from panda3d.core import GeomUtils
             if body.planet.enabled:
+                # TODO:下面代码保留，由于运行太快导致两个天体不是在表面碰撞，这样就要进行计算，希望在表面爆炸，但是需要耗费CPU资源，暂时注释
+                # line_start_pos = body.his_position()[0] * UrsinaConfig.SCALE_FACTOR
+                # line_end_pos = body.planet.position
+                # sphere_center = target.position * UrsinaConfig.SCALE_FACTOR
+                # # sphere_radius = target.planet.scale_x/2
+                # sphere_radius = target.radius * target.size_scale * UrsinaConfig.SCALE_FACTOR
+                # explode_pos = find_intersection(sphere_center, sphere_radius, line_start_pos, line_end_pos)
+                # if explode_pos is None:
+                #     explode_pos = body.planet.position
+                # else:
+                #     print("explode_pos", explode_pos)
+
+                explode_pos = body.planet.position
                 # 如果爆炸，则静止不动（停止并忽略引力）
                 body.stop_and_ignore_gravity()
                 body.planet.enabled = False
@@ -103,7 +116,7 @@ class UrsinaSimulator(Simulator):
                 scale = 3 * volume_scale * body.size_scale * UrsinaConfig.SCALE_FACTOR
                 print(scale, body)
                 explode_ani = Animation(explosion_file,
-                                        position=body.planet.position,
+                                        position=explode_pos,
                                         scale=scale, fps=6,
                                         loop=False, autoplay=True)
                 explode_ani.set_light_off()

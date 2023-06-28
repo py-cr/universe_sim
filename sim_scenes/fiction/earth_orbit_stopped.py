@@ -110,7 +110,7 @@ class EarthOrbitStoppedSim:
         # 计算地球和太阳中心点之间的距离
         distance = calculate_distance(self.earth.position, self.sun.position)
         # 减去太阳和地球的半径，得到地球表面和太阳表面的距离
-        distance = distance - self.sun.raduis - self.earth.raduis
+        distance = distance - self.sun.radius - self.earth.radius
 
         if distance > 100000000:
             distance_str = "%s亿" % round(distance / 100000000.0, 2)

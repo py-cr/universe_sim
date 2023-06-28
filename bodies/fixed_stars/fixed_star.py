@@ -97,7 +97,7 @@ class FixedStar(Body):
         sun = Sun()
         print("---------------------------------")
         print("质量: %.2f M☉ (%.4g kg)" % (self.mass / sun.mass, self.mass))
-        print("半径: %.2f R☉ (%.4g km)" % (self.raduis / sun.raduis, self.raduis))
+        print("半径: %.2f R☉ (%.4g km)" % (self.radius / sun.radius, self.radius))
         print("直径: %.2f D☉ (%.4g km)" % (self.diameter / sun.diameter, self.diameter))
         num_sun_volume = self.volume / sun.volume  # 相当于多少个太阳体积
         if num_sun_volume <= 10000:
@@ -107,20 +107,20 @@ class FixedStar(Body):
         else:
             print("体积: %.2f亿 V☉ (%.4g km³)" % (num_sun_volume / 100000000, self.volume))
 
-    def density_by_radius(self, raduis=None, num_sun_raduis=None):
+    def density_by_radius(self, radius=None, num_sun_radius=None):
         """
         密度換算
-        @param raduis: 半径的长度（km）
-        @param num_sun_raduis: 多少个太阳半径
+        @param radius: 半径的长度（km）
+        @param num_sun_radius: 多少个太阳半径
         @return:
         """
         from bodies import Sun
         import math
 
         sun = Sun()
-        if num_sun_raduis is not None:
-            raduis = num_sun_raduis * sun.raduis
-        print("---------------------------------\n密度換算: ", self.mass / 1e9 / (4 / 3 * math.pi * pow(raduis, 3)))
+        if num_sun_radius is not None:
+            radius = num_sun_radius * sun.radius
+        print("---------------------------------\n密度換算: ", self.mass / 1e9 / (4 / 3 * math.pi * pow(radius, 3)))
 
 
 if __name__ == '__main__':

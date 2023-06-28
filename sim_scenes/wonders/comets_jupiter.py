@@ -16,18 +16,18 @@ from simulators.ursina.ursina_event import UrsinaEvent
 import random
 
 
-def create_comet(index, raduis, gravity_only_for):
+def create_comet(index, radius, gravity_only_for):
     """
     随机生成石头（随机位置、随机初始速度、随机大小、随机旋转）
     @param index: 索引号
-    @param raduis: 木星的半径，保证生成的石头在木星半径外
+    @param radius: 木星的半径，保证生成的石头在木星半径外
     @param gravity_only_for: 指定一个天体，石头只对该天体引力有效
     @return:
     """
     # 随机生成石头的位置和初始速度信息
-    pos = [-raduis * random.randint(120, 200) / 100,
-           -raduis * random.randint(120, 200) / 1000,
-           -raduis * random.randint(100, 300) / 100]
+    pos = [-radius * random.randint(120, 200) / 100,
+           -radius * random.randint(120, 200) / 1000,
+           -radius * random.randint(100, 300) / 100]
     # 随机速度
     vel = [0, -random.randint(90, 200) / 30, 0]
     # 石头随机大小
@@ -58,7 +58,7 @@ if __name__ == '__main__':
 
     for i in range(20):
         # 随机生成石头
-        comet = create_comet(i, jupiter.raduis, gravity_only_for=jupiter)
+        comet = create_comet(i, jupiter.radius, gravity_only_for=jupiter)
         bodies.append(comet)
         comets.append(comet)
 

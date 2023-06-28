@@ -33,6 +33,6 @@ if __name__ == '__main__':
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
     ursina_run(bodies, SECONDS_PER_HOUR / 2,
-               position=(1.5 * earth.raduis, 0, -30000),
+               position=(1.5 * earth.radius, 0, -30000),
                show_grid=False,
                view_closely=0.001)   # 近距离观看 view_closely=True或0.001

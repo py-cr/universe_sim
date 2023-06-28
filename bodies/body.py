@@ -392,7 +392,7 @@ class Body(metaclass=ABCMeta):
         return v
 
     @property
-    def raduis(self):
+    def radius(self):
         """
         天体的半径（单位：km）
         @return:
@@ -406,11 +406,11 @@ class Body(metaclass=ABCMeta):
         天体的直径（单位：km）
         @return:
         """
-        return self.raduis * 2
+        return self.radius * 2
 
     def __repr__(self):
         return '<%s(%s)> m=%.3e(kg), r|d=%.3e|%.3e(km), v=%.3e(km³), d=%.3e(kg/m³), p=[%.3e,%.3e,%.3e](km), v=%s(km/s)' % \
-               (self.name, self.__class__.__name__, self.mass, self.raduis, self.diameter, self.volume, self.density,
+               (self.name, self.__class__.__name__, self.mass, self.radius, self.diameter, self.volume, self.density,
                 self.position[0], self.position[1], self.position[2], self.velocity)
 
     def ignore_gravity_with(self, body):
@@ -533,7 +533,7 @@ if __name__ == '__main__':
     # build_bodies_from_json('../data/sun.json')
     bodies, params = Body.build_bodies_from_json('../data/sun_earth.json')
     # 太阳半径 / 地球半径
-    print("太阳半径 / 地球半径 =", bodies[0].raduis / bodies[1].raduis)
+    print("太阳半径 / 地球半径 =", bodies[0].radius / bodies[1].radius)
     print("params:", params)
     for body in bodies:
         print(body)

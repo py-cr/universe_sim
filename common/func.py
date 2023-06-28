@@ -133,6 +133,82 @@ def get_acceleration_info(acceleration):
         acc_info = "0 m/s²"
     return acc_info
 
+
+def find_intersection(sphere_center, sphere_radius, line_start_pos, line_end_pos):
+    """
+    计算线段与球体表面的交点坐标
+     参数:
+    sphere_center (tuple): 球体中心位置的三维坐标 (x, y, z)
+    sphere_radius (float): 球体的半径
+    line_start_pos (tuple): 线段的起始位置的三维坐标 (x, y, z)
+    line_end_pos (tuple): 线段的结束位置的三维坐标 (x, y, z)
+     返回:
+    tuple: 交点的三维坐标 (x, y, z)，如果没有交点则返回None
+    """
+    # 计算线段的方向向量
+    line_direction = (
+        line_end_pos[0] - line_start_pos[0],
+        line_end_pos[1] - line_start_pos[1],
+        line_end_pos[2] - line_start_pos[2]
+    )
+    # 计算线段的长度
+    line_length = math.sqrt(
+        line_direction[0] ** 2 +
+        line_direction[1] ** 2 +
+        line_direction[2] ** 2
+    )
+    # 将线段方向向量归一化
+    line_direction = (
+        line_direction[0] / line_length,
+        line_direction[1] / line_length,
+        line_direction[2] / line_length
+    )
+    # 计算线段起始位置到球心的向量
+    start_to_center = (
+        sphere_center[0] - line_start_pos[0],
+        sphere_center[1] - line_start_pos[1],
+        sphere_center[2] - line_start_pos[2]
+    )
+    # 计算线段起始位置到球心的距离
+    distance = (
+            start_to_center[0] * line_direction[0] +
+            start_to_center[1] * line_direction[1] +
+            start_to_center[2] * line_direction[2]
+    )
+    # 如果距离小于0，则线段与球体没有交点
+    if distance < 0:
+        return None
+    # 计算最短距离的投影点坐标
+    closest_point = (
+        line_start_pos[0] + distance * line_direction[0],
+        line_start_pos[1] + distance * line_direction[1],
+        line_start_pos[2] + distance * line_direction[2]
+    )
+    # 计算最短距离的投影点到球心的距离
+    closest_distance = math.sqrt(
+        (closest_point[0] - sphere_center[0]) ** 2 +
+        (closest_point[1] - sphere_center[1]) ** 2 +
+        (closest_point[2] - sphere_center[2]) ** 2
+    )
+    # 如果最短距离大于球体半径，则线段与球体没有交点
+    if closest_distance > sphere_radius:
+        return None
+    # 计算交点坐标
+    intersection = (
+        closest_point[0] + (sphere_radius - closest_distance) * line_direction[0],
+        closest_point[1] + (sphere_radius - closest_distance) * line_direction[1],
+        closest_point[2] + (sphere_radius - closest_distance) * line_direction[2]
+    )
+    return intersection
+
+
+if __name__ == '__main__':
+    sphere_center = (0, 0, 0)
+    sphere_radius = 1
+    line_start_pos = (-1, 0, 0)
+    line_end_pos = (1, 0, 0)
+    intersection = find_intersection(sphere_center, sphere_radius, line_start_pos, line_end_pos)
+    print(intersection)
 #
 # def calculate_velocity(mass, semimajor_axis, eccentricity):
 #     """

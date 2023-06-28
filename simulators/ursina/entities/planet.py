@@ -223,7 +223,7 @@ class Planet(Entity):
             if self.rotation_speed is None or dt == 0:
                 self.rotspeed = 0
                 # 旋转速度和大小成反比（未使用真实数据）
-                # self.rotspeed = 30000 / self.body_view.raduis  # random.uniform(1.0, 2.0)
+                # self.rotspeed = 30000 / self.body_view.radius  # random.uniform(1.0, 2.0)
             else:
                 # 是通过月球保持一面面对地球，调整得到
                 self.rotspeed = self.rotation_speed * (dt / 3600) / 2.4 * \

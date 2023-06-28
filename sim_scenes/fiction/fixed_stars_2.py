@@ -48,11 +48,11 @@ if __name__ == '__main__':
         if idx == 0:  # 这是地球
             d = 0
         else:
-            d = pow((body.raduis + bodies[idx - 1].raduis) * SIZE_SCALE, 1.0) * 1.1
+            d = pow((body.radius + bodies[idx - 1].radius) * SIZE_SCALE, 1.0) * 1.1
         # 所有天体的初始速度为 0
         body.init_velocity = [0, 0, 0]
         # 所有天体的初始位置进行赋值
-        body.init_position = [-body.raduis * SIZE_SCALE / 1.1, body.raduis * SIZE_SCALE / 1.1, d]
+        body.init_position = [-body.radius * SIZE_SCALE / 1.1, body.radius * SIZE_SCALE / 1.1, d]
         distance_sum += d
 
     # 使用 ursina 查看的运行效果

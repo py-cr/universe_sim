@@ -103,8 +103,8 @@ class MplSimulator(Simulator):
             else:
                 color = 'blue'
             # size = 800 if str(body.name).lower().startswith("sun") else 500
-            size = body.raduis * body.size_scale / 80000
-            # size = pow(body.raduis / AU * body.size_scale,3)
+            size = body.radius * body.size_scale / 80000
+            # size = pow(body.radius / AU * body.size_scale,3)
             pos = body.position / AU
 
             # 天体

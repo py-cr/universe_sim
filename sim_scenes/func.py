@@ -342,7 +342,7 @@ def two_bodies_colliding(body1: Body, body2: Body):
     d = calculate_distance(np.array(body1.position) * body1.distance_scale,
                            np.array(body2.position) * body2.distance_scale)
 
-    if d <= body1.raduis * body1.size_scale + body2.raduis * body2.size_scale:
+    if d <= body1.radius * body1.size_scale + body2.radius * body2.size_scale:
         return True
     return False
 

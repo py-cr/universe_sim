@@ -87,4 +87,4 @@ if __name__ == '__main__':
     fixed_star = Stephenson_2_18()
     print(fixed_star)
     fixed_star.compare_with_sun()
-    fixed_star.density_by_radius(num_sun_raduis=2150)
+    fixed_star.density_by_radius(num_sun_radius=2150)

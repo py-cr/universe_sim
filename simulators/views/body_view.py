@@ -39,8 +39,8 @@ class BodyView(metaclass=ABCMeta):
         self.name = body.name
         self.mass = body.mass
 
-        if hasattr(body, "raduis"):
-            self.raduis = body.raduis
+        if hasattr(body, "radius"):
+            self.radius = body.radius
 
         self.velocity = body.velocity
 
@@ -48,7 +48,7 @@ class BodyView(metaclass=ABCMeta):
 
     def __repr__(self):
         return '<%s> m=%.3e(kg), r=%.3e(km), p=[%.3e,%.3e,%.3e](km), v=%s(km/s)' % \
-               (self.name, self.mass, self.raduis,
+               (self.name, self.mass, self.radius,
                 self.position[0], self.position[1], self.position[2], self.velocity)
 
     def __find_texture(self, texture):

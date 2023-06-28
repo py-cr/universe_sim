@@ -70,7 +70,7 @@ class MayaviView(BodyView):
                                      self.body.size_scale * rings_scale + \
                                      self.body.position[1]  # * self.body.distance_scale
                     # 带环的厚度
-                    thicknesses_scale = self.body.raduis * 20
+                    thicknesses_scale = self.body.radius * 20
                     torus[2][i][j] = thicknesses_scale * np.sin(phi[j]) + \
                                      self.body.position[2]  # * self.body.distance_scale
             rings_color = (173 / 255, 121 / 255, 92 / 255)

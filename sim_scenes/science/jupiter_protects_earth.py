@@ -24,7 +24,7 @@ class JupiterProtectsEarthSim:
 
         @param comet_num: 随机生成 comet_num 个石头
         """
-        self.colliding_count = [0, 0, 0, 0] # 分别保存太阳碰撞次数、木星碰撞次数、地球碰撞次数、木星保护次数
+        self.colliding_count = [0, 0, 0, 0]  # 分别保存太阳碰撞次数、木星碰撞次数、地球碰撞次数、木星保护次数
         self.sun = Sun(name="太阳", size_scale=0.8e2)  # 太阳放大 80 倍，距离保持不变
         self.jupiter = Jupiter(name="木星", size_scale=0.6e3)  # 木星放大 600 倍，距离保持不变
         self.earth = Earth(name="地球", size_scale=2e3)  # 地球放大 2000 倍，距离保持不变
@@ -35,7 +35,7 @@ class JupiterProtectsEarthSim:
 
         self.comets = []
 
-        self.comet_radius = self.jupiter.position[2] * 2
+        self.comet_radius = self.jupiter.position[2] * 1.5
 
         for i in range(comet_num):
             # 随机生成 comet_num 个石头
@@ -52,8 +52,8 @@ class JupiterProtectsEarthSim:
         #        -radius * random.randint(120, 200) / 1000,
         #        -radius * random.randint(100, 300) / 100]
 
-        x = radius * math.cos(random.uniform(0, 2 * math.pi)) * random.randint(80, 150) / 100
-        z = radius * math.sin(random.uniform(0, 2 * math.pi)) * random.randint(80, 150) / 100
+        x = radius * math.cos(random.uniform(0, 2 * math.pi)) * (random.randint(100, 150) / 100)
+        z = radius * math.sin(random.uniform(0, 2 * math.pi)) * (random.randint(100, 150) / 100)
         pos = [x, 0, z]
 
         # 随机速度
@@ -94,7 +94,7 @@ class JupiterProtectsEarthSim:
                 # 如果是否可见，则旋转石头
                 comet.planet.rotation += comet.rotation
                 # 循环判断每个石头与木星是否相碰撞，如果相碰撞就爆炸
-                if two_bodies_colliding(comet, self.jupiter):
+                if not hasattr(comet, "jupiter_collided") and two_bodies_colliding(comet, self.jupiter):
                     # 将石头隐藏、设置引力无效后，展示爆炸效果
                     # comet.explode(self.jupiter)
                     # 碰撞到木星，该石头不要爆炸，尝试看看是否会碰撞到地球，如果碰撞了地球，则“木星保护”统计加一

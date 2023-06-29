@@ -49,34 +49,19 @@ if __name__ == '__main__':
 
 
     def on_ready():
-        # 月球就会跟着地球自转而转
-        # moon.planet.parent = earth.planet
-        # # 让月亮围绕地球的北极旋转90度
-        # moon.planet.rotation_x = 90
-        # moon.planet.rotation_y = 0
-        #
-        # # 让月亮围绕地球的南极旋转90度
-        # moon.planet.rotation_z = -90
-        # moon.planet.position = Vec3(0, 0, 0)
         pass
 
 
     def on_timer_changed(time_data: TimeData):
-        # print(moon.planet.position)
-        # moon.planet.rotation = -Vec3(earth.planet.rotation_x, # - earth.planet.ring_rotation_x,
-        #                            earth.planet.rotation_y,
-        #                            earth.planet.rotation_z)
-        # 为了不让月球随着地球的周期旋转，则需要获取地球的旋转角度
-        # angle = earth.planet.rotation_y
-        # # TODO:根据旋转的角度对月球的位置进行计算，保证月球公转和地球自转的关系 365天=12月
-        # angle = np.array(angle * np.pi)
-        angle = time_data.total_days / 15 * np.pi
+        # 1个月有多少天
+        days_per_month = 365 / 12  # 360度
+        # 1天多少角度
+        angle_per_day = days_per_month / 360
+        angle = time_data.total_days * angle_per_day
+        angle = angle * np.pi
         px = moon_d * np.cos(angle)
         pz = moon_d * np.sin(angle)
-        # moon.planet.world_position = Vec3(px,0,pz)
         moon.position = [earth.position[0] + px, 0, earth.position[2] + pz]
-        # moon.planet.position = Vec3(16 * math.sin(time.time() * 2 + 0.5), 16 * math.cos(time.time() * 2 + 0.5), 0)
-        pass
 
 
     # 订阅事件后，上面2个函数功能才会起作用

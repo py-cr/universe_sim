@@ -21,7 +21,7 @@ class HabitableZone(Body):
                  init_velocity=[0, 0, 0],
                  texture="green_alpha_1.png", size_scale=1.0,
                  distance_scale=1.0,
-                 rotation_speed=0.1,
+                 rotation_speed=0,
                  parent=None):
         params = {
             "name": name,

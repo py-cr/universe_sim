@@ -22,9 +22,9 @@ if __name__ == '__main__':
     # 其宽度约为2.17亿千米， 按照这个标准，太阳系的宜居带中只有三个大型天体，分别是地球、 月球 以及火星（1.52天文单位）。
     sun = Sun(name="太阳", size_scale=0.5e2)  # 太阳放大 80 倍，距离保持不变
     earth = Earth(name="地球", size_scale=1.5e3)  # 地球放大 1500 倍，距离保持不变
-    moon_d = 20000000
+    earth_moon_d = 20000000  # 因为地球放大 1500 倍，为了较好的效果，地月距离要比实际大才行
     moon = Moon(name="月球", size_scale=1.5e3,
-                init_position=[moon_d, 0, AU],
+                init_position=[earth_moon_d, 0, AU],
                 init_velocity=[0, 0, 0],
                 ignore_mass=True,
                 # gravity_only_for_earth=True
@@ -33,34 +33,31 @@ if __name__ == '__main__':
         sun,
         Venus(name="金星", size_scale=1.5e3),  # 金星放大 1500 倍，距离保持不变
         earth, moon,
-        # Moon(name="月球", size_scale=2e3,
-        #      # init_position=[0, 0, 363104 + 1.12 * AU],
-        #      # init_velocity=[-(29.79 + 1.03), 0, 0]
-        #      init_position=[15000000, 0, AU],
-        #      init_velocity=[-32.79, 0, 2.03], gravity_only_for_earth=True
-        #      ),  # 月球放大 2000 倍，距离保持不变
         Mars(name="火星", size_scale=2e3),  # 火星放大 2000 倍，距离保持不变
         Asteroids(name="小行星群", size_scale=3.2e2,
                   parent=sun),  # 小行星群模拟(仅 ursina 模拟器支持)
-        HabitableZone(name="宜居带", size_scale=1e2,
+        HabitableZone(name="宜居带", size_scale=0.9e2,
                       parent=sun),  # 宜居带模拟(仅 ursina 模拟器支持)
         Jupiter(name="木星", size_scale=2e2),  # 木星放大 200 倍，距离保持不变
     ]
 
 
     def on_ready():
+        # UrsinaConfig.trail_length = 1000
         pass
 
 
     def on_timer_changed(time_data: TimeData):
         # 1个月有多少天
-        days_per_month = 365 / 12  # 360度
+        days_per_month = 27.323
         # 1天多少角度
-        angle_per_day = days_per_month / 360
+        angle_per_day = 360 / days_per_month
+        # 当前的角度（度）
         angle = time_data.total_days * angle_per_day
-        angle = angle * np.pi
-        px = moon_d * np.cos(angle)
-        pz = moon_d * np.sin(angle)
+        # 当前的角度（弧度）
+        angle = angle * np.pi / 180
+        px = earth_moon_d * np.cos(angle)
+        pz = earth_moon_d * np.sin(angle)
         moon.position = [earth.position[0] + px, 0, earth.position[2] + pz]
 
 

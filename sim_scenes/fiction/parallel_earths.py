@@ -8,12 +8,11 @@
 # ==============================================================================
 import random
 import sys
-from bodies import Earth, Moon
-from common.consts import SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
-from sim_scenes.func import ursina_run, camera_look_at
+
+from bodies import Earth
+from common.consts import SECONDS_PER_DAY
+from sim_scenes.func import ursina_run
 from simulators.ursina.entities.sphere_sky import SphereSky
-from simulators.ursina.ursina_config import UrsinaConfig
-from simulators.ursina.ursina_event import UrsinaEvent
 
 
 def sim_show():
@@ -47,32 +46,40 @@ def ursina_show():
     直接使用 ursina 模拟，无需考虑万有引力（性能高）
     @return:
     """
-    from ursina import Ursina, Entity, color, EditorCamera, camera
+    from ursina import Ursina, Entity, EditorCamera, camera
     app = Ursina()
     # 黑色背景的宇宙背景
     SphereSky(texture='../../textures/bg_black.png')
 
     # 控制地球的数量，这里的 num 不代表数量
-    # 地球数量 = num_x * num_y * num_z
     num = 5
     num_x = num * 2
     num_y = num
     num_z = num * 2
+    # 地球数量 = 2 * num_x * num_y * num_z
+    print("地球数量：", 2 * num_x * num_y * num_z)
+
     # 控制运行的速度
     run_speed = 0.1
     # 控制地球之间的距离
-    r = 10
+    spacing = 20
 
-    def create_earth(x, y, z):
+    def create_earth(x, y, z, aligned=False):
         """
         在指定的三维坐标上创建地球
         @param x:
         @param y:
         @param z:
+        @param aligned: 排列整齐
         @return:
         """
-        earth = Entity(model="sphere", texture='../../textures/earth2.jpg',
-                        x=x * r * 2, y=y * r,  z=z * r * 2, scale=3)
+        if aligned:
+            xr, yr, zr = 0, 0, 0
+        else:
+            xr, yr, zr = random.randint(20, 800) / 100, random.randint(20, 800) / 100, random.randint(20, 800) / 100
+
+        earth = Entity(model="sphere", texture='../../textures/earth1.jpg',
+                       x=x * spacing * 2 + xr, y=y * spacing + yr, z=z * spacing * 2 + zr, scale=3)
         earth.name = "%s:%s:%s" % (x, y, z)
 
         def update():
@@ -94,7 +101,7 @@ def ursina_show():
 
     ed = EditorCamera()
     camera.fov = 80
-    ed.position = [0, 0, r/2]
+    ed.position = [0, 0, spacing / 2]
 
     # 控制摄像机三个维度的移动方向，值为 1 和 -1
     camera.x_d = 1

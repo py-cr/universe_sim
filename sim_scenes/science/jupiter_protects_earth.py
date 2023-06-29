@@ -47,7 +47,7 @@ class JupiterProtectsEarthSim:
 
     def random_pos_vel(self):
         # 随机生成石头的位置和初始速度信息
-        radius = calculate_distance(self.jupiter.position, self.sun.position) * 2
+        radius = calculate_distance(self.jupiter.position, self.sun.position) * 1.5
         x = radius * math.cos(random.uniform(0, 2 * math.pi)) * (random.randint(100, 150) / 100)
         z = radius * math.sin(random.uniform(0, 2 * math.pi)) * (random.randint(100, 150) / 100)
         sun_pos = self.sun.position

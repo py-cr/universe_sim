@@ -94,7 +94,7 @@ class MplSimulator(Simulator):
             update_ax(ax, styles)
 
         for idx, body in enumerate(bodies):
-            if hasattr(body, "torus_stars"):
+            if hasattr(body, "torus_stars") or hasattr(body, "torus_zone"):
                 # 暂不支持环状小行星群
                 continue
 

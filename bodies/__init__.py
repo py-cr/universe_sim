@@ -12,6 +12,7 @@ from bodies.venus import Venus
 from bodies.moon import Moon
 from bodies.asteroid import Asteroid
 from bodies.asteroids import Asteroids
+from bodies.habitable_zone import HabitableZone
 
 # 戴森球
 from bodies.dysen_sphere import DysenSphere

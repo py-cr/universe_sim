@@ -22,7 +22,7 @@ class CalcView(BodyView):
         pass
 
     def appear(self):
-        if hasattr(self.body, "torus_stars"):
+        if hasattr(self.body, "torus_stars") or hasattr(self.body, "torus_zone"):
             # 暂不支持环状小行星群
             return
 

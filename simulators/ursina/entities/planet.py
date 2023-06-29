@@ -63,6 +63,13 @@ class Planet(Entity):
             # 创建一个星环小天体群（主要模拟小行星群，非一个天体）
             model = create_torus(0.83, 1.05, 64, 1)
             rotation = (90, 0, 0)
+        elif hasattr(self.body, "torus_zone"):
+            # 创建一个星环小天体群（主要模拟环形带，非一个天体）
+            inner_radius, outer_radius, subdivisions = self.body.torus_zone
+            if subdivisions is None:
+                subdivisions = 64
+            model = create_torus(inner_radius, outer_radius, subdivisions, 1)
+            rotation = (90, 0, 0)
         else:
             # 创建一个天体
             subdivisions = 32
@@ -126,7 +133,7 @@ class Planet(Entity):
                 axis_color = color.rgba(*axis_color)
                 self.create_rotate_line(axis_color)
 
-        if hasattr(self.body, "torus_stars"):
+        if hasattr(self.body, "torus_stars") or hasattr(self.body, "torus_zone"):
             # 星环小天体群（主要模拟小行星群，非一个天体）
             self.set_light_off()
             self.double_sided = True
@@ -193,7 +200,7 @@ class Planet(Entity):
                     len_scale=line_scale, color=line_color, thickness=2)
 
     def change_body_scale(self):
-        if hasattr(self.body, "torus_stars"):
+        if hasattr(self.body, "torus_stars") or hasattr(self.body, "torus_zone"):
             # 星环小天体群（主要模拟小行星群，非一个天体）不受 body_size_factor 影响
             self.scale = self.init_scale
         else:

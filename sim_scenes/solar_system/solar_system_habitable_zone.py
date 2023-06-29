@@ -13,20 +13,21 @@ from sim_scenes.func import mayavi_run, ursina_run
 from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
-from ursina import Vec3
+from ursina import Vec3, time
 import numpy as np
+import math
 
 if __name__ == '__main__':
     # 目前认为 太阳系 的宜居带范围是从距离太阳0.95个天文单位 (约1.42亿千米)到 2.4个天文单位（约3.59亿千米）的范围为宜居带，
     # 其宽度约为2.17亿千米， 按照这个标准，太阳系的宜居带中只有三个大型天体，分别是地球、 月球 以及火星（1.52天文单位）。
     sun = Sun(name="太阳", size_scale=0.5e2)  # 太阳放大 80 倍，距离保持不变
     earth = Earth(name="地球", size_scale=1.5e3)  # 地球放大 1500 倍，距离保持不变
-    moon_d = 10000000
-    moon = Moon(name="月球", size_scale=1e2,
-                init_position=[moon_d, 0, 0],
+    moon_d = 20000000
+    moon = Moon(name="月球", size_scale=1.5e3,
+                init_position=[moon_d, 0, AU],
                 init_velocity=[0, 0, 0],
-                distance_scale=0.2,
-                gravity_only_for_earth=True
+                ignore_mass=True,
+                # gravity_only_for_earth=True
                 )
     bodies = [
         sun,
@@ -49,7 +50,15 @@ if __name__ == '__main__':
 
     def on_ready():
         # 月球就会跟着地球自转而转
-        moon.planet.parent = earth.planet
+        # moon.planet.parent = earth.planet
+        # # 让月亮围绕地球的北极旋转90度
+        # moon.planet.rotation_x = 90
+        # moon.planet.rotation_y = 0
+        #
+        # # 让月亮围绕地球的南极旋转90度
+        # moon.planet.rotation_z = -90
+        # moon.planet.position = Vec3(0, 0, 0)
+        pass
 
 
     def on_timer_changed(time_data: TimeData):
@@ -58,13 +67,16 @@ if __name__ == '__main__':
         #                            earth.planet.rotation_y,
         #                            earth.planet.rotation_z)
         # 为了不让月球随着地球的周期旋转，则需要获取地球的旋转角度
-        angle = earth.planet.rotation_y
-        # TODO:根据旋转的角度对月球的位置进行计算，保证月球公转和地球自转的关系 365天=12月
+        # angle = earth.planet.rotation_y
+        # # TODO:根据旋转的角度对月球的位置进行计算，保证月球公转和地球自转的关系 365天=12月
         # angle = np.array(angle * np.pi)
-        #
-        # px = moon_d * UrsinaConfig.SCALE_FACTOR * np.cos(angle)
-        # pz = moon_d * UrsinaConfig.SCALE_FACTOR * np.sin(angle)
-        # moon.planet.world_position = Vec3(0,0,0)
+        angle = time_data.total_days / 15 * np.pi
+        px = moon_d * np.cos(angle)
+        pz = moon_d * np.sin(angle)
+        # moon.planet.world_position = Vec3(px,0,pz)
+        moon.position = [earth.position[0] + px, 0, earth.position[2] + pz]
+        # moon.planet.position = Vec3(16 * math.sin(time.time() * 2 + 0.5), 16 * math.cos(time.time() * 2 + 0.5), 0)
+        pass
 
 
     # 订阅事件后，上面2个函数功能才会起作用

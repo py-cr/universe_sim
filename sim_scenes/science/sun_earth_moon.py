@@ -62,7 +62,7 @@ if __name__ == '__main__':
     def on_timer_changed(time_data: TimeData):
         # 显示轨迹，并设置轨迹长度
         UrsinaConfig.show_trail = True
-        UrsinaConfig.trail_length = 500
+        UrsinaConfig.trail_length = 800
         # 设置运行速度（加速10倍）
         UrsinaConfig.run_speed_factor = 10
 

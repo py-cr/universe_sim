@@ -7,7 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 import random
-
+import sys
 from bodies import Earth, Moon
 from common.consts import SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_MONTH
 from sim_scenes.func import ursina_run, camera_look_at
@@ -17,6 +17,10 @@ from simulators.ursina.ursina_event import UrsinaEvent
 
 
 def sim_show():
+    """
+    使用模拟器（慢）
+    @return:
+    """
     bodies = []
     num = 2
     r = 30000
@@ -39,54 +43,80 @@ def sim_show():
 
 
 def ursina_show():
+    """
+    直接使用 ursina 模拟，无需考虑万有引力（性能高）
+    @return:
+    """
     from ursina import Ursina, Entity, color, EditorCamera, camera
     app = Ursina()
+    # 黑色背景的宇宙背景
     SphereSky(texture='../../textures/bg_black.png')
+
+    # 控制地球的数量，这里的 num 不代表数量
+    # 地球数量 = num_x * num_y * num_z
     num = 5
     num_x = num * 2
     num_y = num
     num_z = num * 2
+    # 控制运行的速度
+    run_speed = 0.1
+    # 控制地球之间的距离
     r = 10
 
-    def create_sphere(x, y, z):
-        sphere = Entity(model="sphere", texture='../../textures/earth2.jpg',
+    def create_earth(x, y, z):
+        """
+        在指定的三维坐标上创建地球
+        @param x:
+        @param y:
+        @param z:
+        @return:
+        """
+        earth = Entity(model="sphere", texture='../../textures/earth2.jpg',
                         x=x * r * 2, y=y * r,  z=z * r * 2, scale=3)
-        sphere.name = "%s:%s:%s" % (x, y, z)
+        earth.name = "%s:%s:%s" % (x, y, z)
 
         def update():
             def inner(s, b):
                 if not hasattr(s, "initial_y"):
-                    s.rotation_y -= 1
-                # print(s.name, s.rotation_y)
+                    # 随机生成一个地球自转的初始量
+                    s.initial_y = random.randint(20, 200) / 100 * run_speed
+                # 地球进行自转
+                s.rotation_y -= s.initial_y
 
-            return inner(sphere, y)
+            return inner(earth, y)
 
-        sphere.update = update
+        earth.update = update
 
     for x in range(-num_x, num_x):
         for y in range(-num_y, num_y):
             for z in range(-num_z, num_z):
-                create_sphere(x, y, z)
+                create_earth(x, y, z)
 
     ed = EditorCamera()
     camera.fov = 80
     ed.position = [0, 0, r/2]
-    import sys
+
+    # 控制摄像机三个维度的移动方向，值为 1 和 -1
     camera.x_d = 1
     camera.y_d = 1
     camera.z_d = 1
 
     def camera_update():
-        camera.world_rotation_y += 0.05
-        camera.world_rotation_z += 0.01
-        # camera.x += ((random.randint(100, 300) - 100) / 3000) * camera.x_d
-        camera.y += ((random.randint(100, 300) - 100) / 5000) * camera.y_d
-        # camera.z += ((random.randint(100, 300) - 100) / 3000) * camera.z_d
+        # 更新摄像机位置和角度
+
+        # 控制摄像机旋转（以y、z轴进行旋转）
+        camera.world_rotation_y += 0.005
+        camera.world_rotation_z += 0.001
+
+        # 控制摄像机来回移动（x为左右移动，y为上下移动）
+        camera.x += ((random.randint(100, 300) - 100) / 2500 * run_speed) * camera.x_d
+        camera.y += ((random.randint(100, 300) - 100) / 5000 * run_speed) * camera.y_d
+        # camera.z += ((random.randint(100, 300) - 100) / 3000 * run_speed) * camera.z_d
         range_val = 5
-        # if camera.x > range_val:
-        #     camera.x_d = -1
-        # elif camera.x < -range_val:
-        #     camera.x_d = 1
+        if camera.x > range_val:
+            camera.x_d = -1
+        elif camera.x < -range_val:
+            camera.x_d = 1
         if camera.y > range_val:
             camera.y_d = -1
         elif camera.y < -range_val:

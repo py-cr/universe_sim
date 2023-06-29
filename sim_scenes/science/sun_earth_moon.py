@@ -66,6 +66,11 @@ if __name__ == '__main__':
         # 设置运行速度（加速10倍）
         UrsinaConfig.run_speed_factor = 10
 
+        # 以下配置可以快速查看4年的轨迹
+        # UrsinaConfig.trail_length = 2800
+        # # 设置运行速度（加速50倍）
+        # UrsinaConfig.run_speed_factor = 50
+
         # 1个月有29.5天
         days_per_month = 29.5
         # 1天多少角度

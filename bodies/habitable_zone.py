@@ -37,8 +37,8 @@ class HabitableZone(Body):
             "parent": parent
         }
         super().__init__(**params)
-        # 环状带（inner_radius, outer_radius, subdivisions）
-        self.torus_zone = 0.95, 2.4, 64
+        # 环状宜居带（inner_radius, outer_radius, subdivisions）
+        self.torus_zone = 0.95, 1.67, 64
 
     def ignore_gravity_with(self, body):
         """

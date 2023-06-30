@@ -39,6 +39,8 @@ class HabitableZone(Body):
         super().__init__(**params)
         # 环状宜居带（inner_radius, outer_radius, subdivisions）
         self.torus_zone = 0.95, 1.67, 64
+        # 使用 texture="red_green_blue.png",
+        # self.torus_zone = 0.20, 6.00, 64
 
     def ignore_gravity_with(self, body):
         """
@@ -54,5 +56,5 @@ class HabitableZone(Body):
 
 
 if __name__ == '__main__':
-    asteroids = Asteroids()
-    print(asteroids)
+    habitable_zone = HabitableZone()
+    print(habitable_zone)

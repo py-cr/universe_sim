@@ -26,6 +26,7 @@ if __name__ == '__main__':
     moon = Moon(name="月球", size_scale=1.3e3,
                 init_position=[earth_moon_d, 0, AU],
                 init_velocity=[0, 0, 0],
+                rotation_speed=0.4065,
                 ignore_mass=True,
                 # gravity_only_for_earth=True
                 )
@@ -34,7 +35,7 @@ if __name__ == '__main__':
         Venus(name="金星", size_scale=1.2e3),  # 金星放大 1200 倍，距离保持不变
         earth, moon,
         Mars(name="火星", size_scale=1.2e3),  # 火星放大 1200 倍，距离保持不变
-        Asteroids(name="小行星群", size_scale=3.2e2,
+        Asteroids(name="小行星群", size_scale=1e2,
                   parent=sun),  # 小行星群模拟(仅 ursina 模拟器支持)
         HabitableZone(name="宜居带", size_scale=1e2,  # texture="red_green_blue.png",
                        parent=sun),  # 宜居带模拟(仅 ursina 模拟器支持)

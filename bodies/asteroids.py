@@ -48,7 +48,10 @@ class Asteroids(Body):
         }
         super().__init__(**params)
         # 环状星群
-        self.torus_stars = True
+        # self.torus_stars = True
+        # 环状星群带（inner_radius, outer_radius, subdivisions）
+        # inner_radius:内圆半径 outer_radius:外圆半径，subdivisions:细分数，控制圆环的细节和精度
+        self.torus_zone = 2.17, 3.64, 64
 
     def ignore_gravity_with(self, body):
         """

@@ -28,9 +28,9 @@ if __name__ == '__main__':
         Mercury(size_scale=4e3, distance_scale=1.3),        # 水星放大 4000 倍，距离放大 1.3 倍
         Venus(size_scale=4e3, distance_scale=1.3),          # 金星放大 4000 倍，距离放大 1.3 倍
         Earth(size_scale=4e3, distance_scale=1.3),          # 地球放大 4000 倍，距离放大 1.3 倍
-        Asteroids(size_scale=3e2, parent=sun),              # 小行星模拟(仅 ursina 模拟器支持)
-        Mars(size_scale=4e3, distance_scale=1.3),           # 火星放大 4000 倍，距离放大 1.3 倍
-        Jupiter(size_scale=0.68e3, distance_scale=0.65),    # 木星放大 680 倍，距离缩小到真实距离的 0.65
+        Mars(size_scale=4e3, distance_scale=1.2),           # 火星放大 4000 倍，距离放大 1.2 倍
+        Asteroids(size_scale=1e2, parent=sun),              # 小行星模拟(仅 ursina 模拟器支持)
+        Jupiter(size_scale=0.68e3, distance_scale=0.72),    # 木星放大 680 倍，距离缩小到真实距离的 0.72
         Saturn(size_scale=0.68e3, distance_scale=0.52),     # 土星放大 680 倍，距离缩小到真实距离的 0.52
         Uranus(size_scale=0.8e3, distance_scale=0.36),      # 天王星放大 800 倍，距离缩小到真实距离的 0.36
         Neptune(size_scale=1e3, distance_scale=0.27),       # 海王星放大 1000 倍，距离缩小到真实距离的 0.27

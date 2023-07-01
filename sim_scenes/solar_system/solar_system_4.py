@@ -45,19 +45,24 @@ if __name__ == '__main__':
     #  由于宇宙空间尺度非常大，如果按照实际的天体大小，则无法看到天体，因此需要对天体的尺寸进行放大
     sun = Sun(name="太阳", size_scale=1.4e2)  # 太阳放大 80 倍，距离保持不变
     sun.init_velocity = [0, 2, 0]  # 太阳以2km/s的速度带着其他行星一起跑
+
+    asteroids = Asteroids(name="小行星群", size_scale=1e2,
+                          parent=sun)  # 小行星群模拟(仅 ursina 模拟器支持)
+    # 环状星群带（inner_radius, outer_radius, subdivisions）
+    # inner_radius:内圆半径 outer_radius:外圆半径，subdivisions:细分数，控制圆环的细节和精度
+    asteroids.torus_zone = 2.7, 3.5, 64
     bodies = [
         sun,
-        Mercury(name="水星", size_scale=4e3),  # 水星放大 4000 倍，距离保持不变
-        Venus(name="金星", size_scale=4e3),  # 金星放大 4000 倍，距离保持不变
-        Earth(name="地球", size_scale=4e3),  # 地球放大 4000 倍，距离保持不变
-        Mars(name="火星", size_scale=4e3),  # 火星放大 4000 倍，距离保持不变
-        Asteroids(name="小行星群", size_scale=3.2e2,
-                  parent=sun),  # 小行星群模拟(仅 ursina 模拟器支持)
-        Jupiter(name="木星", size_scale=0.6e3),  # 木星放大 800 倍，距离保持不变
-        Saturn(name="土星", size_scale=0.6e3),  # 土星放大 800 倍，距离保持不变
+        Mercury(name="水星", size_scale=4e3),     # 水星放大 4000 倍，距离保持不变
+        Venus(name="金星", size_scale=4e3),       # 金星放大 4000 倍，距离保持不变
+        Earth(name="地球", size_scale=4e3),       # 地球放大 4000 倍，距离保持不变
+        Mars(name="火星", size_scale=4e3),        # 火星放大 4000 倍，距离保持不变
+        asteroids,
+        Jupiter(name="木星", size_scale=0.6e3),   # 木星放大 800 倍，距离保持不变
+        Saturn(name="土星", size_scale=0.6e3),    # 土星放大 800 倍，距离保持不变
         Uranus(name="天王星", size_scale=0.8e3),  # 天王星放大 800 倍，距离保持不变
-        Neptune(name="海王星", size_scale=1e3),  # 海王星放大 1000 倍，距离保持不变
-        Pluto(name="冥王星", size_scale=10e3),  # 冥王星放大 10000 倍，距离保持不变(从太阳系的行星中排除)
+        Neptune(name="海王星", size_scale=1e3),   # 海王星放大 1000 倍，距离保持不变
+        Pluto(name="冥王星", size_scale=10e3),    # 冥王星放大 10000 倍，距离保持不变(从太阳系的行星中排除)
     ]
 
     # 真实距离
@@ -71,7 +76,7 @@ if __name__ == '__main__':
     # 设置为行星距离
     for idx, body in enumerate(bodies):
         # 对于太阳和小行星群保持原来的距离
-        if body.is_fixed_star or hasattr(body, "torus_stars"):
+        if body.is_fixed_star or hasattr(body, "torus_zone"):
             continue
         body_real_distance = body.init_position[2]  # 格式：body.init_position=[0, 0, 1.12 * AU]
         body_real_velocity = body.init_velocity[0]  # 格式：body.init_velocity=body.[-29.79, 0, 0]

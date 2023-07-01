@@ -38,6 +38,7 @@ class HabitableZone(Body):
         }
         super().__init__(**params)
         # 环状宜居带（inner_radius, outer_radius, subdivisions）
+        # inner_radius:内圆半径 outer_radius:外圆半径，subdivisions:细分数，控制圆环的细节和精度
         self.torus_zone = 0.95, 1.67, 64
         # 使用 texture="red_green_blue.png",
         # self.torus_zone = 0.20, 6.00, 64

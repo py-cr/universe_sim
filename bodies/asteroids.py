@@ -7,9 +7,10 @@
 # python_version  :3.8
 # ==============================================================================
 from bodies.body import Body, AU
+from bodies.torus_zone import TorusZone
 
 
-class Asteroids(Body):
+class Asteroids(TorusZone):
     """
     小行星群
     质量 (kg):~4.1×1010 kg
@@ -29,7 +30,11 @@ class Asteroids(Body):
     def __init__(self, name="小行星群", mass=1.9891e30,
                  init_position=[0, 0, 0],
                  init_velocity=[0, 0, 0],
-                 texture="asteroids.png", size_scale=1.0,
+                 texture="asteroids.png",
+                 inner_radius=2.17,
+                 outer_radius=3.64,
+                 subdivisions=64,
+                 size_scale=1.0,
                  distance_scale=1.0,
                  rotation_speed=0.002,  # 小行星绕太阳转一圈的时间在数年到几十年之间不等。
                  parent=None):
@@ -38,8 +43,9 @@ class Asteroids(Body):
             "mass": mass,
             "init_position": init_position,
             "init_velocity": init_velocity,
-            "density": 1.408e3,
-            "color": (179, 231, 255),
+            "inner_radius": inner_radius,
+            "outer_radius": outer_radius,
+            "subdivisions": subdivisions,
             "texture": texture,
             "size_scale": size_scale,
             "distance_scale": distance_scale,
@@ -51,7 +57,7 @@ class Asteroids(Body):
         # self.torus_stars = True
         # 环状星群带（inner_radius, outer_radius, subdivisions）
         # inner_radius:内圆半径 outer_radius:外圆半径，subdivisions:细分数，控制圆环的细节和精度
-        self.torus_zone = 2.17, 3.64, 64
+        # self.torus_zone = 2.17, 3.64, 64
 
     def ignore_gravity_with(self, body):
         """

@@ -11,6 +11,7 @@ from bodies.uranus import Uranus
 from bodies.venus import Venus
 from bodies.moon import Moon
 from bodies.asteroid import Asteroid
+from bodies.torus_zone import TorusZone
 from bodies.asteroids import Asteroids
 from bodies.habitable_zone import HabitableZone
 

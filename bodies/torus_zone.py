@@ -7,14 +7,11 @@
 # python_version  :3.8
 # ==============================================================================
 from bodies.body import Body, AU
-from bodies.torus_zone import TorusZone
 
 
-class HabitableZone(TorusZone):
+class TorusZone(Body):
     """
-    模拟太阳系宜居带:
-    目前认为 太阳系 的宜居带范围是从距离太阳0.95个天文单位 (约1.42亿千米)到 2.4个天文单位（约3.59亿千米）的范围为宜居带，
-    其宽度约为2.17亿千米， 按照这个标准，太阳系的宜居带中只有三个大型天体，分别是地球、 月球 以及火星（1.52天文单位）。
+    模拟环形区域:
     """
 
     def __init__(self, name="宜居带", mass=1.9891e30,
@@ -28,14 +25,28 @@ class HabitableZone(TorusZone):
                  distance_scale=1.0,
                  rotation_speed=0,
                  parent=None):
+        """
+
+        @param name: 天体名称
+        @param mass: 天体质量 (kg)
+        @param init_position: 初始位置 (km)
+        @param init_velocity: 初始速度 (km/s)
+        @param texture: 纹理图片
+        @param inner_radius: 内圆半径
+        @param outer_radius: 外圆半径
+        @param subdivisions: 细分数，控制圆环的细节和精度
+        @param size_scale: 尺寸缩放
+        @param distance_scale: 距离缩放
+        @param rotation_speed: 自旋速度（度/小时）
+        @param parent: 天体的父对象
+        """
         params = {
             "name": name,
             "mass": mass,
             "init_position": init_position,
             "init_velocity": init_velocity,
-            "inner_radius": inner_radius,
-            "outer_radius": outer_radius,
-            "subdivisions": subdivisions,
+            "density": 1.408e3,
+            "color": (179, 231, 255),
             "texture": texture,
             "size_scale": size_scale,
             "distance_scale": distance_scale,
@@ -43,11 +54,8 @@ class HabitableZone(TorusZone):
             "parent": parent
         }
         super().__init__(**params)
-        # 环状宜居带（inner_radius, outer_radius, subdivisions）
-        # inner_radius:内圆半径 outer_radius:外圆半径，subdivisions:细分数，控制圆环的细节和精度
-        # self.torus_zone = 0.95, 1.67, 64
-        # 使用 texture="red_green_blue.png",
-        # self.torus_zone = 0.20, 6.00, 64
+        # 环状带（inner_radius, outer_radius, subdivisions）
+        self.torus_zone = inner_radius, outer_radius, subdivisions
 
     def ignore_gravity_with(self, body):
         """

@@ -37,6 +37,7 @@ class SpeedOfLightInit:
         self.__bodies = None
         self.view_closely = False
         self.auto_control_speed = False
+        self.body_arrived = None
 
         if self.__camera_follow_light in ["SideView"]:
             # 摄像机位置 = 前-后+、上+下-、左-右+、
@@ -282,6 +283,8 @@ class SpeedOfLightInit:
                 continue
             # 计算判断，如果光速天体距离到达了某个天体，就记录到“已到达天体列表”中
             if self.light_ship.position[2] >= body.position[2]:
+                if callable(self.body_arrived):
+                    self.body_arrived(body)
                 self.arrived_bodies.append(body)
                 if self.text_panel is not None:
                     self.arrived_info += f"[{time_data.time_text}]\t到达\t[{body.name}]\n\n"

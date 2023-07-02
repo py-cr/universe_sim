@@ -244,9 +244,9 @@ def create_solar_system_bodies(ignore_mass=False, init_velocity=None):
         #           parent=sun),  # 小行星群模拟(仅 ursina 模拟器支持)
         Jupiter(name="木星", size_scale=0.3e3),  # 木星放大 300 倍，距离保持不变
         Saturn(name="土星", size_scale=0.3e3),  # 土星放大 300 倍，距离保持不变
-        Uranus(name="天王星", size_scale=0.4e3),  # 天王星放大 400 倍，距离保持不变
-        Neptune(name="海王星", size_scale=1e3),  # 海王星放大 800 倍，距离保持不变
-        Pluto(name="冥王星", size_scale=10e3),  # 冥王星放大 10000 倍，距离保持不变(从太阳系的行星中排除)
+        Uranus(name="天王星", size_scale=0.3e3),  # 天王星放大 300 倍，距离保持不变
+        Neptune(name="海王星", size_scale=0.3e3),  # 海王星放大 300 倍，距离保持不变
+        Pluto(name="冥王星", size_scale=0.3e3),  # 冥王星放大 300 倍，距离保持不变(从太阳系的行星中排除)
     ]
 
     # 遍历所有天体，

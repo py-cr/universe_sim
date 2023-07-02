@@ -3,45 +3,76 @@ from PIL import ImageGrab
 import numpy as np
 import argparse
 import time
-
+import os
 global img
 global point1, point2
+import win32gui
+import win32ui
+import win32con
+import win32api
 
+#
+# def on_mouse(event, x, y, flags, param):
+#     global img, point1, point2
+#     img2 = img.copy()
+#     if event == cv2.EVENT_LBUTTONDOWN:  # 左键点击
+#         point1 = (x, y)
+#         cv2.circle(img2, point1, 10, (0, 255, 0), thickness=2)
+#         cv2.imshow('image', img2)
+#     elif event == cv2.EVENT_MOUSEMOVE and (flags & cv2.EVENT_FLAG_LBUTTON):  # 按住左键拖曳
+#         cv2.rectangle(img2, point1, (x, y), (255, 0, 0), thickness=2)
+#         cv2.imshow('image', img2)
+#     elif event == cv2.EVENT_LBUTTONUP:  # 左键释放
+#         point2 = (x, y)
+#         cv2.rectangle(img2, point1, point2, (0, 0, 255), thickness=2)
+#         cv2.imshow('image', img2)
+#
+#
+# def select_roi(frame):
+#     global img, point1, point2
+#     img = cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR)
+#     winname = 'image'
+#     cv2.namedWindow(winname, cv2.WINDOW_NORMAL)
+#     cv2.setWindowProperty(winname, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
+#     cv2.setMouseCallback(winname, on_mouse)
+#     cv2.imshow(winname, img)
+#     cv2.waitKey(0)
+#     cv2.destroyAllWindows()
+#     return point1, point2
 
-def on_mouse(event, x, y, flags, param):
-    global img, point1, point2
-    img2 = img.copy()
-    if event == cv2.EVENT_LBUTTONDOWN:  # 左键点击
-        point1 = (x, y)
-        cv2.circle(img2, point1, 10, (0, 255, 0), thickness=2)
-        cv2.imshow('image', img2)
-    elif event == cv2.EVENT_MOUSEMOVE and (flags & cv2.EVENT_FLAG_LBUTTON):  # 按住左键拖曳
-        cv2.rectangle(img2, point1, (x, y), (255, 0, 0), thickness=2)
-        cv2.imshow('image', img2)
-    elif event == cv2.EVENT_LBUTTONUP:  # 左键释放
-        point2 = (x, y)
-        cv2.rectangle(img2, point1, point2, (0, 0, 255), thickness=2)
-        cv2.imshow('image', img2)
+FFMPEG_PATH= "F:\\Tools\\ffmpeg"
 
+def crop(mp4_file):
+    # "ffmpeg -i 1年等于11个月.mp4 -vf crop=1724:972:194:108 1年等于11个月_crop.mp4 -y"
+    cmd = 'SET PATH=%PATH%;"' + FFMPEG_PATH + '" & '
+    cmd = cmd + 'ffmpeg -i "' + mp4_file + '" -vf crop=1724:972:194:108 "' + mp4_file + '_crop.mp4" -y'
+    val = os.system(cmd)
+    if val == 0:
+        print("success")
+    else:
+        print("fail..")
 
-def select_roi(frame):
-    global img, point1, point2
-    img = cv2.cvtColor(np.array(frame), cv2.COLOR_RGB2BGR)
-    winname = 'image'
-    cv2.namedWindow(winname, cv2.WINDOW_NORMAL)
-    cv2.setWindowProperty(winname, cv2.WND_PROP_FULLSCREEN, cv2.WINDOW_FULLSCREEN)
-    cv2.setMouseCallback(winname, on_mouse)
-    cv2.imshow(winname, img)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-    return point1, point2
+window_name="earth"
+window_name="fiction"
+window_name="funny"
+window_name="science"
+window_name="solar_system"
+window_name="tri_bodies"
+window_name="wonders"
+
+def get_window_img_dc(window_name="science"):
+    # 获取桌面
+    # hdesktop = win32gui.GetDesktopWindow()
+    handle = win32gui.FindWindow(None, window_name)
+    return handle
 
 
 if __name__ == '__main__':
+
     parser = argparse.ArgumentParser()
     parser.add_argument('--fps', type=int, default=30, help='frame per second')
-    parser.add_argument('--total_time', type=int, default=10, help='video total time')
-    parser.add_argument('--savename', type=str, default='video.mp4', help='save file name')
+    parser.add_argument('--total_time', type=int, default=10000000, help='video total time')
+    parser.add_argument('--savename', type=str, default='video_right.mp4', help='save file name')
     parser.add_argument('--screen_type', default=0, type=int, choices=[0, 1], help='1: full screen, 0: region screen')
     args = parser.parse_args()
 
@@ -73,8 +104,19 @@ if __name__ == '__main__':
 
     wait_ms = 1000 / args.fps
     imageNum = 0
+    print("查找窗口...")
+    while True:
+        handle = get_window_img_dc()
+        if handle > 0:
+            break
+        time.sleep(0.001)
+    print("开始捕捉...")
 
     while True:
+        handle = get_window_img_dc()
+        if handle == 0:
+            break
+
         current_time = time.time() * 1000
         next_frame_time = last_time + wait_ms
         if current_time < next_frame_time:
@@ -102,4 +144,5 @@ if __name__ == '__main__':
     print("保存中...")
     video.release()
     cv2.destroyAllWindows()
+    # crop('video.mp4')
     print("完成")

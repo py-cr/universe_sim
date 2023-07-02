@@ -26,9 +26,9 @@ init = SpeedOfLightInit(camera_follow_light)
 # 创建太阳系天体（忽略质量，引力无效，初速度全部为0）
 bodies = create_solar_system_bodies(ignore_mass=True, init_velocity=[0, 0, 0])
 
-# camera_pos = "left"
+camera_pos = "left"
 camera_pos = "right"
-camera_l2r = 0.01 * AU
+camera_l2r = 0.1 * AU
 
 if camera_pos == "right":  # 摄像机右眼
     init.light_init_position[0] += camera_l2r
@@ -59,7 +59,9 @@ def on_reset():
     init.arrived_info = "距离[太阳中心]：${distance}\n\n光速飞船速度：${speed}\n\n"
 
 
+
 def on_timer_changed(time_data: TimeData):
+    init.text_panel.parent.enabled = False
     velocity, _ = get_value_direction_vectors(light_ship.velocity)
     distance = round(init.light_ship.position[2] / AU, 4)
     text = init.arrived_info.replace("${distance}", "%.4f AU" % distance)
@@ -86,6 +88,8 @@ def body_arrived(body):
         light_ship.acceleration = [0, -50, 200]
     elif body.name == "海王星":  # 到达海王星，加速前进，并进行攀升
         light_ship.acceleration = [-3, 48, 300]
+    elif body.name == "冥王星":
+        exit(0)
     # print(body)
 
 # def body_arrived(body):
@@ -109,7 +113,7 @@ init.body_arrived = body_arrived
 # position = 左-右+、上+下-、前+后-
 ursina_run(bodies, 60,
            position=init.camera_position,
-           show_trail=init.show_trail,
+           # show_trail=init.show_trail,
            show_timer=True,
            view_closely=init.view_closely,
            bg_music="sounds/interstellar.mp3")

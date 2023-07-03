@@ -16,7 +16,6 @@ from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.entities.entity_utils import get_value_direction_vectors
 from simulators.ursina.ursina_event import UrsinaEvent
 
-camera_follow_light = None  # 摄像机固定，不会跟随光
 camera_follow_light = 'ForwardView'  # 摄像机跟随光，方向是向前看
 
 # 实例化一个初始化对象（订阅事件，记录到达每个行星所需要的时间）
@@ -111,7 +110,7 @@ init.body_arrived = body_arrived
 # 使用 ursina 查看的运行效果
 # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
 # position = 左-右+、上+下-、前+后-
-ursina_run(bodies, 60,
+ursina_run(bodies, 5,
            position=init.camera_position,
            # show_trail=init.show_trail,
            show_timer=True,

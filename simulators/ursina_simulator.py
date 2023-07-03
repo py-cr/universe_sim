@@ -36,6 +36,10 @@ class UrsinaSimulator(Simulator):
     """
 
     def __init__(self, bodies_sys: System):
+        # window.borderless = False
+        window.title = 'universe_sim'  # '宇宙模拟器'
+        icon = find_file("images/icon.ico")
+        window.icon = icon
         self.app = Ursina()
         # import os
         # os.environ['CUDA_VISIBLE_DEVICES'] = '1'  # 选择第二个GPU
@@ -263,9 +267,6 @@ class UrsinaSimulator(Simulator):
         #                   rotation=(0, 0, 0))
 
     def run(self, dt, **kwargs):
-
-        window.title = '宇宙模拟器'
-
         # 默认非近距离查看
         view_closely = False
         if "view_closely" in kwargs:

@@ -6,6 +6,7 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
+import sys
 from common.consts import AU
 from sim_scenes.func import ursina_run, create_solar_system_bodies, create_light_ship
 from common.consts import LIGHT_SPEED
@@ -25,8 +26,13 @@ init = SpeedOfLightInit(camera_follow_light)
 # 创建太阳系天体（忽略质量，引力无效，初速度全部为0）
 bodies = create_solar_system_bodies(ignore_mass=True, init_velocity=[0, 0, 0])
 
-camera_pos = "left"
-camera_pos = "right"
+if len(sys.argv) > 1:
+    camera_pos = sys.argv[1].replace("_", "")
+else:
+    camera_pos = "left"
+    camera_pos = "right"
+
+print("camera_pos:", camera_pos)
 camera_l2r = 0.1 * AU
 
 if camera_pos == "right":  # 摄像机右眼
@@ -56,7 +62,6 @@ def on_reset():
     init.on_reset
     init.arrived_info = "距离[太阳中心]：${distance}\n\n"
     init.arrived_info = "距离[太阳中心]：${distance}\n\n光速飞船速度：${speed}\n\n"
-
 
 
 def on_timer_changed(time_data: TimeData):
@@ -90,6 +95,7 @@ def body_arrived(body):
     elif body.name == "冥王星":
         exit(0)
     # print(body)
+
 
 # def body_arrived(body):
 #     # 到达每个行星都会触发，对光速飞船进行加速，超光速前进（使用未来曲率引擎技术）

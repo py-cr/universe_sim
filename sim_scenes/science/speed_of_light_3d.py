@@ -18,7 +18,7 @@ from simulators.ursina.entities.entity_utils import get_value_direction_vectors
 from simulators.ursina.ursina_event import UrsinaEvent
 
 camera_follow_light = None
-# camera_follow_light = 'ForwardView'  # 摄像机跟随光，方向是向前看
+camera_follow_light = 'ForwardView'  # 摄像机跟随光，方向是向前看
 
 # 实例化一个初始化对象（订阅事件，记录到达每个行星所需要的时间）
 init = SpeedOfLightInit(camera_follow_light)

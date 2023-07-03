@@ -8,6 +8,7 @@ import win32gui
 import win32ui
 import win32con
 import win32api
+import traceback
 
 
 def get_window_handle(window_name="universe_sim"):
@@ -78,6 +79,7 @@ def sim_window_screen_shot(wait_ses=-1):
                 img = screen_shot(img_dc)
             except Exception as e:
                 print("ERROR:", str(e))
+                traceback.print_exc()
                 return None
             return img
         if wait_ses < 0:

@@ -17,7 +17,8 @@ from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.entities.entity_utils import get_value_direction_vectors
 from simulators.ursina.ursina_event import UrsinaEvent
 
-camera_follow_light = 'ForwardView'  # 摄像机跟随光，方向是向前看
+camera_follow_light = None
+# camera_follow_light = 'ForwardView'  # 摄像机跟随光，方向是向前看
 
 # 实例化一个初始化对象（订阅事件，记录到达每个行星所需要的时间）
 init = SpeedOfLightInit(camera_follow_light)
@@ -25,6 +26,14 @@ init = SpeedOfLightInit(camera_follow_light)
 # TODO: 注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）
 # 创建太阳系天体（忽略质量，引力无效，初速度全部为0）
 bodies = create_solar_system_bodies(ignore_mass=True, init_velocity=[0, 0, 0])
+
+distance_scales = [1, 2.4, 2.05, 2.03, 2.1, 1.8, 0.72, 0.6, 0.40, 0.30, 0.26]
+
+for idx, body in enumerate(bodies):
+    body.distance_scale = distance_scales[idx]
+    if idx > 0:
+        body.init_position[0] = -body.radius * body.size_scale
+        body.init_position[1] = -body.diameter * body.size_scale
 
 if len(sys.argv) > 1:
     camera_pos = sys.argv[1].replace("_", "")
@@ -81,18 +90,18 @@ UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
 
 
 def body_arrived(body):
-    # 到达每个行星都会触发，对光速飞船进行加速，超光速前进（使用未来曲率引擎技术）
-    if body.name == "火星":  # 到达火星，加速前进，并进行攀升
-        light_ship.acceleration = [0, 35, 300]
-    elif body.name == "木星":  # 到达木星，加速前进，并进行下降
-        light_ship.acceleration = [0, -100, 200]
-    elif body.name == "土星":  # 到达土星，加速前进，并进行攀升
-        light_ship.acceleration = [0, 55, 200]
-    elif body.name == "天王星":  # 到达天王星，加速前进，并进行下降
-        light_ship.acceleration = [0, -50, 200]
-    elif body.name == "海王星":  # 到达海王星，加速前进，并进行攀升
-        light_ship.acceleration = [-3, 48, 300]
-    elif body.name == "冥王星":
+    # # 到达每个行星都会触发，对光速飞船进行加速，超光速前进（使用未来曲率引擎技术）
+    # if body.name == "火星":  # 到达火星，加速前进，并进行攀升
+    #     light_ship.acceleration = [120, 150, 1000]
+    # elif body.name == "木星":  # 到达木星，加速前进，并进行下降
+    #     light_ship.acceleration = [-200, -600, 5000]
+    # elif body.name == "土星":  # 到达土星，加速前进，并进行攀升
+    #     light_ship.acceleration = [-150, 100, 0]
+    # elif body.name == "天王星":  # 到达天王星，加速前进，并进行下降
+    #     light_ship.acceleration = [0, 200, 0]
+    # elif body.name == "海王星":  # 到达海王星，加速前进，并进行攀升
+    #     light_ship.acceleration = [150, -550, -2500]
+    if body.name == "冥王星":
         exit(0)
     # print(body)
 
@@ -116,9 +125,10 @@ init.body_arrived = body_arrived
 # 使用 ursina 查看的运行效果
 # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
 # position = 左-右+、上+下-、前+后-
-ursina_run(bodies, 5,
+ursina_run(bodies, 10,
            position=init.camera_position,
            # show_trail=init.show_trail,
            show_timer=True,
            view_closely=init.view_closely,
-           bg_music="sounds/interstellar.mp3")
+           # bg_music="sounds/interstellar.mp3"
+           )

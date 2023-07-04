@@ -112,6 +112,8 @@ def ursina_run(bodies,
                cosmic_bg=None,
                bg_music=None,
                show_grid=True,
+               show_camera_info=True,
+               show_control_info=True,
                grid_position=None,
                grid_scale=None,
                show_trail=False,
@@ -129,6 +131,8 @@ def ursina_run(bodies,
     @param cosmic_bg: 宇宙背景图片
     @param bg_music: 背景音乐
     @param show_grid: 是否显示空间网格
+    @param show_camera_info: 是否显示摄像机信息面板
+    @param show_control_info: 是否显示控制信息面板
     @param show_trail: 是否显示拖尾
     @param show_name: 是否显示天体名称
     @param show_timer: 是否显示计时器
@@ -158,9 +162,9 @@ def ursina_run(bodies,
     view_azimuth = 0  # 暂时未用
     player = UrsinaPlayer(position, view_azimuth, simulator.ursina_views)
 
-    if save_as_video:
-        from common.video_recorder import VideoRecorder
-        vr = VideoRecorder()
+    # if save_as_video:
+    #     from common.video_recorder import VideoRecorder
+    #     vr = VideoRecorder()
 
     def callback_update():
         UrsinaEvent.on_application_run()
@@ -169,13 +173,17 @@ def ursina_run(bodies,
             if ursina_view.appeared:
                 ursina_view.update()
 
-        if save_as_video:
-            vr.screenshot()
+        # if save_as_video:
+        #     vr.screenshot()
 
     import sys
     from simulators.ursina.ursina_config import UrsinaConfig
     from simulators.ursina.ursina_event import UrsinaEvent
     sys.modules["__main__"].update = callback_update
+
+    UrsinaConfig.show_camera_info = show_camera_info
+    UrsinaConfig.show_control_info = show_control_info
+
     if show_trail:
         UrsinaConfig.show_trail = show_trail
     simulator.run(dt,

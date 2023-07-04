@@ -35,6 +35,9 @@ class UrsinaConfig:
     __on_reset_funcs = []
 
     show_trail = False
+    show_camera_info = True
+    show_control_info = True
+
     # 拖尾球体的数量
     trail_length = 100
     # 拖尾的类型（球体、线条）

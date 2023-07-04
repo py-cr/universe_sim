@@ -100,8 +100,8 @@ def on_timer_changed(time_data: TimeData):
     init.text_panel.text = text.replace("${speed}", str(round(velocity / LIGHT_SPEED, 1)) + "倍光速")
     init._3d_card.switch_color()
     light_ship.switch_position()
-    if time_data.total_seconds > 20:
-        wait_for(0.3)
+    # if time_data.total_seconds > 20:
+    #     wait_for(0.03)
 
 
 # 订阅重新开始事件
@@ -153,7 +153,10 @@ init.body_arrived = body_arrived
 ursina_run(bodies, 10,
            position=init.camera_position,
            # show_trail=init.show_trail,
-           show_timer=True,
+           # show_timer=True,
+           show_camera_info=False,
+           show_control_info=False,
+           timer_enabled=True,
            view_closely=init.view_closely,
            # bg_music="sounds/interstellar.mp3"
            )

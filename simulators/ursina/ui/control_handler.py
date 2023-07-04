@@ -33,11 +33,15 @@ class ControlHandler(EventHandler):
         self.settings_handler = Entity(ignore_paused=True)
         self.settings_handler.input = self.settings_handler_input
         key_info_str = "方位控制[键盘QWEASD]+[鼠标右键]，按[空格]更多控制"
-        key_info = Text(text=key_info_str, font=UrsinaConfig.CN_FONT, position=(-1, 0.5), origin=(-1, 1),
-                        background=True)
+        if UrsinaConfig.show_control_info:
+            key_info = Text(text=key_info_str, font=UrsinaConfig.CN_FONT, position=(-1, 0.5), origin=(-1, 1),
+                            background=True)
 
         self.camera_info = Text(text="", scale=0.8, position=(0, -0.45), origin=(0, 1),
                                 background=False)
+
+        if not UrsinaConfig.show_camera_info:
+            self.camera_info.enabled = False
 
     def camera_update(self):
         pos = camera.position  # WS => [2]

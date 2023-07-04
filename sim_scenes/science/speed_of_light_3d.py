@@ -7,8 +7,10 @@
 # python_version  :3.8
 # ==============================================================================
 import sys
+import time
+from common.func import wait_for
 from common.consts import AU
-from sim_scenes.func import ursina_run, create_solar_system_bodies, create_light_ship
+from sim_scenes.func import ursina_run, create_solar_system_bodies, create_light_ship, create_3d_card
 from common.consts import LIGHT_SPEED
 from sim_scenes.science.speed_of_light_init import SpeedOfLightInit
 
@@ -42,7 +44,7 @@ else:
     camera_pos = "right"
 
 print("camera_pos:", camera_pos)
-camera_l2r = 0.1 * AU
+camera_l2r = 0.01 * AU
 
 if camera_pos == "right":  # 摄像机右眼
     init.light_init_position[0] += camera_l2r
@@ -56,8 +58,21 @@ init.light_init_position[1] = 1000000
 # 从 init 对象中获取 光体的大小（light_size_scale），光体的位置（light_init_position）
 # 创建一个以光速前进的天体（模拟一个光子） speed=1光速=299792.458千米/秒，注意：质量为0才能达到光速，虽然如此，但也可以试试超光速
 light_ship = create_light_ship(init.light_size_scale, init.light_init_position, speed=LIGHT_SPEED * 1)
+light_ship.camera_pos = camera_pos
 # 增加光速天体到天体集合
 bodies.append(light_ship)
+
+
+def switch_position():
+    if light_ship.camera_pos == "right":  # 摄像机右眼
+        light_ship.position[0] -= 2 * camera_l2r
+        light_ship.camera_pos = "left"
+    elif light_ship.camera_pos == "left":  # 摄像机左眼
+        light_ship.position[0] += 2 * camera_l2r
+        light_ship.camera_pos = "right"
+
+
+light_ship.switch_position = switch_position
 
 # 运行前指定bodies、light_body并订阅事件
 init.light_ship = light_ship
@@ -68,9 +83,13 @@ UrsinaEvent.on_reset_unsubscription(init.on_reset)
 
 
 def on_reset():
-    init.on_reset
+    init.on_reset()
     init.arrived_info = "距离[太阳中心]：${distance}\n\n"
     init.arrived_info = "距离[太阳中心]：${distance}\n\n光速飞船速度：${speed}\n\n"
+
+
+def on_ready():
+    init._3d_card = create_3d_card()
 
 
 def on_timer_changed(time_data: TimeData):
@@ -79,11 +98,17 @@ def on_timer_changed(time_data: TimeData):
     distance = round(init.light_ship.position[2] / AU, 4)
     text = init.arrived_info.replace("${distance}", "%.4f AU" % distance)
     init.text_panel.text = text.replace("${speed}", str(round(velocity / LIGHT_SPEED, 1)) + "倍光速")
+    init._3d_card.switch_color()
+    light_ship.switch_position()
+    if time_data.total_seconds > 20:
+        wait_for(0.3)
 
 
 # 订阅重新开始事件
 # 按键盘的 “O” 重置键会触发 on_reset
 UrsinaEvent.on_reset_subscription(on_reset)
+
+UrsinaEvent.on_ready_subscription(on_ready)
 # 订阅计时器事件（记录已到达天体列表）
 # 运行中，每时每刻都会触发 on_timer_changed
 UrsinaEvent.on_timer_changed_subscription(on_timer_changed)

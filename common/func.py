@@ -12,6 +12,7 @@ import numpy as np
 import random
 import os
 import math
+import time
 
 
 def get_dominant_colors(infile, resize=(20, 20)):
@@ -94,6 +95,15 @@ def find_file(file_path, default_val=None, find_deep=5):
             return os.path.normpath(file_path)
 
     return default_val
+
+
+def wait_for(secs):
+    wait = secs * 800
+    while True:
+        if wait <= 0:
+            return
+        time.sleep(0.001)
+        wait -= 1
 
 
 def calculate_distance(pos1, pos2=[0, 0, 0]):

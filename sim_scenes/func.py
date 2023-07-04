@@ -285,6 +285,31 @@ def create_light_ship(size_scale, init_position, speed=LIGHT_SPEED):
                      init_velocity=[0, 0, speed]).set_light_disable(True)
 
 
+def create_3d_card(left=-.885, top=0.495, width=0.02, height=0.02):
+    # 创建一个 Panel 组件
+    from ursina import Text, Panel, color, camera, Vec3
+    from simulators.ursina.ursina_config import UrsinaConfig
+    panel = Panel(
+        parent=None,
+        model='quad',
+        # texture='white_cube',
+        color=color.black,
+        origin=(-.48, .48, -.48),
+        scale=(width, height),
+        position=(left, top, 0)
+    )
+
+    def switch_color():
+        if panel.color == color.black:
+            panel.color = color.white
+        else:
+            panel.color = color.black
+
+    panel.switch_color = switch_color
+
+    return panel
+
+
 def create_text_panel(width=0.35, height=.5):
     # 创建一个 Panel 组件
     from ursina import Text, Panel, color, camera, Vec3

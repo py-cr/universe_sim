@@ -51,8 +51,8 @@ if camera_pos == "right":  # 摄像机右眼
 elif camera_pos == "left":  # 摄像机左眼
     init.light_init_position[0] -= camera_l2r
 
-init.light_init_position[0] = 4000000
-init.light_init_position[1] = 1000000
+init.light_init_position[0] = 5000000
+init.light_init_position[1] = 1500000
 # init.auto_control_speed = True
 
 # 从 init 对象中获取 光体的大小（light_size_scale），光体的位置（light_init_position）
@@ -158,7 +158,7 @@ init.body_arrived = body_arrived
 # 使用 ursina 查看的运行效果
 # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
 # position = 左-右+、上+下-、前+后-
-ursina_run(bodies, 10,
+ursina_run(bodies, 100,
            position=init.camera_position,
            # show_trail=init.show_trail,
            # show_timer=True,

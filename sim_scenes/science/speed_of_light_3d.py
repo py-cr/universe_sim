@@ -44,7 +44,7 @@ else:
     camera_pos = "right"
 
 print("camera_pos:", camera_pos)
-camera_l2r = 0.01 * AU
+camera_l2r = 0.002 * AU
 
 if camera_pos == "right":  # 摄像机右眼
     init.light_init_position[0] += camera_l2r

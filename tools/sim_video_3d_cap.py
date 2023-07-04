@@ -169,6 +169,7 @@ if __name__ == '__main__':
         #     video.write(img)
     min_index = min(r_frames.keys())
     max_index = max(r_frames.keys())
+    print("对视频进行3D处理")
     for index in range(min_index, max_index + 1):
         rv = r_frames.get(index, None)
         lv = l_frames.get(index, None)

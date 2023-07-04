@@ -40,15 +40,24 @@ def screen_shot(window_img_dc):
     # 创建一个内存设备描述表
     mem_dc = window_img_dc.CreateCompatibleDC()
     # 创建位图对象
-    screenshot = win32ui.CreateBitmap()
+    screenshot = win32ui.CreateBitmap()  # win32ui.CreateBitmap() GetBitmapBits() MemoryError
     screenshot.CreateCompatibleBitmap(window_img_dc, width, height)
     mem_dc.SelectObject(screenshot)
     # 截图至内存设备描述表
     mem_dc.BitBlt((0, 0), (width, height), window_img_dc, (0, 0), win32con.SRCCOPY)
     # 将截图保存到文件中
     # screenshot.SaveBitmapFile(mem_dc, 'screenshot.bmp')
+    # TODO: Traceback (most recent call last):
+    #   File "G:\works\gitcode\universe_sim\tools\sim_video_3d_cap.py", line 79, in sim_window_screen_shot
+    #     img = screen_shot(img_dc)
+    #   File "G:\works\gitcode\universe_sim\tools\sim_video_3d_cap.py", line 50, in screen_shot
+    #     signedIntsArray = screenshot.GetBitmapBits(True)
+    # MemoryError
     signedIntsArray = screenshot.GetBitmapBits(True)
     # 下面3个语句都能实现转换，推荐第1个
+    # TODO: G:\works\gitcode\universe_sim\tools\sim_video_3d_cap.py:52:
+    #  DeprecationWarning: The binary mode of fromstring is deprecated, as it behaves surprisingly on unicode inputs. Use frombuffer instead
+    #   img = np.fromstring(signedIntsArray, dtype='uint8')
     img = np.fromstring(signedIntsArray, dtype='uint8')
     img.shape = (height, width, 4)
     # 内存释放
@@ -131,7 +140,7 @@ if __name__ == '__main__':
 
         _3d_card = img[4:20, 3:20, ]
         _3d_card_p = _3d_card[10, 10,]
-        index = _3d_card_p[1] + _3d_card_p[0]
+        index = int(_3d_card_p[1]) + int(_3d_card_p[0])
         if index < last_index:
             index_base += (last_index + 1)
 
@@ -177,8 +186,20 @@ if __name__ == '__main__':
             continue
         merged_list = [np.concatenate((lv[i], sublist), axis=0) for i, sublist in enumerate(rv)]
         # show_image(np.array(merged_list))
-
-        video.write(np.array(merged_list))
+        # TODO： Traceback (most recent call last):
+        #   File "D:\Anaconda3\envs\pythoncr\lib\runpy.py", line 197, in _run_module_as_main
+        #     return _run_code(code, main_globals, None,
+        #   File "D:\Anaconda3\envs\pythoncr\lib\runpy.py", line 87, in _run_code
+        #     exec(code, run_globals)
+        #   File "G:\works\gitcode\universe_sim\tools\sim_video_3d_cap.py", line 180, in <module>
+        #     video.write(np.array(merged_list))
+        # numpy.core._exceptions._ArrayMemoryError: Unable to allocate 3.80 MiB for an array with shape (864, 1536, 3) and data type uint8
+        try:
+            video.write(np.array(merged_list))
+        except Exception as e:
+            print("video.write ERROR:", str(e))
+            traceback.print_exc()
+            break
 
     print("视频保存中")
     video.release()

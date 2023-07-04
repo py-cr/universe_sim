@@ -224,7 +224,10 @@ class UrsinaSimulator(Simulator):
             UrsinaEvent.on_evolving(evolve_dt)
             # interval_fator 能让更新天体运行状态（位置、速度）更精确
             evolve_dt = evolve_dt * self.interval_fator
-            super().evolve(evolve_dt)
+            evolve_args = {"evolve_dt": evolve_dt}
+            UrsinaEvent.on_before_evolving(evolve_args)
+            # if evolve_args["evolve_dt"] > 0:
+            super().evolve(evolve_args["evolve_dt"])
 
             if self.show_timer or self.timer_enabled:
                 timer = BodyTimer()

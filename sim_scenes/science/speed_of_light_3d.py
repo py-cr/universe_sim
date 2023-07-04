@@ -98,10 +98,16 @@ def on_timer_changed(time_data: TimeData):
     distance = round(init.light_ship.position[2] / AU, 4)
     text = init.arrived_info.replace("${distance}", "%.4f AU" % distance)
     init.text_panel.text = text.replace("${speed}", str(round(velocity / LIGHT_SPEED, 1)) + "倍光速")
-    init._3d_card.switch_color()
-    light_ship.switch_position()
+
     # if time_data.total_seconds > 20:
     #     wait_for(0.03)
+
+
+def on_before_evolving(evolve_args):
+    init._3d_card.switch_color()
+    light_ship.switch_position()
+    if init._3d_card.switch_flag == 1:
+        evolve_args["evolve_dt"] = 0.0
 
 
 # 订阅重新开始事件
@@ -112,6 +118,8 @@ UrsinaEvent.on_ready_subscription(on_ready)
 # 订阅计时器事件（记录已到达天体列表）
 # 运行中，每时每刻都会触发 on_timer_changed
 UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
+
+UrsinaEvent.on_before_evolving_subscription(on_before_evolving)
 
 
 def body_arrived(body):

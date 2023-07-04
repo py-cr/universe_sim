@@ -307,11 +307,15 @@ def create_3d_card(left=-.885, top=0.495, width=0.02, height=0.02):
         position=(left, top, 0)
     )
 
+    panel.switch_flag = 0
+
     def switch_color():
         if panel.color == color.black:
             panel.color = color.white
+            panel.switch_flag = 1
         else:
             panel.color = color.black
+            panel.switch_flag = 0
 
     panel.switch_color = switch_color
 

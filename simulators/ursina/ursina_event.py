@@ -36,6 +36,8 @@ class UrsinaEvent:
         UrsinaEvent.on_body_size_changed_callback = []
         # 逐步演变触发的订阅事件
         UrsinaEvent.on_evolving_callback = []
+        # 逐步演变触发前的订阅事件
+        UrsinaEvent.on_before_evolving_callback = []
         # 计时器触发的订阅事件
         UrsinaEvent.on_timer_changed_callback = []
 
@@ -77,6 +79,19 @@ class UrsinaEvent:
     def on_evolving(evolve_dt):
         for f in UrsinaEvent.on_evolving_callback:
             f(evolve_dt)
+
+    @staticmethod
+    def on_before_evolving_subscription(fun):
+        UrsinaEvent.on_before_evolving_callback.append(fun)
+
+    @staticmethod
+    def on_before_evolving_unsubscription(fun):
+        UrsinaEvent.on_before_evolving_callback.remove(fun)
+
+    @staticmethod
+    def on_before_evolving(evolve_args):
+        for f in UrsinaEvent.on_before_evolving_callback:
+            f(evolve_args)
 
     @staticmethod
     def on_application_run_callback_subscription(fun):

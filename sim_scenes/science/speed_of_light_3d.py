@@ -36,6 +36,7 @@ for idx, body in enumerate(bodies):
     if idx > 0:
         body.init_position[0] = -body.radius * body.size_scale
         body.init_position[1] = -body.diameter * body.size_scale
+    body.rotation_speed *= 20
 
 if len(sys.argv) > 1:
     camera_pos = sys.argv[1].replace("_", "")
@@ -159,7 +160,7 @@ init.body_arrived = body_arrived
 # 使用 ursina 查看的运行效果
 # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
 # position = 左-右+、上+下-、前+后-
-ursina_run(bodies, 100,
+ursina_run(bodies, 10,
            position=init.camera_position,
            # show_trail=init.show_trail,
            # show_timer=True,

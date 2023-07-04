@@ -11,6 +11,8 @@ import win32api
 import traceback
 import threading
 
+window_handle = None
+
 
 def get_window_handle(window_name="宇宙模拟器(universe sim)"):
     """
@@ -18,7 +20,9 @@ def get_window_handle(window_name="宇宙模拟器(universe sim)"):
     @param window_name:
     @return:
     """
+    global window_handle
     handle = win32gui.FindWindow(None, window_name)
+    window_handle = handle
     return handle
 
 
@@ -195,7 +199,7 @@ def clear_frame_temp_files():
         shutil.rmtree("frame_temp")
 
 
-def create_frame_temp_files_threading(file_index, left_frames, right_frames):
+def create_frame_temp_files(file_index, left_frames, right_frames):
     data = FrameData(left_frames, right_frames)
     if not os.path.exists("frame_temp"):
         os.mkdir("frame_temp")
@@ -204,13 +208,13 @@ def create_frame_temp_files_threading(file_index, left_frames, right_frames):
     data.save(file_name)
 
 
-def create_frame_temp_files(file_index, left_frames, right_frames):
-    import copy
-
-    thread1 = threading.Thread(target=create_frame_temp_files_threading,
-                               args=[file_index, copy.deepcopy(left_frames),
-                                     copy.deepcopy(right_frames)])
-    thread1.start()
+# def create_frame_temp_files(file_index, left_frames, right_frames):
+#     import copy
+#
+#     thread1 = threading.Thread(target=create_frame_temp_files_threading,
+#                                args=[file_index, copy.deepcopy(left_frames),
+#                                      copy.deepcopy(right_frames)])
+#     thread1.start()
 
 
 def get_frame_temp_data():
@@ -225,6 +229,16 @@ def get_frame_temp_data():
             temp_frame_data.append((f, fd))
 
     return temp_frame_data
+
+
+def press_pause_key():
+    KEY_P = win32api.VkKeyScan('P')
+    win32api.PostMessage(window_handle, win32con.WM_KEYDOWN, KEY_P, 0x00190001)
+    # win32api.PostMessage(window_handle, win32api.VkKeyScan('P'), 0x0001 | 0x0008 | 0x0010 | 0x0020, 0)
+    # win32api.PostMessage(0xFFFFFFF6,  win32api.VkKeyScan('P'), 0x0001 | 0x0008 | 0x0010 | 0x0020, 0)
+    # win32api.PostMessage(window_handle, win32con.WM_KEYDOWN, win32api.VkKeyScan('P'), 0)  # 发送F9键
+    # win32api.PostMessage(window_handle, win32con.WM_KEYUP, win32con.VK_F9, 0)
+    pass
 
 
 def make_3d_video():
@@ -256,13 +270,24 @@ def make_3d_video():
         _3d_card_p = _3d_card[10, 10,]
         index = int(_3d_card_p[1]) + int(_3d_card_p[0])
 
-        if index < last_index:
-            index_base += (last_index + 1)
+        if imageNum % 100 == 0:
+            press_pause_key()
             create_frame_temp_files(index + index_base, l_frames, r_frames)
             r_frames.clear()
             l_frames.clear()
             r_frames = {}
             l_frames = {}
+            press_pause_key()
+
+        if index < last_index:
+            index_base += (last_index + 1)
+            # press_pause_key()
+            # create_frame_temp_files(index + index_base, l_frames, r_frames)
+            # r_frames.clear()
+            # l_frames.clear()
+            # r_frames = {}
+            # l_frames = {}
+            # press_pause_key()
 
         last_index = index
         index = index + index_base

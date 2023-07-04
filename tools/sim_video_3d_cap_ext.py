@@ -9,6 +9,7 @@ import win32ui
 import win32con
 import win32api
 import traceback
+import threading
 
 
 def get_window_handle(window_name="宇宙模拟器(universe sim)"):
@@ -115,14 +116,17 @@ def show_image(img):
 
 
 def video_write(video, l_frames, r_frames):
+    if len(l_frames.keys()) == 0 or len(r_frames.keys()) == 0:
+        return
     min_index = min(r_frames.keys())
     max_index = max(r_frames.keys())
-
+    print("index:", end='')
     for index in range(min_index, max_index + 1):
         rv = r_frames.get(index, None)
         lv = l_frames.get(index, None)
         if rv is None or lv is None:
             continue
+        print(str(index) + ", ", end='')
         merged_list = [np.concatenate((lv[i], sublist), axis=0) for i, sublist in enumerate(rv)]
         try:
             video.write(np.array(merged_list))
@@ -130,6 +134,7 @@ def video_write(video, l_frames, r_frames):
             print("video.write ERROR:", str(e))
             traceback.print_exc()
             break
+    print("")
 
 
 def handle_3d_video(video, l_frames, r_frames):
@@ -137,8 +142,8 @@ def handle_3d_video(video, l_frames, r_frames):
 
     if temp_frame_data is not None:
         cnt = len(temp_frame_data)
-        for idx, data in enumerate(temp_frame_data):
-            print("对视频进行3D处理(%s/%s)" % (idx + 1, cnt + 1))
+        for idx, (f, data) in enumerate(temp_frame_data):
+            print("对视频进行3D处理(%s/%s)->%s" % (idx + 1, cnt + 1, f))
             video_write(video, data.left_frames, data.right_frames)
 
     print("对视频进行3D处理(%s/%s)" % (cnt + 1, cnt + 1))
@@ -190,13 +195,22 @@ def clear_frame_temp_files():
         shutil.rmtree("frame_temp")
 
 
-def create_frame_temp_files(file_index, left_frames, right_frames):
+def create_frame_temp_files_threading(file_index, left_frames, right_frames):
     data = FrameData(left_frames, right_frames)
     if not os.path.exists("frame_temp"):
         os.mkdir("frame_temp")
 
     file_name = os.path.join("frame_temp", str(file_index).rjust(10, '0')) + ".frames"
     data.save(file_name)
+
+
+def create_frame_temp_files(file_index, left_frames, right_frames):
+    import copy
+
+    thread1 = threading.Thread(target=create_frame_temp_files_threading,
+                               args=[file_index, copy.deepcopy(left_frames),
+                                     copy.deepcopy(right_frames)])
+    thread1.start()
 
 
 def get_frame_temp_data():
@@ -208,7 +222,7 @@ def get_frame_temp_data():
             temp_file = os.path.join("frame_temp", f)
             fd = FrameData.load(temp_file)
             print("读取临时文件", temp_file)
-            temp_frame_data.append(fd)
+            temp_frame_data.append((f, fd))
 
     return temp_frame_data
 

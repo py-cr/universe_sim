@@ -54,6 +54,7 @@ elif camera_pos == "left":  # 摄像机左眼
 init.light_init_position[0] = 5000000
 init.light_init_position[1] = 1500000
 # init.auto_control_speed = True
+init.camera_position = (0, -AU / 100, -AU / 50)
 
 # 从 init 对象中获取 光体的大小（light_size_scale），光体的位置（light_init_position）
 # 创建一个以光速前进的天体（模拟一个光子） speed=1光速=299792.458千米/秒，注意：质量为0才能达到光速，虽然如此，但也可以试试超光速

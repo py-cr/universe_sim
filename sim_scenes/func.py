@@ -290,7 +290,7 @@ def create_light_ship(size_scale, init_position, speed=LIGHT_SPEED):
     from objs.space_ship import SpaceShip
     return SpaceShip(name='光速飞船', mass=0, size_scale=size_scale, color=(255, 110, 0),
                      init_position=init_position,
-                     init_velocity=[0, 0, speed]).set_light_disable(True)
+                     init_velocity=[0, 0, speed]).set_light_disable(False)
 
 
 def create_3d_card(left=-.885, top=0.495, width=0.02, height=0.02):

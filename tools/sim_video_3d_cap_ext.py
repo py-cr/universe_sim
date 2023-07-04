@@ -241,11 +241,14 @@ def make_3d_video():
         _3d_card = img[4:20, 3:20, ]
         _3d_card_p = _3d_card[10, 10,]
         index = int(_3d_card_p[1]) + int(_3d_card_p[0])
+
         if index < last_index:
             index_base += (last_index + 1)
             create_frame_temp_files(index + index_base, l_frames, r_frames)
             r_frames.clear()
             l_frames.clear()
+            r_frames = {}
+            l_frames = {}
 
         last_index = index
         index = index + index_base

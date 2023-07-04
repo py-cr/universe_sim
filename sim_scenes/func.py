@@ -306,18 +306,36 @@ def create_3d_card(left=-.885, top=0.495, width=0.02, height=0.02):
         scale=(width, height),
         position=(left, top, 0)
     )
-
+    panel.color = color.rgba(0, 0, 0, 1)
     panel.switch_flag = 0
+    panel.switch_count = [0, 0]
+
+    def switch_count_inc():
+        num1 = panel.switch_count[1]
+        if num1 >= 255:
+            panel.switch_count[1] = 0
+            panel.switch_count[0] = 0
+
+        num0 = panel.switch_count[0]
+        if num0 >= 255:
+            panel.switch_count[1] += 1
+        else:
+            panel.switch_count[0] += 1
+
+    def get_switch_index():
+        return panel.switch_count[1] + panel.switch_count[0]
 
     def switch_color():
-        if panel.color == color.black:
-            panel.color = color.white
+        if panel.color.r == 0:
+            panel.color = color.rgba(255, panel.switch_count[1], panel.switch_count[0], 255)
             panel.switch_flag = 1
         else:
-            panel.color = color.black
+            panel.color = color.rgba(0, panel.switch_count[1], panel.switch_count[0], 255)
             panel.switch_flag = 0
+            switch_count_inc()
 
     panel.switch_color = switch_color
+    panel.get_switch_index = get_switch_index
 
     return panel
 

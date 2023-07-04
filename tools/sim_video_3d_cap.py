@@ -11,7 +11,7 @@ import win32api
 import traceback
 
 
-def get_window_handle(window_name="universe_sim"):
+def get_window_handle(window_name="宇宙模拟器(universe sim)"):
     """
     获取模拟器窗口句柄
     @param window_name:
@@ -96,13 +96,13 @@ def create_video(args, height, width):
     return video
 
 
-# def show_image(img):
-#     from PIL import Image
-#     image = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
-#     image = Image.fromarray(image)
-#     print(type(image))  # 结果为<class 'PIL.JpegImagePlugin.JpegImageFile'>
-#     print(image.size)  # 结果为(822，694)，这里注意Image输出的结果先显示列数，后显示行数
-#     image.show()
+def show_image(img):
+    from PIL import Image
+    image = cv2.cvtColor(img, cv2.COLOR_RGB2BGR)
+    image = Image.fromarray(image)
+    print(type(image))  # 结果为<class 'PIL.JpegImagePlugin.JpegImageFile'>
+    print(image.size)  # 结果为(822，694)，这里注意Image输出的结果先显示列数，后显示行数
+    image.show()
 
 
 if __name__ == '__main__':
@@ -118,12 +118,25 @@ if __name__ == '__main__':
     # show_image(img)
     video = create_video(args, img.shape[0], img.shape[1])
     imageNum = 0
+    r_frames = []
+    l_frames = []
     print("开始录屏")
     while True:
         img = sim_window_screen_shot()
         if img is None:
             print("\n模拟器窗口已关闭，退出录屏")
             break
+
+        _3d_card = img[4:20, 3:20, ]
+        _3d_card_p = _3d_card[10, 10, ]
+        if _3d_card_p[2] < 100:
+            _3d_card_color = "b"
+            _3d_card_direct = "right"
+            r_frames.append((_3d_card_p[1]+_3d_card_p[0], img[:432, :768, ]))
+        else:
+            _3d_card_color = "w"
+            _3d_card_direct = "left"
+            l_frames.append((_3d_card_p[1]+_3d_card_p[0], img[:432, :768, ]))
 
         # if is_blank_screen(img):
         #     if imageNum % args.fps == 0:
@@ -139,9 +152,10 @@ if __name__ == '__main__':
         imageNum += 1
 
         # frame = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-        if imageNum < args.fps * args.total_time:
-            # show_image(frame)
-            video.write(img)
+        # if imageNum < args.fps * args.total_time:
+        #     # img = img[:432,:768,]
+        #     # show_image(frame)
+        #     video.write(img)
 
     print("视频保存中")
     video.release()

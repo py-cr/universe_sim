@@ -37,7 +37,7 @@ class UrsinaSimulator(Simulator):
 
     def __init__(self, bodies_sys: System):
         # window.borderless = False
-        window.title = 'universe_sim'  # '宇宙模拟器'
+        window.title = '宇宙模拟器(universe sim)'  # 'universe_sim'  # '宇宙模拟器'
         icon = find_file("images/icon.ico")
         window.icon = icon
         self.app = Ursina()

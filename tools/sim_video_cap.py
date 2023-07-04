@@ -11,7 +11,7 @@ import win32api
 import traceback
 
 
-def get_window_handle(window_name="universe_sim"):
+def get_window_handle(window_name="宇宙模拟器(universe sim)"):
     """
     获取模拟器窗口句柄
     @param window_name:

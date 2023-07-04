@@ -118,8 +118,10 @@ if __name__ == '__main__':
     # show_image(img)
     video = create_video(args, img.shape[0], img.shape[1])
     imageNum = 0
-    r_frames = []
-    l_frames = []
+    index_base = 0
+    last_index = 0
+    r_frames = {}
+    l_frames = {}
     print("开始录屏")
     while True:
         img = sim_window_screen_shot()
@@ -128,15 +130,24 @@ if __name__ == '__main__':
             break
 
         _3d_card = img[4:20, 3:20, ]
-        _3d_card_p = _3d_card[10, 10, ]
+        _3d_card_p = _3d_card[10, 10,]
+        index = _3d_card_p[1] + _3d_card_p[0]
+        if index < last_index:
+            index_base += (last_index + 1)
+
+        last_index = index
+        index = index + index_base
+
         if _3d_card_p[2] < 100:
             _3d_card_color = "b"
             _3d_card_direct = "right"
-            r_frames.append((_3d_card_p[1]+_3d_card_p[0], img[:432, :768, ]))
+            if index not in r_frames.keys():
+                r_frames[index] = img[:864, :768, ]
         else:
             _3d_card_color = "w"
             _3d_card_direct = "left"
-            l_frames.append((_3d_card_p[1]+_3d_card_p[0], img[:432, :768, ]))
+            if index not in l_frames.keys():
+                l_frames[index] = img[:864, :768, ]
 
         # if is_blank_screen(img):
         #     if imageNum % args.fps == 0:
@@ -156,6 +167,17 @@ if __name__ == '__main__':
         #     # img = img[:432,:768,]
         #     # show_image(frame)
         #     video.write(img)
+    min_index = min(r_frames.keys())
+    max_index = max(r_frames.keys())
+    for index in range(min_index, max_index + 1):
+        rv = r_frames.get(index, None)
+        lv = l_frames.get(index, None)
+        if rv is None or lv is None:
+            continue
+        merged_list = [np.concatenate((lv[i], sublist), axis=0) for i, sublist in enumerate(rv)]
+        # show_image(np.array(merged_list))
+
+        video.write(np.array(merged_list))
 
     print("视频保存中")
     video.release()

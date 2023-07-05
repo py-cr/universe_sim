@@ -102,7 +102,7 @@ def on_ready():
 
 
 def on_timer_changed(time_data: TimeData):
-    init.text_panel.parent.enabled = True
+    init.text_panel.parent.enabled = False
     velocity, _ = get_value_direction_vectors(light_ship.velocity)
     distance = round(init.light_ship.position[2] / AU, 4)
     text = init.arrived_info.replace("${distance}", "%.4f AU" % distance)
@@ -232,7 +232,7 @@ init.body_arrived = body_arrived
 # 使用 ursina 查看的运行效果
 # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
 # position = 左-右+、上+下-、前+后-
-ursina_run(bodies, 30,
+ursina_run(bodies, 50,
            position=init.camera_position,
            # show_trail=init.show_trail,
            show_timer=True,

@@ -148,7 +148,7 @@ def video_write(video, l_frames, r_frames):
 
 def handle_3d_video(video, l_frames, r_frames):
     temp_frame_data = get_frame_temp_data()
-
+    cnt = 0
     if temp_frame_data is not None:
         cnt = len(temp_frame_data)
         for idx, (f, data) in enumerate(temp_frame_data):

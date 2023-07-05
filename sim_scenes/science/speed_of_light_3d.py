@@ -29,13 +29,18 @@ init = SpeedOfLightInit(camera_follow_light)
 # 创建太阳系天体（忽略质量，引力无效，初速度全部为0）
 bodies = create_solar_system_bodies(ignore_mass=True, init_velocity=[0, 0, 0])
 
-distance_scales = [1, 2.4, 2.05, 2.03, 2.1, 1.8, 0.72, 0.6, 0.40, 0.30, 0.26]
+jupiter, saturn, uranus, neptune = bodies[6:10]
+
+for big_body in [jupiter, saturn, uranus, neptune]:
+    big_body.init_position[0] = big_body.radius * big_body.size_scale
+
+distance_scales = [1, 2.0, 1.5, 1.48, 1.65, 1.5, 0.82, 0.75, 0.50, 0.40, 0.33]
 
 for idx, body in enumerate(bodies):
     body.distance_scale = distance_scales[idx]
-    if idx > 0:
-        body.init_position[0] = -body.radius * body.size_scale
-        body.init_position[1] = -body.diameter * body.size_scale
+    # if idx > 0:
+    #     body.init_position[0] = body.diameter * body.size_scale
+    #     body.init_position[1] = -body.radius * body.size_scale / 10
     body.rotation_speed *= 20
 
 if len(sys.argv) > 1:
@@ -53,7 +58,7 @@ elif camera_pos == "left":  # 摄像机左眼
     init.light_init_position[0] -= camera_l2r
 
 init.light_init_position[0] = 5000000
-init.light_init_position[1] = 1500000
+init.light_init_position[1] = 150000
 # init.auto_control_speed = True
 init.camera_position = (0, -AU / 100, -AU / 50)
 
@@ -126,17 +131,27 @@ UrsinaEvent.on_before_evolving_subscription(on_before_evolving)
 
 def body_arrived(body):
     # # 到达每个行星都会触发，对光速飞船进行加速，超光速前进（使用未来曲率引擎技术）
-    # if body.name == "火星":  # 到达火星，加速前进，并进行攀升
-    #     light_ship.acceleration = [120, 150, 1000]
-    # elif body.name == "木星":  # 到达木星，加速前进，并进行下降
-    #     light_ship.acceleration = [-200, -600, 5000]
+    if body.name == "金星":  # 到达金星，木星开始调整位置
+        jupiter.acceleration[0] = -35
+        jupiter.acceleration[1] = -15
+    elif body.name == "火星":  # 到达火星，土星开始调整位置
+        saturn.acceleration[0] = -16
+        saturn.acceleration[1] = -8
+    elif body.name == "木星":  # 到达木星，天王星开始调整位置
+        uranus.acceleration[0] = -8
+        uranus.acceleration[1] = -5
+    elif body.name == "土星":  # 到达土星，海王星开始调整位置
+        neptune.acceleration[0] = -20
+        neptune.acceleration[1] = -8
+        # saturn, uranus, neptune
     # elif body.name == "土星":  # 到达土星，加速前进，并进行攀升
     #     light_ship.acceleration = [-150, 100, 0]
     # elif body.name == "天王星":  # 到达天王星，加速前进，并进行下降
     #     light_ship.acceleration = [0, 200, 0]
     # elif body.name == "海王星":  # 到达海王星，加速前进，并进行攀升
     #     light_ship.acceleration = [150, -550, -2500]
-    if body.name == "冥王星":
+
+    elif body.name == "冥王星":
         exit(0)
     # print(body)
 
@@ -160,7 +175,7 @@ init.body_arrived = body_arrived
 # 使用 ursina 查看的运行效果
 # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
 # position = 左-右+、上+下-、前+后-
-ursina_run(bodies, 10,
+ursina_run(bodies, 30,
            position=init.camera_position,
            # show_trail=init.show_trail,
            # show_timer=True,

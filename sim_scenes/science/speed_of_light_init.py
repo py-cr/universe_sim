@@ -282,10 +282,10 @@ class SpeedOfLightInit:
                 # 对于光速天体、太阳、小行星群、“已到达天体列表”中的天体无需计算
                 continue
             # 计算判断，如果光速天体距离到达了某个天体，就记录到“已到达天体列表”中
-            if self.light_ship.position[2] >= body.position[2]:
+            if self.light_ship.position[2] >= body.position[2] * body.distance_scale:
                 if callable(self.body_arrived):
                     self.body_arrived(body)
-                self.arrived_bodies.append(body)
+                    self.arrived_bodies.append(body)
                 if self.text_panel is not None:
                     self.arrived_info += f"[{time_data.time_text}]\t到达\t[{body.name}]\n\n"
                     # distance = round(self.light_body.position[2] / AU, 4)

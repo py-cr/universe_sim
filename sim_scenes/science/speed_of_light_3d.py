@@ -29,6 +29,8 @@ init = SpeedOfLightInit(camera_follow_light)
 # 创建太阳系天体（忽略质量，引力无效，初速度全部为0）
 bodies = create_solar_system_bodies(ignore_mass=True, init_velocity=[0, 0, 0])
 
+earth = bodies[3]
+earth.rotate_angle = -23.44
 jupiter, saturn, uranus, neptune = bodies[6:10]
 
 for big_body in [jupiter, saturn, uranus, neptune]:
@@ -41,13 +43,13 @@ for idx, body in enumerate(bodies):
     # if idx > 0:
     #     body.init_position[0] = body.diameter * body.size_scale
     #     body.init_position[1] = -body.radius * body.size_scale / 10
-    body.rotation_speed *= 20
+    body.rotation_speed *= 55
 
-if len(sys.argv) > 1:
-    camera_pos = sys.argv[1].replace("_", "")
-else:
-    camera_pos = "left"
-    camera_pos = "right"
+# if len(sys.argv) > 1:
+#     camera_pos = sys.argv[1].replace("_", "")
+# else:
+#     camera_pos = "left"
+camera_pos = "right"
 
 print("camera_pos:", camera_pos)
 camera_l2r = 0.002 * AU

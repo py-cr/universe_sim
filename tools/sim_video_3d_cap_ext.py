@@ -31,10 +31,15 @@ def get_args():
     parser.add_argument('--fps', type=int, default=30, help='frame per second')
     parser.add_argument('--total_time', type=int, default=10000000, help='video total time')
     parser.add_argument('--save_name', type=str, default='video.mp4', help='save file name')
+    parser.add_argument('--start_index', type=int, default=-1, help='start_index')
     # parser.add_argument('--screen_type', default=0, type=int, choices=[0, 1], help='1: full screen, 0: region screen')
     args = parser.parse_args()
     print("total_time:", args.total_time)
     print("fps:", args.fps)
+
+    print("start_index:", args.start_index)
+    if args.start_index > 0:
+        args.save_name = args.save_name + ("_%s" % args.start_index)
     print("save_name:", args.save_name)
     return args
 
@@ -232,13 +237,17 @@ def get_frame_temp_data():
 
 
 def press_pause_key():
-    KEY_P = win32api.VkKeyScan('P')
-    win32api.PostMessage(window_handle, win32con.WM_KEYDOWN, KEY_P, 0x00190001)
+    try:
+        KEY_P = win32api.VkKeyScan('P')
+        win32api.PostMessage(window_handle, win32con.WM_KEYDOWN, KEY_P, 0x00190001)
+        return True
     # win32api.PostMessage(window_handle, win32api.VkKeyScan('P'), 0x0001 | 0x0008 | 0x0010 | 0x0020, 0)
     # win32api.PostMessage(0xFFFFFFF6,  win32api.VkKeyScan('P'), 0x0001 | 0x0008 | 0x0010 | 0x0020, 0)
     # win32api.PostMessage(window_handle, win32con.WM_KEYDOWN, win32api.VkKeyScan('P'), 0)  # 发送F9键
     # win32api.PostMessage(window_handle, win32con.WM_KEYUP, win32con.VK_F9, 0)
-    pass
+    except Exception as e:
+        print(str(e))
+        return False
 
 
 def make_3d_video():
@@ -255,7 +264,8 @@ def make_3d_video():
     video = create_video(args, img.shape[0], img.shape[1])
     imageNum = 0
     index_base = 0
-    last_index = 0
+    last_index = 0  # 最后一个index
+    completed_index = 0  # 最后完成的 index
     r_frames = {}
     l_frames = {}
     print("开始录屏")
@@ -269,6 +279,11 @@ def make_3d_video():
         _3d_card = img[4:20, 3:20, ]
         _3d_card_p = _3d_card[10, 10,]
         index = int(_3d_card_p[1]) + int(_3d_card_p[0])
+
+        if index < args.start_index:
+            if imageNum % args.fps == 0:
+                print('X', end='')
+            continue
 
         if imageNum % 100 == 0:
             press_pause_key()
@@ -291,7 +306,7 @@ def make_3d_video():
 
         last_index = index
         index = index + index_base
-
+        completed_index = index
         if _3d_card_p[2] < 100:
             _3d_card_color = "b"
             _3d_card_direct = "right"
@@ -322,6 +337,7 @@ def make_3d_video():
         #     # show_image(frame)
         #     video.write(img)
 
+    print("3D视频处理（完成索引：%s）" % completed_index)
     handle_3d_video(video, l_frames, r_frames)
 
     print("视频保存中")

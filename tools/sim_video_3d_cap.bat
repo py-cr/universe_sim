@@ -17,9 +17,9 @@ CALL conda activate %env%
 %DISK%
 
 cd %SimFilePath%
-start python -m %SimFileName% %3
+start python -m %SimFileName%
 
 cd %SimDir%\tools
-python -m sim_video_3d_cap_ext --save_name=%SimFileName%%param3%.mp4
+python -m sim_video_3d_cap_ext --save_name=%SimFileName%.mp4 %param3%
 
 

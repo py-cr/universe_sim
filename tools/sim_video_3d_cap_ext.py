@@ -271,7 +271,17 @@ def make_3d_video():
     print("开始录屏")
     clear_frame_temp_files()
     while True:
+        if imageNum % 400 == 0:
+            press_pause_key()
+            create_frame_temp_files(completed_index, l_frames, r_frames)
+            r_frames.clear()
+            l_frames.clear()
+            r_frames = {}
+            l_frames = {}
+            press_pause_key()
+
         img = sim_window_screen_shot()
+
         if img is None:
             print("\n模拟器窗口已关闭，退出录屏")
             break
@@ -284,15 +294,6 @@ def make_3d_video():
             if imageNum % args.fps == 0:
                 print('X', end='')
             continue
-
-        if imageNum % 100 == 0:
-            press_pause_key()
-            create_frame_temp_files(index + index_base, l_frames, r_frames)
-            r_frames.clear()
-            l_frames.clear()
-            r_frames = {}
-            l_frames = {}
-            press_pause_key()
 
         if index < last_index:
             index_base += (last_index + 1)

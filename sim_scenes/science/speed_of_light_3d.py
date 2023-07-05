@@ -43,7 +43,7 @@ for idx, body in enumerate(bodies):
     # if idx > 0:
     #     body.init_position[0] = body.diameter * body.size_scale
     #     body.init_position[1] = -body.radius * body.size_scale / 10
-    body.rotation_speed *= 55
+    body.rotation_speed *= 75
 
 # if len(sys.argv) > 1:
 #     camera_pos = sys.argv[1].replace("_", "")
@@ -102,12 +102,65 @@ def on_ready():
 
 
 def on_timer_changed(time_data: TimeData):
-    init.text_panel.parent.enabled = False
+    init.text_panel.parent.enabled = True
     velocity, _ = get_value_direction_vectors(light_ship.velocity)
     distance = round(init.light_ship.position[2] / AU, 4)
     text = init.arrived_info.replace("${distance}", "%.4f AU" % distance)
     init.text_panel.text = text.replace("${speed}", str(round(velocity / LIGHT_SPEED, 1)) + "倍光速")
+    # [00:06:14] 到达 [水星] 0.768 AU
+    # [00:10:16] 到达 [金星] 1.0817 AU
+    # [00:16:14] 到达 [地球] 1.4808 AU
+    # [00:19:18] 到达 [月球] 1.6544 AU
+    # [00:26:32] 到达 [火星] 2.2803 AU
+    # [00:44:58] 到达 [木星] 4.2581 AU
+    # [00:52:54] 到达 [土星] 7.1278 AU
+    # [00:59:44] 到达 [天王星] 9.606 AU
+    # [01:07:08] 到达 [海王星] 12.28 AU
+    # Process finished with exit code 0
+    if distance > 13.5:
+        exit(0)
+    acc_control_info = [(0, 0.42, 10000),
+                        (0.42, 0.70, -21000),  # 水星 0.76
+                        (0.70, 0.85, 10000),
+                        (0.85, 1.05, -21000),  # 金星 1.08
+                        (1.05, 1.18, 10000),
+                        (1.18, 1.6, -18000),  # 地球 1.48 # 月球 1.65
+                        (1.6, 2.0, 10000),
+                        (2.0, 2.25, -25000),  # 火星 2.28
+                        (2.25, 3.3, 19000),
+                        (3.3, 4.1, -35000),  # 木星 4.2
+                        (4.1, 5.8, 15000),
+                        (5.8, 6.9, -35000),  # 土星 7.14
+                        (6.9, 8.2, 20000),
+                        (8.3, 9.2, -35000),  # 天王星 9.6
+                        (9.3, 10.8, 20000),
+                        (10.8, 12, -35000),  # 海王星 12.3
+                        (12, 12.5, 10000),
+                        (12.5, 16, -35000),  # 冥王星 13
+                        ]
+    MAX_SPEED = LIGHT_SPEED * 8
+    MIN_SPEED = LIGHT_SPEED
+    acc_val = 0
+    for acc_vals in acc_control_info:
+        if acc_vals[0] < distance < acc_vals[1]:
+            acc_val = acc_vals[2]
+            break
 
+    if acc_val > 0:
+        if velocity > MAX_SPEED:
+            acc_val = 0
+    elif acc_val < 0:
+        if velocity < MIN_SPEED:
+            acc_val = 0
+
+    light_ship.acceleration[2] = acc_val
+
+    # if time_data.total_minutes < 2:
+    #     light_ship.acceleration[2] = 5000
+    # elif 2 < time_data.total_minutes < 100:
+    #     light_ship.acceleration[2] = -5000
+    # else:
+    #     light_ship.acceleration[2] = 0
     # if time_data.total_seconds > 20:
     #     wait_for(0.03)
 
@@ -134,17 +187,17 @@ UrsinaEvent.on_before_evolving_subscription(on_before_evolving)
 def body_arrived(body):
     # # 到达每个行星都会触发，对光速飞船进行加速，超光速前进（使用未来曲率引擎技术）
     if body.name == "金星":  # 到达金星，木星开始调整位置
-        jupiter.acceleration[0] = -35
-        jupiter.acceleration[1] = -15
+        jupiter.acceleration[0] = -200
+        jupiter.acceleration[1] = -135
     elif body.name == "火星":  # 到达火星，土星开始调整位置
-        saturn.acceleration[0] = -16
-        saturn.acceleration[1] = -8
+        saturn.acceleration[0] = -200
+        saturn.acceleration[1] = -135
     elif body.name == "木星":  # 到达木星，天王星开始调整位置
-        uranus.acceleration[0] = -8
-        uranus.acceleration[1] = -5
+        uranus.acceleration[0] = -150
+        uranus.acceleration[1] = -105
     elif body.name == "土星":  # 到达土星，海王星开始调整位置
-        neptune.acceleration[0] = -20
-        neptune.acceleration[1] = -8
+        neptune.acceleration[0] = -150
+        neptune.acceleration[1] = -105
         # saturn, uranus, neptune
     # elif body.name == "土星":  # 到达土星，加速前进，并进行攀升
     #     light_ship.acceleration = [-150, 100, 0]
@@ -154,7 +207,9 @@ def body_arrived(body):
     #     light_ship.acceleration = [150, -550, -2500]
 
     elif body.name == "冥王星":
-        exit(0)
+        # time.sleep(2)
+        # exit(0)
+        pass
     # print(body)
 
 
@@ -180,7 +235,7 @@ init.body_arrived = body_arrived
 ursina_run(bodies, 30,
            position=init.camera_position,
            # show_trail=init.show_trail,
-           # show_timer=True,
+           show_timer=True,
            show_camera_info=False,
            show_control_info=False,
            timer_enabled=True,

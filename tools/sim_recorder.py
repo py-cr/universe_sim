@@ -23,7 +23,7 @@ def crop(mp4_file):
         print("裁剪视频失败")
 
 
-def get_window_img_dc(window_name="universe_sim"):
+def get_window_img_dc(window_name="宇宙模拟器(universe sim)"):
     # 获取桌面
     # hdesktop = win32gui.GetDesktopWindow()
     handle = win32gui.FindWindow(None, window_name)
@@ -33,6 +33,7 @@ def get_window_img_dc(window_name="universe_sim"):
 def record():
     parser = argparse.ArgumentParser()
     parser.add_argument('--fps', type=int, default=30, help='frame per second')
+    parser.add_argument('--window_name', type=str, default='宇宙模拟器(universe sim)', help='window_name')
     parser.add_argument('--total_time', type=int, default=10000000, help='video total time')
     parser.add_argument('--savename', type=str, default='video_right.mp4', help='save file name')
     parser.add_argument('--screen_type', default=0, type=int, choices=[0, 1], help='1: full screen, 0: region screen')

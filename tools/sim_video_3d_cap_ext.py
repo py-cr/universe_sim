@@ -29,6 +29,7 @@ def get_window_handle(window_name="宇宙模拟器(universe sim)"):
 def get_args():
     parser = argparse.ArgumentParser()
     parser.add_argument('--fps', type=int, default=30, help='frame per second')
+    parser.add_argument('--window_name', type=str, default='宇宙模拟器(universe sim)', help='window_name')
     parser.add_argument('--total_time', type=int, default=10000000, help='video total time')
     parser.add_argument('--save_name', type=str, default='video.mp4', help='save file name')
     parser.add_argument('--start_index', type=int, default=-1, help='start_index')
@@ -97,6 +98,7 @@ def sim_window_screen_shot(wait_ses=-1):
             try:
                 img = screen_shot(img_dc)
             except Exception as e:
+                press_pause_key()
                 print("ERROR:", str(e))
                 traceback.print_exc()
                 return None

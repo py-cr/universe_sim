@@ -106,6 +106,20 @@ def wait_for(secs):
         wait -= 1
 
 
+def calculate_acceleration(current_v , distance, t):
+    """
+    计算加速度，使得当前物体到达目的距离需要的加速度
+    @param current_v: 物体当前速度（km/s）
+    @param distance:  到达目的的距离(km
+    @param t: 消耗的时间
+    @return: 加速度 (km/s^2)
+    """
+    current_v = current_v * 1000  # km/s -> m/s
+    distance = distance * 1000  # km -> m
+    acceleration = 2 * (distance - current_v * t) / (t ** 2)
+    acceleration = acceleration/1000  # m/s^2 -> km/s^2
+    return acceleration
+
 def calculate_distance(pos1, pos2=[0, 0, 0]):
     """
     计算两点间的距离

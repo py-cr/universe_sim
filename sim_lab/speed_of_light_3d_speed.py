@@ -129,17 +129,17 @@ def get_acc_control_info():
     # [01:31:11] 到达 [海王星] 12.2898 AU
     # [01:40:23] 到达 [冥王星] 13.0516 AU
     distance_list = [0.7736, 1.0845, 1.4816, 1.6587, 2.2803, 4.2629, 7.1386, 9.6171, 12.2898, 13.0516]
-    distance_list = [0.7036, 1.0045, 1.4016, 1.6087, 2.2403, 4.0029,  # 木星
-                     6.9086, 9.4171, 12.2098, 12.9516]
+    distance_list = [0.7036, 1.0045, 1.4016, 1.6087, 2.2403, 4.0829,  # 木星
+                     6.9986, 9.4171, 12.2098, 12.9516]
     acc_list = [(30000, -66000),  # 水星
                 (28000, -65000),  # 金星
                 (28000, -65000),  # 地球
                 (0, 0),  # 月球
                 (45000, -160000),  # 火星
-                (32000, -60000),  # 木星
-                (80000, -50000),  # 土星
-                (50000, -50000),  # 天王星
-                (50000, -40000),  # 海王星
+                (26000, -65000),  # 木星
+                (180000, -75000),  # 土星
+                (250000, -100000),  # 天王星
+                (250000, -100000),  # 海王星
                 (100000, -206000)  # 冥王星
                 ]
     acc_control_info.clear()
@@ -168,7 +168,7 @@ def on_timer_changed(time_data: TimeData):
     if distance > 13.2:
         exit(0)
 
-    MAX_SPEED = LIGHT_SPEED * 10
+    MAX_SPEED = LIGHT_SPEED * 15
     MIN_SPEED = LIGHT_SPEED
     acc_val = 0
     for acc_vals in init.light_ship.acc_control_info:
@@ -217,17 +217,17 @@ UrsinaEvent.on_before_evolving_subscription(on_before_evolving)
 def body_arrived(body):
     # # 到达每个行星都会触发，对光速飞船进行加速，超光速前进（使用未来曲率引擎技术）
     if body.name == "金星":  # 到达金星，木星开始调整位置
-        jupiter.acceleration[0] = -500
-        jupiter.acceleration[1] = -205
+        jupiter.acceleration[0] = -300
+        jupiter.acceleration[1] = -150
     elif body.name == "火星":  # 到达火星，土星开始调整位置
-        saturn.acceleration[0] = -500
-        saturn.acceleration[1] = -205
+        saturn.acceleration[0] = -800
+        saturn.acceleration[1] = -300
     elif body.name == "木星":  # 到达木星，天王星开始调整位置
-        uranus.acceleration[0] = -150
-        uranus.acceleration[1] = -105
+        uranus.acceleration[0] = -300
+        uranus.acceleration[1] = -205
     elif body.name == "土星":  # 到达土星，海王星开始调整位置
-        neptune.acceleration[0] = -150
-        neptune.acceleration[1] = -105
+        neptune.acceleration[0] = -300
+        neptune.acceleration[1] = -205
         # saturn, uranus, neptune
     # elif body.name == "土星":  # 到达土星，加速前进，并进行攀升
     #     light_ship.acceleration = [-150, 100, 0]

@@ -8,7 +8,7 @@
 # ==============================================================================
 import sys
 import time
-from common.func import wait_for, calculate_acceleration
+from common.func import wait_for
 from common.consts import AU
 from sim_scenes.func import ursina_run, create_solar_system_bodies, create_light_ship, create_3d_card
 from common.consts import LIGHT_SPEED

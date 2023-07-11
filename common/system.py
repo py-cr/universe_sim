@@ -7,6 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 import numpy as np
+from numpy.linalg import norm
 import math
 from common.consts import AU, G
 from bodies import Body, Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Pluto
@@ -162,9 +163,40 @@ class System(object):
             body1.acceleration = acceleration
         return True
 
+    def calculate_gravitational_accelerations(self, masses, positions):
+        '''Params:
+        - positions: numpy array of size (n,3)
+        - masses: numpy array of size (n,)
+        '''
+        masses = np.array(masses)
+        positions = np.array(positions)
+        mass_matrix = masses.reshape((1, -1, 1)) * masses.reshape((-1, 1, 1))
+        disps = positions.reshape((1, -1, 3)) - positions.reshape((-1, 1, 3))  # displacements
+        dists = norm(disps, axis=2)
+        dists[dists == 0] = 1  # Avoid divide by zero warnings
+        forces = G * disps * mass_matrix / np.expand_dims(dists, 2) ** 3
+        return forces.sum(axis=1) / masses.reshape(-1, 1)
+
     def calc_bodies_acceleration(self):
         """
-        计算加速度
+        计算加速度(使用矩阵的方式，性能提高很多)
+        @return:
+        """
+        valid_bodies = list(filter(lambda b: not b.ignore_mass, self.bodies))
+        masses = []
+        positions = []
+        for body in valid_bodies:
+            masses.append(body.mass)
+            positions.append(body.position * 1000)
+
+        accelerations = self.calculate_gravitational_accelerations(masses, positions)
+
+        for idx, body in enumerate(valid_bodies):
+            body.acceleration = accelerations[idx]/1000
+
+    def calc_bodies_acceleration_bak(self):
+        """
+        计算加速度（性能非常低，代码保留）
         @return:
         """
         # 如果快速计算成功，则无需再计算

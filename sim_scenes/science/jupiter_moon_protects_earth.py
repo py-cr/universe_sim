@@ -185,6 +185,7 @@ class JupiterProtectsEarthSim:
         self.text_panel.text = colliding_info
 
     def on_ready(self):
+        from ursina import application
         # 运行前触发
         self.text_panel = create_text_panel()
         self.text_panel.text = self.colliding_info % (0, "0.0%",
@@ -192,6 +193,7 @@ class JupiterProtectsEarthSim:
                                                       0, "0.0%",
                                                       0, "0.0%",
                                                       0, 0)
+        application.time_scale = 3
 
 
 if __name__ == '__main__':
@@ -202,7 +204,7 @@ if __name__ == '__main__':
     # 设置计时器的最小时间单位为年
     BodyTimer().min_unit = BodyTimer.MIN_UNIT_YEARS
 
-    sim = JupiterProtectsEarthSim(comet_num=50)
+    sim = JupiterProtectsEarthSim(comet_num=30)
 
     # 运行前会触发 on_ready
     UrsinaEvent.on_ready_subscription(sim.on_ready)
@@ -212,6 +214,6 @@ if __name__ == '__main__':
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(sim.bodies, SECONDS_PER_MONTH,
+    ursina_run(sim.bodies, SECONDS_PER_MONTH * 3,
                position=(30000000, 0, -3000000000),
                show_timer=True)

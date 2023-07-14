@@ -283,6 +283,10 @@ class UrsinaSimulator(Simulator):
         if "timer_enabled" in kwargs:
             self.timer_enabled = kwargs["timer_enabled"]
 
+        show_exit_button = True
+        if "show_exit_button" in kwargs:
+            show_exit_button = kwargs["show_exit_button"]
+
         if view_closely:
             # 近距离查看
             if isinstance(view_closely, float):
@@ -299,7 +303,7 @@ class UrsinaSimulator(Simulator):
         camera.fov = 60
 
         window.fps_counter.enabled = False
-        # window.exit_button.enabled = False
+        window.exit_button.enabled = show_exit_button
         # window.editor_ui.enabled = True
 
         # # 场景加入雾的效果

@@ -114,6 +114,7 @@ def ursina_run(bodies,
                show_grid=True,
                show_camera_info=True,
                show_control_info=True,
+               show_exit_button=True,
                grid_position=None,
                grid_scale=None,
                show_trail=False,
@@ -133,6 +134,7 @@ def ursina_run(bodies,
     @param show_grid: 是否显示空间网格
     @param show_camera_info: 是否显示摄像机信息面板
     @param show_control_info: 是否显示控制信息面板
+    @param show_exit_button: 是否显示模拟器关闭按钮
     @param show_trail: 是否显示拖尾
     @param show_name: 是否显示天体名称
     @param show_timer: 是否显示计时器
@@ -192,6 +194,7 @@ def ursina_run(bodies,
                   grid_position=grid_position,
                   grid_scale=grid_scale,
                   show_timer=show_timer,
+                  show_exit_button=show_exit_button,
                   timer_enabled=timer_enabled,
                   bg_music=bg_music,
                   view_closely=view_closely)

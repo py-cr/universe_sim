@@ -151,6 +151,7 @@ class SpeedOfLightInit:
         """
         # self.__light_body.planet_scale = self.__light_body.planet.scale
         self.text_panel = create_text_panel()
+        # self.text_panel.parent.enabled = False
         self.text_panel.text = self.arrived_info.replace("${distance}", "0 AU")
 
         self.light_ship.planet.rotation_x = 90

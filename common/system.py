@@ -163,7 +163,7 @@ class System(object):
             body1.acceleration = acceleration
         return True
 
-    def calculate_gravitational_accelerations(self, masses, positions):
+    def calculate_gravitational_accelerations_np(self, masses, positions):
         '''Params:
         - positions: numpy array of size (n,3)
         - masses: numpy array of size (n,)
@@ -177,9 +177,42 @@ class System(object):
         forces = G * disps * mass_matrix / np.expand_dims(dists, 2) ** 3
         return forces.sum(axis=1) / masses.reshape(-1, 1)
 
+    def calculate_gravitational_accelerations_cp(self, masses, positions):
+        '''Params:
+         - positions: numpy array of size (n,3)
+         - masses: numpy array of size (n,)
+         pip install -i https://pypi.douban.com/simple/ cupy
+
+ nvcc -V
+ nvcc: NVIDIA (R) Cuda compiler driver
+ Copyright (c) 2005-2021 NVIDIA Corporation
+ Built on Fri_Dec_17_18:28:54_Pacific_Standard_Time_2021
+ Cuda compilation tools, release 11.6, V11.6.55
+ Build cuda_11.6.r11.6/compiler.30794723_0
+
+ pip install -i https://pypi.douban.com/simple/ cupy-cuda116
+ cupy-11.6.0.tar.gz
+ https://pypi.doubanio.com/packages/70/e1/acc77e327548cce7cb28eb345b7f31ab85b6a3d99214479f9bcbe78e6e9b/cupy_cuda116-10.6.0-cp39-cp39-win_amd64.whl
+ https://pypi.doubanio.com/packages/e3/62/c808623b8000185efebd8b4542efdf76cc93d20dfd3f0a3eaeb5e5697430/cupy-11.6.0.tar.gz#sha256=53dbb840072bb32d4bfbaa6bfa072365a30c98b1fcd1f43e48969071ad98f1a7
+
+         '''
+        import cupy as cp
+        masses = cp.array(masses)
+        positions = cp.array(positions)
+        mass_matrix = masses.reshape((1, -1, 1)) * masses.reshape((-1, 1, 1))
+        disps = positions.reshape((1, -1, 3)) - positions.reshape((-1, 1, 3))  # displacements
+        dists = cp.linalg.norm(disps, axis=2)
+        dists[dists == 0] = 1  # Avoid divide by zero warnings
+        forces = G * disps * mass_matrix / cp.expand_dims(dists, 2) ** 3
+        accelerations = forces.sum(axis=1) / masses.reshape(-1, 1)
+        return accelerations.get()
+
+    def calculate_gravitational_accelerations(self, masses, positions):
+        return self.calculate_gravitational_accelerations_np(masses, positions)
+
     def calc_bodies_acceleration_bak(self):
         """
-        计算加速度(使用矩阵的方式，性能提高很多)
+        计算加速度(使用矩阵的方式，性能提高很多，不支持指定重力对某天体有效)
         @return:
         """
         valid_bodies = list(filter(lambda b: not b.ignore_mass, self.bodies))
@@ -192,11 +225,11 @@ class System(object):
         accelerations = self.calculate_gravitational_accelerations(masses, positions)
 
         for idx, body in enumerate(valid_bodies):
-            body.acceleration = accelerations[idx]/1000
+            body.acceleration = accelerations[idx] / 1000
 
     def calc_bodies_acceleration(self):
         """
-        计算加速度（性能非常低，代码保留）
+        计算加速度（性能非常低）
         @return:
         """
         # 如果快速计算成功，则无需再计算

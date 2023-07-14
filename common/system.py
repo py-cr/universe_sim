@@ -177,7 +177,7 @@ class System(object):
         forces = G * disps * mass_matrix / np.expand_dims(dists, 2) ** 3
         return forces.sum(axis=1) / masses.reshape(-1, 1)
 
-    def calc_bodies_acceleration(self):
+    def calc_bodies_acceleration_bak(self):
         """
         计算加速度(使用矩阵的方式，性能提高很多)
         @return:
@@ -194,7 +194,7 @@ class System(object):
         for idx, body in enumerate(valid_bodies):
             body.acceleration = accelerations[idx]/1000
 
-    def calc_bodies_acceleration_bak(self):
+    def calc_bodies_acceleration(self):
         """
         计算加速度（性能非常低，代码保留）
         @return:

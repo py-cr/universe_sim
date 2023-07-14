@@ -204,7 +204,7 @@ if __name__ == '__main__':
     # 设置计时器的最小时间单位为年
     BodyTimer().min_unit = BodyTimer.MIN_UNIT_YEARS
 
-    sim = JupiterProtectsEarthSim(comet_num=30)
+    sim = JupiterProtectsEarthSim(comet_num=20)
 
     # 运行前会触发 on_ready
     UrsinaEvent.on_ready_subscription(sim.on_ready)

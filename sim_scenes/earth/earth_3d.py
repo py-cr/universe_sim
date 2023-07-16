@@ -17,8 +17,7 @@ from ursina import camera
 
 if __name__ == '__main__':
     """
-    地球3D效果
-    # sim_video_3d_cap.bat earth earth_3d
+    地球3D效果（透视3D地球）
     """
     # 创建带有云层的地球
     earth = Earth(
@@ -74,7 +73,7 @@ if __name__ == '__main__':
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_HOUR,
+    ursina_run(bodies, SECONDS_PER_HOUR / 2,
                # position=(1.2 * earth.radius, 0, -30000),
                position=(0, 0, 0),
                show_grid=False,

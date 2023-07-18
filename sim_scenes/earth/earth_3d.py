@@ -33,6 +33,7 @@ if __name__ == '__main__':
                    size_scale=1.001, parent=earth)
 
     bodies = [earth, clouds]
+
     # camera.camera_pos = "right"
     # camera_l2r = 0.002 * AU * UrsinaConfig.SCALE_FACTOR
     #
@@ -47,28 +48,33 @@ if __name__ == '__main__':
     #
     #
     # camera.switch_position = switch_position
+    init_pos = (1.45 * earth.radius * UrsinaConfig.SCALE_FACTOR,
+                0,
+                -30000 * UrsinaConfig.SCALE_FACTOR)
+    Camera3d.support3d(init_pos)
+    # def on_ready():
+    #
+    #     Camera3d.init_on_ready(init_pos)
+    # earth.camera3d = Camera3d()
+    # earth.camera3d.position = (1.45 * earth.radius * UrsinaConfig.SCALE_FACTOR,
+    #                            0,
+    #                            -30000 * UrsinaConfig.SCALE_FACTOR)
+    #
+    # # camera_look_at(earth, rotation_z=0)
+    # # camera.fov = 40
+    # earth._3d_card = create_3d_card()
 
-
-    def on_ready():
-        earth.camera3d = Camera3d()
-        earth.camera3d.position = (1.45 * earth.radius * UrsinaConfig.SCALE_FACTOR,
-                                   0,
-                                   -30000 * UrsinaConfig.SCALE_FACTOR)
-
-        # camera_look_at(earth, rotation_z=0)
-        # camera.fov = 40
-        earth._3d_card = create_3d_card()
-
-    def on_before_evolving(evolve_args):
-        earth._3d_card.switch_color()
-        earth.camera3d.switch_position()
-        if earth._3d_card.switch_flag == 1:
-            evolve_args["evolve_dt"] = 0.0
+    # def on_before_evolving(evolve_args):
+    #     Camera3d.exec_on_before_evolving(evolve_args)
+    # earth._3d_card.switch_color()
+    # earth.camera3d.switch_position()
+    # if earth._3d_card.switch_flag == 1:
+    #     evolve_args["evolve_dt"] = 0.0
 
     # 订阅事件后，上面的函数功能才会起作用
-    # 运行前会触发 on_ready
-    UrsinaEvent.on_ready_subscription(on_ready)
-    UrsinaEvent.on_before_evolving_subscription(on_before_evolving)
+    # # 运行前会触发 on_ready
+    # UrsinaEvent.on_ready_subscription(on_ready)
+    # UrsinaEvent.on_before_evolving_subscription(Camera3d.exec_on_before_evolving)
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹

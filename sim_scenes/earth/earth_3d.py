@@ -51,7 +51,7 @@ if __name__ == '__main__':
     init_pos = (1.45 * earth.radius * UrsinaConfig.SCALE_FACTOR,
                 0,
                 -30000 * UrsinaConfig.SCALE_FACTOR)
-    Camera3d.support3d(init_pos)
+    Camera3d.init(init_pos)
     # def on_ready():
     #
     #     Camera3d.init_on_ready(init_pos)

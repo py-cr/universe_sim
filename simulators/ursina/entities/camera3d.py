@@ -43,7 +43,7 @@ class Camera3d(Entity):
         pass
 
     @staticmethod
-    def support3d(init_pos):
+    def init(init_pos):
         def on_ready():
             Camera3d.init_on_ready(init_pos)
 

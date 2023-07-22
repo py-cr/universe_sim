@@ -9,7 +9,7 @@
 import os
 
 import numpy as np
-
+import sys
 from bodies import Earth
 from common.consts import SECONDS_PER_HOUR
 from sim_scenes.func import ursina_run
@@ -23,7 +23,9 @@ def transformed_mars_ani(transformed_texture=None, texture=None, camera3d=False)
     trans_texture = transformed_texture.replace(".jpg", "_trans.png")
     # texture = transformed_texture
     # texture = os.path.join("transformed", texture)
-
+    if len(sys.argv) > 1:
+        camera3d = True
+    print("sys.argv", sys.argv)
     # 创建带有云层的地球
     mars = Earth(
         texture=texture,

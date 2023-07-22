@@ -10,7 +10,9 @@ from sim_scenes.fiction.transformed_planet import run_transformed_planet
 
 if __name__ == '__main__':
     run_transformed_planet(
-        "mars.jpg",
+        transformed_texture="mars.jpg",
+        # texture="mars.png",
+        with_clouds=True,
         camera3d=True,
-        transparent=False
+        transparent=True
     )

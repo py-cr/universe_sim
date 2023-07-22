@@ -135,8 +135,24 @@ def video_write(video, l_frames, r_frames):
     for index in range(min_index, max_index + 1):
         rv = r_frames.get(index, None)
         lv = l_frames.get(index, None)
-        if rv is None or lv is None:
+        if rv is None and lv is None:
+            print('[' + str(index) + "], ", end='')
             continue
+        if rv is None:
+            rv = r_frames.get(index-1, None)
+            if rv is None:
+                rv = r_frames.get(index + 1, None)
+            if rv is None:
+                print('[R:'+str(index) + "], ", end='')
+                continue
+        if lv is None:
+            lv = l_frames.get(index-1, None)
+            if lv is None:
+                lv = l_frames.get(index + 1, None)
+            if lv is None:
+                print('[L:' + str(index) + "], ", end='')
+                continue
+
         print(str(index) + ", ", end='')
         merged_list = [np.concatenate((lv[i], sublist), axis=0) for i, sublist in enumerate(rv)]
         try:
@@ -272,40 +288,21 @@ def make_3d_video():
     l_frames = {}
     print("开始录屏")
     clear_frame_temp_files()
-    while True:
-        if imageNum % 400 == 0:
-            press_pause_key()
-            create_frame_temp_files(completed_index, l_frames, r_frames)
-            r_frames.clear()
-            l_frames.clear()
-            r_frames = {}
-            l_frames = {}
-            press_pause_key()
 
+    def record_frame():
+        nonlocal imageNum, last_index, index_base, completed_index
         img = sim_window_screen_shot()
-
         if img is None:
-            print("\n模拟器窗口已关闭，退出录屏")
-            break
-
+            return None
         _3d_card = img[4:20, 3:20, ]
         _3d_card_p = _3d_card[10, 10,]
         index = int(_3d_card_p[1]) + int(_3d_card_p[0])
 
-        if index < args.start_index:
-            if imageNum % args.fps == 0:
-                print('X', end='')
-            continue
+        # if index in r_frames.keys() and index in l_frames.keys():
+        #     return False
 
         if index < last_index:
             index_base += (last_index + 1)
-            # press_pause_key()
-            # create_frame_temp_files(index + index_base, l_frames, r_frames)
-            # r_frames.clear()
-            # l_frames.clear()
-            # r_frames = {}
-            # l_frames = {}
-            # press_pause_key()
 
         last_index = index
         index = index + index_base
@@ -315,30 +312,45 @@ def make_3d_video():
             _3d_card_direct = "right"
             if index not in r_frames.keys():
                 r_frames[index] = img[:864, :768, ]
+            else:
+                return False
         else:
             _3d_card_color = "w"
             _3d_card_direct = "left"
             if index not in l_frames.keys():
                 l_frames[index] = img[:864, :768, ]
-
-        # if is_blank_screen(img):
-        #     if imageNum % args.fps == 0:
-        #         print('x', end='')
-        #
-        #     continue
+            else:
+                return False
 
         if imageNum % args.fps == 0:
             print('.', end='')
-        # else:
-        #     print(imageNum, end='')
 
         imageNum += 1
+        return True
 
-        # frame = cv2.cvtColor(np.array(img), cv2.COLOR_RGB2BGR)
-        # if imageNum < args.fps * args.total_time:
-        #     # img = img[:432,:768,]
-        #     # show_image(frame)
-        #     video.write(img)
+    while True:
+        if imageNum % 400 == 0:
+            press_pause_key()
+            for i in range(10):
+                status = record_frame()
+                # print("status:", status, i)
+                if not status:
+                    break
+                time.sleep(0.01)
+            create_frame_temp_files(completed_index, l_frames, r_frames)
+            r_frames.clear()
+            l_frames.clear()
+            r_frames = {}
+            l_frames = {}
+            press_pause_key()
+
+        status = record_frame()
+
+        # img = sim_window_screen_shot()
+
+        if status is None:
+            print("\n模拟器窗口已关闭，退出录屏")
+            break
 
     print("3D视频处理（完成索引：%s）" % completed_index)
     handle_3d_video(video, l_frames, r_frames)

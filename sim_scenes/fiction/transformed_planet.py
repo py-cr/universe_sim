@@ -19,14 +19,18 @@ from ursina import camera
 import os
 
 
-def run_transformed_planet(texture, with_clouds=True, camera3d=False, transparent=True):
-    if transparent:
-        texture = texture.replace(".jpg", "_trans.png")
+def run_transformed_planet(transformed_texture=None, texture=None, with_clouds=True, camera3d=False, transparent=True):
+    if transformed_texture is not None:
+        if transparent:
+            texture = transformed_texture.replace(".jpg", "_trans.png")
+        else:
+            texture = transformed_texture
+        texture = os.path.join("transformed", texture)
 
     # 创建带有云层的地球
     earth = Earth(
-        texture=os.path.join("transformed", texture),
-        rotate_angle=-23.44,
+        texture=texture,
+        rotate_angle=0,
         init_position=[0, 0, 0],
         init_velocity=[0, 0, 0],
         size_scale=1)
@@ -34,7 +38,7 @@ def run_transformed_planet(texture, with_clouds=True, camera3d=False, transparen
     if with_clouds:
         # 创建云层（texture纹理图使用了透明云层的图片，云层的 size_scale 要稍微比地球大一点）
         clouds = Earth(name="云层", texture="transparent_clouds.png",
-                       rotate_angle=-23.44,
+                       rotate_angle=0,
                        size_scale=1.001, parent=earth)
 
         bodies.append(clouds)
@@ -65,6 +69,6 @@ if __name__ == '__main__':
     """
     run_transformed_planet(
         "earth.jpg",
-        camera3d=True,
-        transparent=False
+        camera3d=False,
+        transparent=True
     )

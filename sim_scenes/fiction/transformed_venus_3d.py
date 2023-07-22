@@ -10,7 +10,8 @@ from sim_scenes.fiction.transformed_planet import run_transformed_planet
 
 if __name__ == '__main__':
     run_transformed_planet(
-        "venus.jpg",
+        # transformed_texture="venus.jpg",
+        texture="venus.jpg",
         camera3d=True,
-        transparent=False
+        transparent=True
     )

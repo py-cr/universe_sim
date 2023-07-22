@@ -14,10 +14,16 @@ if __name__ == '__main__':
     """
     高清地球模拟运行
     """
+    texture = "earth_miller_projection_SW.jpg"
+    texture = "earth_bam_equidistant_cylindrical.png"
+    texture = "earth_miller.png"
+    texture = "earth_hd.jpg"
+
     bodies = [
-        Earth(texture="earth_hd.jpg",
-              init_position=[0, 0, 0], init_velocity=[0, 0, 0],
-              size_scale=1)
+        Earth(
+            texture=texture,
+            init_position=[0, 0, 0], init_velocity=[0, 0, 0],
+            size_scale=1)
     ]
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹

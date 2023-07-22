@@ -15,7 +15,7 @@ if __name__ == '__main__':
     高清水星模拟运行
     """
     bodies = [
-        Mercury(texture="mercury_hd.tif",
+        Mercury(texture="mercury_hd.jpg",
                 init_position=[0, 0, 0], init_velocity=[0, 0, 0],
                 size_scale=1, show_name=True)
     ]

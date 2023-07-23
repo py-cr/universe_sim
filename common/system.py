@@ -210,7 +210,7 @@ class System(object):
     def calculate_gravitational_accelerations(self, masses, positions):
         return self.calculate_gravitational_accelerations_np(masses, positions)
 
-    def calc_bodies_acceleration_bak(self):
+    def calc_bodies_acceleration_high_performance(self):
         """
         计算加速度(使用矩阵的方式，性能提高很多，不支持指定重力对某天体有效)
         @return:
@@ -232,6 +232,11 @@ class System(object):
         计算加速度（性能非常低）
         @return:
         """
+
+        if len(self.bodies) > 30:
+            self.calc_bodies_acceleration_high_performance()
+            return
+
         # 如果快速计算成功，则无需再计算
         if self.fast_calc():
             return

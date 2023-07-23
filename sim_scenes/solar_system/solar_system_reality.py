@@ -120,7 +120,7 @@ if __name__ == '__main__':
 
         dt = time_data.get_datetime(str(current_time))
         # print(time_data.get_datetime(str(current_time)))
-        ControlUI.current_ui.show_message(dt.strftime('%Y-%m-%d %H:%M:%S'), font="simsun.ttc", close_time=-1)
+        ControlUI.current_ui.show_message(dt.strftime('%Y-%m-%d %H:%M:%S'), font="verdana.ttf", close_time=-1)
 
 
     # 运行中，每时每刻都会触发 on_timer_changed

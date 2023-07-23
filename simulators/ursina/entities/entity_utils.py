@@ -100,7 +100,10 @@ def create_trails(parent):
         pos = parent.position
     except Exception as e:
         print(parent.body_view.body)
-        parent.destroy_all()
+        if not hasattr(parent, "destroy_all"):
+            parent.destroy_all()
+        return
+    if not hasattr(parent, "trails"):
         return
     trails_keys = parent.trails.keys()
     trail_int_scale = 1.2

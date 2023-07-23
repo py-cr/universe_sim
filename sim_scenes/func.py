@@ -117,6 +117,7 @@ def ursina_run(bodies,
                show_exit_button=True,
                grid_position=None,
                grid_scale=None,
+               gravity_works=True,
                show_trail=False,
                show_name=False,
                show_timer=False,
@@ -135,6 +136,7 @@ def ursina_run(bodies,
     @param show_camera_info: 是否显示摄像机信息面板
     @param show_control_info: 是否显示控制信息面板
     @param show_exit_button: 是否显示模拟器关闭按钮
+    @param gravity_works: 万有引力是否启用
     @param show_trail: 是否显示拖尾
     @param show_name: 是否显示天体名称
     @param show_timer: 是否显示计时器
@@ -171,7 +173,7 @@ def ursina_run(bodies,
     def callback_update():
         UrsinaEvent.on_application_run()
         for ursina_view in simulator.ursina_views:
-            simulator.check_and_evolve()
+            simulator.check_and_evolve(gravity_works)
             if ursina_view.appeared:
                 ursina_view.update()
 

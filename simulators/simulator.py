@@ -35,13 +35,17 @@ class Simulator(metaclass=ABCMeta):
             view = viewer_type(body, self.bodies_sys)
             self.body_views.append(view)
 
-    def evolve(self, dt: int):
+    def evolve(self, dt: int, gravity_works=True):
         """
         单位：秒，按时间差进行演变，值越小越精确，但演变速度会慢。
+
         @param dt: 时间差（秒）
+        @param gravity_works: 万有引力是否起作用
         @return:
         """
-        self.bodies_sys.evolve(dt)
+        if gravity_works:
+            self.bodies_sys.evolve(dt)
+
         for idx, view in enumerate(self.body_views):
             body = self.bodies_sys.bodies[idx]
             body.dt = dt

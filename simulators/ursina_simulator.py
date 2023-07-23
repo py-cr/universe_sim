@@ -210,7 +210,7 @@ class UrsinaSimulator(Simulator):
             self.last_time = now
         return is_expired
 
-    def check_and_evolve(self):
+    def check_and_evolve(self, gravity_works=True):
         if self.check_interval_expired():
             # 获取配置中的运行速度的因子
             run_speed_factor = float(UrsinaConfig.run_speed_factor)
@@ -227,7 +227,7 @@ class UrsinaSimulator(Simulator):
             evolve_args = {"evolve_dt": evolve_dt}
             UrsinaEvent.on_before_evolving(evolve_args)
             # if evolve_args["evolve_dt"] > 0:
-            super().evolve(evolve_args["evolve_dt"])
+            super().evolve(evolve_args["evolve_dt"], gravity_works=gravity_works)
 
             if self.show_timer or self.timer_enabled:
                 timer = BodyTimer()

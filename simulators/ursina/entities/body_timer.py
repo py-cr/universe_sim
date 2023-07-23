@@ -59,6 +59,17 @@ class TimeData:
             else:
                 self.time_text = f'{self.hours:02d}:{self.minutes:02d}:{self.seconds:02d}'
 
+
+    def get_datetime(self, init_datetime):
+        import datetime
+        # UTC_format = "%Y-%m-%dT%H:%M:%S.%fZ"
+        UTC = datetime.datetime.strptime(init_datetime + "Z", "%Y-%m-%d %H:%M:%S.%fZ")
+        # BJS_format = "%Y-%m-%d %H:%M:%S"
+        BJS = UTC + datetime.timedelta(hours=8+self.total_hours)
+        # BJS = BJS.strftime(BJS_format)
+        # dt = datetime(init_datetime)
+        return BJS
+
     @property
     def total_minutes(self):
         return self.total_seconds / 60

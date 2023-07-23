@@ -224,6 +224,8 @@ class UrsinaSimulator(Simulator):
             UrsinaEvent.on_evolving(evolve_dt)
             # interval_fator 能让更新天体运行状态（位置、速度）更精确
             evolve_dt = evolve_dt * self.interval_fator
+            if run_speed_factor < 3:
+                evolve_dt *= 1.666   # 人为加入一个针对秒级计算的误差，保证模拟器的1秒和现实同步（不要求精确可以注释掉）
             evolve_args = {"evolve_dt": evolve_dt}
             UrsinaEvent.on_before_evolving(evolve_args)
             # if evolve_args["evolve_dt"] > 0:

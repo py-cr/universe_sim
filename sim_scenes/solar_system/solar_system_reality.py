@@ -73,8 +73,8 @@ if __name__ == '__main__':
         Earth(name="地球", size_scale=1e3),  # 地球
         Moon(name="月球", size_scale=2e3),  # 月球
         Mars(name="火星", size_scale=1.2e3),  # 火星
-        Jupiter(name="木星", size_scale=6e2),  # 木星
-        Saturn(name="土星", size_scale=6e2),  # 土星
+        Jupiter(name="木星", size_scale=4e2),  # 木星
+        Saturn(name="土星", size_scale=4e2),  # 土星
         Uranus(name="天王星", size_scale=10e2),  # 天王星
         Neptune(name="海王星", size_scale=10e2),  # 海王星
     ]
@@ -120,19 +120,22 @@ if __name__ == '__main__':
 
         dt = time_data.get_datetime(str(current_time))
         # print(time_data.get_datetime(str(current_time)))
-        ControlUI.current_ui.show_message(dt.strftime('%Y-%m-%d %H:%M:%S'), font="verdana.ttf", close_time=-1)
+        ControlUI.current_ui.show_message(dt.strftime('%Y-%m-%d %H:%M:%S'),
+                                          font="verdana.ttf",
+                                          close_time=-1)
 
 
     # 运行中，每时每刻都会触发 on_timer_changed
     UrsinaEvent.on_timer_changed_subscription(on_timer_changed)
     # 运行前会触发 on_ready
     UrsinaEvent.on_ready_subscription(on_ready)
-
+    dt = SECONDS_PER_DAY  # 1秒=1天
+    dt = 1  # 1秒=1秒
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, 1,
+    ursina_run(bodies, dt,
                position=(0, 0.2 * AU, -3 * AU),
                gravity_works=False,  # 关闭万有引力的计算
                show_grid=False,
-               show_timer=True)
+               timer_enabled=True)

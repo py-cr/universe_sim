@@ -15,7 +15,7 @@ import numpy as np
 from astropy.coordinates import get_body_barycentric_posvel
 from astropy.time import Time
 
-from bodies import Sun, Mercury, Venus, Earth, Mars, Jupiter, Saturn, Uranus, Neptune, Moon
+from bodies import Sun, Mercury, Venus, Earth, Mars, Asteroids, Jupiter, Saturn, Uranus, Neptune, Moon
 from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, AU
 from sim_scenes.func import ursina_run
 from simulators.ursina.entities.body_timer import TimeData
@@ -73,6 +73,7 @@ if __name__ == '__main__':
         Earth(name="地球", size_scale=1e3),  # 地球
         Moon(name="月球", size_scale=2e3),  # 月球
         Mars(name="火星", size_scale=1.2e3),  # 火星
+        Asteroids(size_scale=1e2, parent=sun, rotate_angle=-20),
         Jupiter(name="木星", size_scale=4e2),  # 木星
         Saturn(name="土星", size_scale=4e2),  # 土星
         Uranus(name="天王星", size_scale=10e2),  # 天王星
@@ -80,10 +81,14 @@ if __name__ == '__main__':
     ]
 
     names = get_bodies_names(bodies)
+    names = names.replace("Asteroids,", "")
 
 
-    def get_body_posvel(body, posvels):
-        posvel = posvels.get(body.__class__.__name__, None)
+    def get_body_posvel(body, posvels=None, time=None):
+        if posvels is None:
+            posvel = get_body_barycentric_posvel(body.__class__.__name__, time)
+        else:
+            posvel = posvels.get(body.__class__.__name__, None)
         return posvel
 
 
@@ -97,14 +102,21 @@ if __name__ == '__main__':
         posvels = get_bodies_posvels(names, t)
         # earth_loc = None
         earth_pos = None
+        sun_pos = None
         for body in bodies:
 
-            posvel = get_body_posvel(body, posvels)
+            if isinstance(body, Asteroids):
+                posvel = None
+            else:
+                posvel = get_body_posvel(body, None, t)
+
             if isinstance(body, Moon):
                 posvel = recalc_moon_position(posvel, earth_pos)
 
             if posvel is None:
-                position, velocity = [0, 0, 0], [0, 0, 0]
+                position, velocity = [sun_pos.x.value * AU,
+                                      sun_pos.z.value * AU,
+                                      sun_pos.y.value * AU], [0, 0, 0]
             else:
                 S_OF_D = 24 * 60 * 60
                 # 坐标单位：千米  速度单位：千米/秒
@@ -117,6 +129,8 @@ if __name__ == '__main__':
             if isinstance(body, Earth):
                 # earth_loc = EarthLocation(x=posvel[0].x, y=posvel[0].y, z=posvel[0].z)
                 earth_pos = posvel[0]
+            elif isinstance(body, Sun):
+                sun_pos = posvel[0]
 
         dt = time_data.get_datetime(str(current_time))
         # print(time_data.get_datetime(str(current_time)))

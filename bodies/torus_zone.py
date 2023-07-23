@@ -23,6 +23,7 @@ class TorusZone(Body):
                  subdivisions=64,
                  size_scale=1.0,
                  distance_scale=1.0,
+                 rotate_angle=0,
                  rotation_speed=0,
                  parent=None):
         """
@@ -51,6 +52,7 @@ class TorusZone(Body):
             "size_scale": size_scale,
             "distance_scale": distance_scale,
             "rotation_speed": rotation_speed,
+            "rotate_angle": rotate_angle,
             "parent": parent
         }
         super().__init__(**params)

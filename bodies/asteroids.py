@@ -36,6 +36,7 @@ class Asteroids(TorusZone):
                  subdivisions=64,
                  size_scale=1.0,
                  distance_scale=1.0,
+                 rotate_angle=0,
                  rotation_speed=0.002,  # 小行星绕太阳转一圈的时间在数年到几十年之间不等。
                  parent=None):
         params = {
@@ -50,6 +51,7 @@ class Asteroids(TorusZone):
             "size_scale": size_scale,
             "distance_scale": distance_scale,
             "rotation_speed": rotation_speed,
+            "rotate_angle": rotate_angle,
             "parent": parent
         }
         super().__init__(**params)

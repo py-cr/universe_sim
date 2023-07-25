@@ -33,6 +33,7 @@ class Body(metaclass=ABCMeta):
         @param mass: 天体质量 (kg)
         @param init_position: 初始位置 (km)
         @param init_velocity: 初始速度 (km/s)
+        @param rotate_angle: 转轴倾角
         @param density: 平均密度 (kg/m³)
         @param color: 天体颜色（纹理图片优先）
         @param texture: 纹理图片

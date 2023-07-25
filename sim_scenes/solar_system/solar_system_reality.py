@@ -77,7 +77,7 @@ def are_planets_in_line(positions, line_width):
         current_dz = z - z1
         # 计算当前行星与线之间的距离的平方
         distance_squared = (current_dy * dz - current_dz * dy) ** 2 + (current_dz * dx - current_dx * dz) ** 2 + (
-                    current_dx * dy - current_dy * dx) ** 2
+                current_dx * dy - current_dy * dx) ** 2
         # 如果距离的平方大于线的宽度的平方，则行星不在一条线上
         if distance_squared > line_width_squared:
             return False
@@ -125,23 +125,22 @@ def are_planets_in_line(planets, line_width):
 
 current_time = Time.now()
 
-in_line_datetimes = []
+# in_line_datetimes = []
 
 if __name__ == '__main__':
-    # 八大行星：木星(♃)、土星(♄)、天王星(♅)、海王星(♆)、地球(⊕)、金星(♀)、火星(♂)、水星(☿)
-    # 排列顺序
-    # 1、体积：(以地球为1)木星 ：土星 ：天王星 ：海王星 ：地球 ：金星 ：火星 ：水星 = 1330：745：65：60：1：0.86：0.15：0.056
-    # 2、质量：(以地球为1)木星 ：土星 ：天王星 ：海王星 ：地球 ：金星 ：火星 ：水星 = 318：95：14.53：17.15：1：0.8：0.11：0.0553
-    # 3、离太阳从近到远的顺序：水星、金星、地球、火星、木星、土星、天王星、海王星
-    #  =====================================================================
-    #  以下展示的效果为太阳系真实的距离
+    #  以下展示的效果为太阳系真实的时间和位置
     #  由于宇宙空间尺度非常大，如果按照实际的天体大小，则无法看到天体，因此需要对天体的尺寸进行放大
-    sun = Sun(name="太阳", size_scale=0.4e2)  # 太阳放大 40 倍，距离保持不变（size_scale=0.04e2）TODO:进行调试大小
+    sun = Sun(name="太阳", size_scale=0.4e2)  # 太阳放大 40 倍，TODO:调试时的大小，size_scale=0.04e2
     bodies = [
         sun,
         Mercury(name="水星", size_scale=1.5e3),  # 水星
         Venus(name="金星", size_scale=1e3),  # 金星
-        Earth(name="地球", size_scale=1e3),  # 地球（size_scale=10e3）TODO:进行调试大小
+        Earth(name="地球",
+              texture="earth_hd.jpg",
+              size_scale=1e3),  # 地球 TODO:调试时的大小，size_scale=10e3
+        # Earth(name="地球云层",
+        #       texture="transparent_clouds.png",
+        #       size_scale=1.01e3),  # 地球云层 TODO:调试时的大小，size_scale=10.1e3
         Moon(name="月球", size_scale=2e3),  # 月球
         Mars(name="火星", size_scale=1.2e3),  # 火星
         # Asteroids(size_scale=1e2, parent=sun, rotate_angle=-20),
@@ -152,8 +151,9 @@ if __name__ == '__main__':
     ]
 
     earth = bodies[3]
+    # 显示自转轴线
     earth.rotate_axis_color = (255, 255, 50)
-    # earth.set_light_disable(True) # TODO:进行调试
+    # earth.set_light_disable(True)  # TODO:调试时，取消注释
 
     names = get_bodies_names(bodies)
     names = names.replace("Asteroids,", "")
@@ -227,7 +227,7 @@ if __name__ == '__main__':
         # 日期是当年的第几天
         day_of_year = dt.timetuple().tm_yday
         # 计算出：日期当天的偏转角度 - 贴图的误差
-        angle_of_day = day_of_year * (360 / 365) - 120
+        angle_of_day = day_of_year * (360 / 365) - 93.5
         # 控制地球的自转速度和方向，保障白天，中国面对太阳（会存在一点点的误差，可以通过上面“贴图的误差”进行调整）。
         earth.planet.rotation_y = -(time_data.total_hours) * 15 - angle_of_day
 

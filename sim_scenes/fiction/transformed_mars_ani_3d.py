@@ -11,12 +11,35 @@ import os
 import numpy as np
 import sys
 from bodies import Earth
+from objs import Satellite, Satellite2
 from common.consts import SECONDS_PER_HOUR
 from sim_scenes.func import ursina_run
 from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.entities.camera3d import Camera3d
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
+
+
+def create_satellites():
+    # 卫星位置和初始速度信息
+    satellite_infos = [
+        # {"position": [0, 0, 10002], "velocity": [6.3, 0, 0]},
+        # {"position": [0, 0, -12000], "velocity": [5.75, 0, 0]},
+        # {"position": [0, 8000, 0], "velocity": [7.05, 0, 0]},
+        # {"position": [0, -12002, 0], "velocity": [5.75, 0, 0]},
+        {"position": [0, 0, 14000], "velocity": [0, 5, 0]},
+        # {"position": [0, 0, -10000], "velocity": [0, 6.3, 0]},
+    ]
+    satellites = []
+    for i, info in enumerate(satellite_infos):
+        # Satellite Satellite2
+        satellite = Satellite(name=f'卫星{i + 1}', mass=4.4e10,
+                              size_scale=1e2, color=(255, 200, 0),
+                              init_position=info["position"],
+                              init_velocity=info["velocity"])
+        # info["satellite"] = satellite
+        satellites.append(satellite)
+    return satellites
 
 
 def transformed_mars_ani(transformed_texture=None, texture=None, camera3d=False):
@@ -39,14 +62,14 @@ def transformed_mars_ani(transformed_texture=None, texture=None, camera3d=False)
         rotate_angle=0,
         init_position=[0, 0, 0],
         init_velocity=[0, 0, 0],
-        size_scale=0.999)
+        size_scale=0.9996).set_ignore_gravity(True)
 
     trans_mars = Earth(
         texture=os.path.join("transformed", trans_texture),
         rotate_angle=0,
         init_position=[0, 0, 0],
         init_velocity=[0, 0, 0],
-        size_scale=0.995)
+        size_scale=0.9990).set_ignore_gravity(True)
 
     bodies = [mars, transformed_mars, trans_mars]
 
@@ -55,23 +78,27 @@ def transformed_mars_ani(transformed_texture=None, texture=None, camera3d=False)
                    rotate_angle=0,
                    size_scale=1.001, parent=mars)
 
+    satellites = create_satellites()
+    bodies = bodies + satellites
     bodies.append(clouds)
 
     init_pos = (1.45 * mars.radius,
                 0,
-                -30000)
+                -38000)
     if camera3d:
         init_pos = np.array(init_pos) * UrsinaConfig.SCALE_FACTOR
         Camera3d.init(init_pos)
         init_pos = (0, 0, 0)
 
     def on_ready():
-        pass
+        for satellite in satellites:
+            satellite.planet.enabled = False
 
     def on_timer_changed(time_data: TimeData):
         # mars.planet.opacity = 0.01
         opacity = round((time_data.total_hours - 1) / 10, 2)
         clouds_opacity = round(opacity - 0.5, 2)
+        show_satellites = False
         if opacity > 1.0:
             opacity = 1.0
         elif opacity < 0.0:
@@ -82,11 +109,17 @@ def transformed_mars_ani(transformed_texture=None, texture=None, camera3d=False)
 
         if clouds_opacity > 1.0:
             clouds_opacity = 1.0
+            show_satellites = True
         elif clouds_opacity < 0.0:
             clouds_opacity = 0.0
 
         clouds.planet.alpha = clouds_opacity  # 火星云层渐渐显示
         mars.planet.alpha = 1 - opacity  # 原火星渐渐消失
+        # show_satellites = True
+        if show_satellites:
+            for satellite in satellites:
+                satellite.planet.enabled = True
+                satellite.planet.look_at(mars.planet)
 
         # if time_data.total_hours > 10:
         #     trans_mars.planet.enabled = True

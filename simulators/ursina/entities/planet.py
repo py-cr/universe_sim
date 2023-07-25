@@ -7,7 +7,7 @@
 # python_version  :3.8
 # ==============================================================================
 # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com ursina
-from ursina import application,Entity, camera, color, Vec3, Text, load_texture, destroy, PointLight
+from ursina import application, Entity, camera, color, Vec3, Text, load_texture, destroy, PointLight
 
 from simulators.ursina.entities.entity_utils import create_name_text, create_trails, clear_trails, create_rings, \
     trail_init, create_fixed_star_lights
@@ -196,8 +196,9 @@ class Planet(Entity):
         # 1.0 0.006373216398060322 0.006373216398060322
         if hasattr(self.body, "rotate_axis_scale"):
             line_scale = self.body.rotate_axis_scale * line_scale
-        create_line(from_pos, to_pos, parent=self.main_entity,
-                    len_scale=line_scale, color=line_color, thickness=2)
+
+        self.rotate_axis_line = create_line(from_pos, to_pos, parent=self.main_entity,
+                                            len_scale=line_scale, color=line_color, thickness=2)
 
     def change_body_scale(self):
         if hasattr(self.body, "torus_stars") or hasattr(self.body, "torus_zone"):
@@ -205,6 +206,11 @@ class Planet(Entity):
             self.scale = self.init_scale
         else:
             self.scale = self.init_scale * UrsinaConfig.body_size_factor
+
+        if hasattr(self, "rotate_axis_line"):
+            if not hasattr(self, "rotate_axis_init_scale"):
+                self.rotate_axis_init_scale = self.rotate_axis_line.scale
+            self.rotate_axis_line.scale = self.rotate_axis_init_scale * UrsinaConfig.body_size_factor
 
     def update(self):
         self.change_body_scale()
@@ -319,7 +325,7 @@ class Planet(Entity):
             delattr(self, "label_name")
         else:
             self.label_name = create_label(parent=self,
-                         label=self.body.name,
-                         pos=Vec3(-0.5, -0.5, -0.5),
-                         color=color.red)
+                                           label=self.body.name,
+                                           pos=Vec3(-0.5, -0.5, -0.5),
+                                           color=color.red)
             self.label_name.set_light_off()

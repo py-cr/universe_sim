@@ -142,6 +142,9 @@ if __name__ == '__main__':
         Neptune(name="海王星", size_scale=10e2),  # 海王星
     ]
 
+    earth = bodies[3]
+    earth.rotate_axis_color = (255, 255, 50)
+
     names = get_bodies_names(bodies)
     names = names.replace("Asteroids,", "")
 

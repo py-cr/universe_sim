@@ -54,49 +54,36 @@ def get_bodies_names(bodies):
         names += body.__class__.__name__ + ","
     return names[0:-1]
 
+
 def are_planets_in_line(positions, line_width):
     # 检查行星的数量是否足够判断是否在一条线上
     if len(positions) < 3:
         return False
-     # 获取第一个行星的坐标
+    # 获取第一个行星的坐标
     x1, y1, z1 = positions[0]
-     # 计算行星之间的向量差
+    # 计算行星之间的向量差
     dx = positions[1][0] - x1
     dy = positions[1][1] - y1
     dz = positions[1][2] - z1
-     # 计算线的宽度的平方
-    line_width_squared = line_width**2
-     # 遍历剩余的行星
+    # 计算线的宽度的平方
+    line_width_squared = line_width ** 2
+    # 遍历剩余的行星
     for i in range(2, len(positions)):
         # 获取当前行星的坐标
         x, y, z = positions[i]
-         # 计算当前行星与第一个行星之间的向量差
+        # 计算当前行星与第一个行星之间的向量差
         current_dx = x - x1
         current_dy = y - y1
         current_dz = z - z1
-         # 计算当前行星与线之间的距离的平方
-        distance_squared = (current_dy * dz - current_dz * dy)**2 + (current_dz * dx - current_dx * dz)**2 + (current_dx * dy - current_dy * dx)**2
-         # 如果距离的平方大于线的宽度的平方，则行星不在一条线上
+        # 计算当前行星与线之间的距离的平方
+        distance_squared = (current_dy * dz - current_dz * dy) ** 2 + (current_dz * dx - current_dx * dz) ** 2 + (
+                    current_dx * dy - current_dy * dx) ** 2
+        # 如果距离的平方大于线的宽度的平方，则行星不在一条线上
         if distance_squared > line_width_squared:
             return False
-     # 所有行星都在一条线上
+    # 所有行星都在一条线上
     return True
 
-def are_planets_in_line(planets, line_width):
-    if len(planets) < 2:
-        return False
-
-    x_coords = [planet[0] for planet in planets]
-    y_coords = [planet[1] for planet in planets]
-    z_coords = [planet[2] for planet in planets]
-
-    x_diff = [abs(x2 - x1) for (x1, x2) in zip(x_coords, x_coords[1:])]
-    y_diff = [abs(y2 - y1) for (y1, y2) in zip(y_coords, y_coords[1:])]
-    z_diff = [abs(z2 - z1) for (z1, z2) in zip(z_coords, z_coords[1:])]
-
-    widths = [max(d1, d2, line_width) for (d1, d2) in zip(x_diff, y_diff)] + [line_width] + [max(d1, d2, line_width) for (d1, d2) in zip(x_diff[::-1], y_diff[::-1])]
-
-    return all(w == widths[0] for w in widths)
 
 def are_planets_in_line(planets, line_width):
     if len(planets) < 2:
@@ -110,9 +97,31 @@ def are_planets_in_line(planets, line_width):
     y_diff = [abs(y2 - y1) for (y1, y2) in zip(y_coords, y_coords[1:])]
     z_diff = [abs(z2 - z1) for (z1, z2) in zip(z_coords, z_coords[1:])]
 
-    widths = [max(d1, d2, line_width**2) for (d1, d2) in zip(x_diff, y_diff)] + [line_width**2] + [max(d1, d2, line_width**2) for (d1, d2) in zip(x_diff[::-1], y_diff[::-1])]
+    widths = [max(d1, d2, line_width) for (d1, d2) in zip(x_diff, y_diff)] + [line_width] + [max(d1, d2, line_width) for
+                                                                                             (d1, d2) in
+                                                                                             zip(x_diff[::-1],
+                                                                                                 y_diff[::-1])]
 
     return all(w == widths[0] for w in widths)
+
+
+def are_planets_in_line(planets, line_width):
+    if len(planets) < 2:
+        return False
+
+    x_coords = [planet[0] for planet in planets]
+    y_coords = [planet[1] for planet in planets]
+    z_coords = [planet[2] for planet in planets]
+
+    x_diff = [abs(x2 - x1) for (x1, x2) in zip(x_coords, x_coords[1:])]
+    y_diff = [abs(y2 - y1) for (y1, y2) in zip(y_coords, y_coords[1:])]
+    z_diff = [abs(z2 - z1) for (z1, z2) in zip(z_coords, z_coords[1:])]
+
+    widths = [max(d1, d2, line_width ** 2) for (d1, d2) in zip(x_diff, y_diff)] + [line_width ** 2] + [
+        max(d1, d2, line_width ** 2) for (d1, d2) in zip(x_diff[::-1], y_diff[::-1])]
+
+    return all(w == widths[0] for w in widths)
+
 
 current_time = Time.now()
 
@@ -127,12 +136,12 @@ if __name__ == '__main__':
     #  =====================================================================
     #  以下展示的效果为太阳系真实的距离
     #  由于宇宙空间尺度非常大，如果按照实际的天体大小，则无法看到天体，因此需要对天体的尺寸进行放大
-    sun = Sun(name="太阳", size_scale=0.4e2)  # 太阳放大 40 倍，距离保持不变
+    sun = Sun(name="太阳", size_scale=0.4e2)  # 太阳放大 40 倍，距离保持不变（size_scale=0.04e2）TODO:进行调试大小
     bodies = [
         sun,
         Mercury(name="水星", size_scale=1.5e3),  # 水星
         Venus(name="金星", size_scale=1e3),  # 金星
-        Earth(name="地球", size_scale=1e3),  # 地球
+        Earth(name="地球", size_scale=1e3),  # 地球（size_scale=10e3）TODO:进行调试大小
         Moon(name="月球", size_scale=2e3),  # 月球
         Mars(name="火星", size_scale=1.2e3),  # 火星
         # Asteroids(size_scale=1e2, parent=sun, rotate_angle=-20),
@@ -144,6 +153,7 @@ if __name__ == '__main__':
 
     earth = bodies[3]
     earth.rotate_axis_color = (255, 255, 50)
+    # earth.set_light_disable(True) # TODO:进行调试
 
     names = get_bodies_names(bodies)
     names = names.replace("Asteroids,", "")
@@ -160,6 +170,9 @@ if __name__ == '__main__':
     def on_ready():
         # 运行前触发
         camera.rotation_z = -20
+        # 需要按照时间和日期控制地球的自转，不能随意转动
+        delattr(earth.planet, "rotation_speed")
+        delattr(earth.planet, "rotspeed")
 
 
     def on_timer_changed(time_data: TimeData):
@@ -168,6 +181,7 @@ if __name__ == '__main__':
         # earth_loc = None
         earth_pos = None
         sun_pos = None
+
         positions = []
         for body in bodies:
             if isinstance(body, Asteroids):
@@ -203,6 +217,19 @@ if __name__ == '__main__':
                 sun_pos = posvel[0]
 
         dt = time_data.get_datetime(str(current_time))
+
+        # # 日期当天的偏转角度+误差
+        # angle_of_day = day_of_year * (360 / 365) + 75
+        # # 控制地球的自转
+        # earth.planet.rotation_y = -(time_data.total_hours) * 15 + angle_of_day
+
+        # 需要按照时间和日期控制地球的自转，不能随意转动
+        # 日期是当年的第几天
+        day_of_year = dt.timetuple().tm_yday
+        # 计算出：日期当天的偏转角度 - 贴图的误差
+        angle_of_day = day_of_year * (360 / 365) - 120
+        # 控制地球的自转速度和方向，保障白天，中国面对太阳（会存在一点点的误差，可以通过上面“贴图的误差”进行调整）。
+        earth.planet.rotation_y = -(time_data.total_hours) * 15 - angle_of_day
 
         # if len(in_line_datetimes) == 0:
         #     in_line = are_planets_in_line(positions, 5*AU)

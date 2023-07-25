@@ -22,7 +22,7 @@ from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.ui.control_ui import ControlUI
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
-from ursina import camera
+from ursina import camera, application
 
 
 def get_bodies_posvels(planet_names="sun,mercury,venus,earth,moon,mars,jupiter,saturn,uranus,neptune", time=None):
@@ -173,6 +173,7 @@ if __name__ == '__main__':
         # 需要按照时间和日期控制地球的自转，不能随意转动
         delattr(earth.planet, "rotation_speed")
         delattr(earth.planet, "rotspeed")
+        application.time_scale = 2
 
 
     def on_timer_changed(time_data: TimeData):

@@ -16,6 +16,7 @@ from common.consts import SECONDS_PER_HOUR
 from sim_scenes.func import ursina_run
 from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.entities.camera3d import Camera3d
+from simulators.ursina.entities.entity_utils import create_directional_light
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
 
@@ -33,8 +34,8 @@ def create_satellites():
     satellites = []
     for i, info in enumerate(satellite_infos):
         # Satellite Satellite2
-        satellite = Satellite(name=f'卫星{i + 1}', mass=4.4e10,
-                              size_scale=1e2, color=(255, 200, 0),
+        satellite = Satellite2(name=f'卫星{i + 1}', mass=4.4e10,
+                              size_scale=2e2, color=(255, 200, 0),
                               init_position=info["position"],
                               init_velocity=info["velocity"])
         # info["satellite"] = satellite
@@ -76,13 +77,13 @@ def transformed_mars_ani(transformed_texture=None, texture=None, camera3d=False)
     # 创建云层（texture纹理图使用了透明云层的图片，云层的 size_scale 要稍微比地球大一点）
     clouds = Earth(name="云层", texture="transparent_clouds.png",
                    rotate_angle=0,
-                   size_scale=1.001, parent=mars)
+                   size_scale=1.02, parent=mars)
 
     satellites = create_satellites()
     bodies = bodies + satellites
     bodies.append(clouds)
 
-    init_pos = (1.45 * mars.radius,
+    init_pos = (1.80 * mars.radius,
                 0,
                 -38000)
     if camera3d:
@@ -91,6 +92,8 @@ def transformed_mars_ani(transformed_texture=None, texture=None, camera3d=False)
         init_pos = (0, 0, 0)
 
     def on_ready():
+        # 为了较好的立体效果，可以增加太阳光线，光线指向火星（target=mars）
+        create_directional_light(position=(300, 0, -300), light_num=3, target=mars)
         for satellite in satellites:
             satellite.planet.enabled = False
 
@@ -119,7 +122,7 @@ def transformed_mars_ani(transformed_texture=None, texture=None, camera3d=False)
         if show_satellites:
             for satellite in satellites:
                 satellite.planet.enabled = True
-                satellite.planet.look_at(mars.planet)
+                # satellite.planet.look_at(mars.planet)
 
         # if time_data.total_hours > 10:
         #     trans_mars.planet.enabled = True
@@ -158,5 +161,5 @@ if __name__ == '__main__':
     transformed_mars_ani(
         transformed_texture="mars.jpg",
         texture="mars.png",
-        camera3d=False
+        camera3d=True
     )

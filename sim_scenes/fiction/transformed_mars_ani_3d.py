@@ -7,17 +7,14 @@
 # python_version  :3.8
 # ==============================================================================
 import os
-
-import numpy as np
 import sys
+
 from bodies import Earth
-from objs import Satellite, Satellite2
 from common.consts import SECONDS_PER_HOUR
+from objs import Satellite2
 from sim_scenes.func import ursina_run
 from simulators.ursina.entities.body_timer import TimeData
-from simulators.ursina.entities.camera3d import Camera3d
 from simulators.ursina.entities.entity_utils import create_directional_light
-from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
 
 
@@ -84,7 +81,10 @@ def transformed_mars_ani(transformed_texture=None, texture=None, camera3d=False)
     bodies.append(clouds)
 
     if camera3d:
-        Camera3d.init()
+        # TODO: 开启3D摄像机
+        from simulators.ursina.entities.camera3d import Camera3d
+        # 3D摄像机初始化(眼睛的距离为1000公里效果)
+        Camera3d.init(eye_distance=1000)
 
     def on_ready():
         # 为了较好的立体效果，可以增加太阳光线，光线指向火星（target=mars）

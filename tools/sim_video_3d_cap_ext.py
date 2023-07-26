@@ -307,13 +307,13 @@ def make_3d_video():
         last_index = index
         index = index + index_base
         completed_index = index
-        # 清除识别块的颜色为黑色
-        img[4:21, 3:20, ] = [0, 0, 0]
 
         if _3d_card_p[2] < 100:
             _3d_card_color = "b"
             _3d_card_direct = "right"
             if index not in r_frames.keys():
+                # 清除识别块的颜色为周边的背景色
+                img[4:21, 3:20, ] = img[22:23, 21:22, ][0][0]
                 r_frames[index] = img[:cut_h, :cut_w, ]
             else:
                 return False
@@ -321,6 +321,8 @@ def make_3d_video():
             _3d_card_color = "w"
             _3d_card_direct = "left"
             if index not in l_frames.keys():
+                # 清除识别块的颜色为周边的背景色
+                img[4:21, 3:20, ] = img[22:23, 21:22, ][0][0]
                 l_frames[index] = img[:cut_h, :cut_w, ]
             else:
                 return False

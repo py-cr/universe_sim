@@ -6,17 +6,12 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
-import numpy as np
+
+import os
 
 from bodies import Earth
-from common.consts import SECONDS_PER_HOUR, SECONDS_PER_DAY, AU
-from sim_scenes.func import ursina_run, camera_look_at, create_3d_card
-from simulators.ursina.entities.body_timer import TimeData
-from simulators.ursina.entities.camera3d import Camera3d
-from simulators.ursina.ursina_config import UrsinaConfig
-from simulators.ursina.ursina_event import UrsinaEvent
-from ursina import camera
-import os
+from common.consts import SECONDS_PER_HOUR
+from sim_scenes.func import ursina_run
 
 
 def run_transformed_planet(transformed_texture=None, texture=None, with_clouds=True, camera3d=False, transparent=True):
@@ -44,7 +39,10 @@ def run_transformed_planet(transformed_texture=None, texture=None, with_clouds=T
         bodies.append(clouds)
 
     if camera3d:
-        Camera3d.init()
+        # TODO: 开启3D摄像机
+        from simulators.ursina.entities.camera3d import Camera3d
+        # 3D摄像机初始化(眼睛的距离为1000公里效果)
+        Camera3d.init(eye_distance=1000)
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹

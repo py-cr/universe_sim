@@ -18,6 +18,10 @@ def browse_file():
     input_entry.insert(0, file_path)
     output_entry.delete(0, tk.END)
     output_entry.insert(0, file_path[0:-3] + ".mp4")
+
+    if file_path.endswith("_3d.py") and checkbox3d_var.get() != 1:
+        checkbox3d.select()
+
     check3d()
 
 

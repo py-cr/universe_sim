@@ -29,9 +29,10 @@ if __name__ == '__main__':
 
     bodies = [earth, clouds]
 
-    # 3D摄像机初始化
+    # TODO: 开启3D摄像机
     from simulators.ursina.entities.camera3d import Camera3d
-    Camera3d.init()
+    # 3D摄像机初始化(眼睛的距离为1000公里效果)
+    Camera3d.init(eye_distance=1000)
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹

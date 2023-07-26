@@ -2,7 +2,7 @@
 # title           :三体场景模拟02
 # description     :三体场景模拟（3个太阳、1个地球）
 # author          :Python超人
-# date            :2023-07-20
+# date            :2023-07-26
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
@@ -37,7 +37,13 @@ if __name__ == '__main__':
             size_scale=SIZE_SCALE, texture="fixed_star.png"),
     ]
 
+    # TODO: 开启3D摄像机
+    from simulators.ursina.entities.camera3d import Camera3d
+
+    # 3D摄像机初始化(眼睛的距离为1000公里效果)
+    Camera3d.init(eye_distance=5000000)
+
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_WEEK, position=(0 * AU, 0, -3 * AU), show_trail=True)
+    ursina_run(bodies, SECONDS_PER_WEEK * 3, position=(1.5 * AU, 0, -5 * AU), show_trail=True)

@@ -139,14 +139,14 @@ def video_write(video, l_frames, r_frames):
             # print('[' + str(index) + "], ", end='')
             continue
         if rv is None:
-            rv = r_frames.get(index-1, None)
+            rv = r_frames.get(index - 1, None)
             if rv is None:
                 rv = r_frames.get(index + 1, None)
             if rv is None:
                 # print('[R:'+str(index) + "], ", end='')
                 continue
         if lv is None:
-            lv = l_frames.get(index-1, None)
+            lv = l_frames.get(index - 1, None)
             if lv is None:
                 lv = l_frames.get(index + 1, None)
             if lv is None:
@@ -295,7 +295,7 @@ def make_3d_video():
         if img is None:
             return None
         _3d_card = img[4:20, 3:20, ]
-        _3d_card_p = _3d_card[10, 10,]
+        _3d_card_p = _3d_card[10, 10, ]
         index = int(_3d_card_p[1]) + int(_3d_card_p[0])
 
         # if index in r_frames.keys() and index in l_frames.keys():
@@ -303,22 +303,25 @@ def make_3d_video():
 
         if index < last_index:
             index_base += (last_index + 1)
-
+        cut_h, cut_w = img.shape[0], int((img.shape[1]) / 2)
         last_index = index
         index = index + index_base
         completed_index = index
+        # 清除识别块的颜色为黑色
+        img[4:21, 3:20, ] = [0, 0, 0]
+
         if _3d_card_p[2] < 100:
             _3d_card_color = "b"
             _3d_card_direct = "right"
             if index not in r_frames.keys():
-                r_frames[index] = img[:864, :768, ]
+                r_frames[index] = img[:cut_h, :cut_w, ]
             else:
                 return False
         else:
             _3d_card_color = "w"
             _3d_card_direct = "left"
             if index not in l_frames.keys():
-                l_frames[index] = img[:864, :768, ]
+                l_frames[index] = img[:cut_h, :cut_w, ]
             else:
                 return False
 

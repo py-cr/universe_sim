@@ -339,6 +339,9 @@ class UrsinaSimulator(Simulator):
 
         if "cosmic_bg" in kwargs:
             cosmic_bg = kwargs["cosmic_bg"]
+            if cosmic_bg == "":
+                cosmic_bg = "no_cosmic_bg"
+
             if cosmic_bg is None:
                 # cosmic_bg = '../textures/cosmic1.png'
                 # cosmic_bg = '../textures/cosmic2.jpg'

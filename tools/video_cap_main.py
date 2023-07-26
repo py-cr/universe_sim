@@ -86,7 +86,9 @@ def start():
         messagebox.showwarning("消息", err_msg)
         return
 
-    if messagebox.askyesno("确认", "是否开始生成视频？"):
+    msg_info = "是否开始生成视频？\n"
+    msg_info += "**注意**：如果要停止录屏，则关闭“宇宙模拟器”的窗口即可。"
+    if messagebox.askyesno("确认", msg_info):
         generate()
 
 
@@ -105,26 +107,29 @@ def check3d():
 root = tk.Tk()
 root.title("模拟器视频生成工具")
 
-input_entry = tk.Entry(root, width=80)
+frame = tk.Frame(root, borderwidth=0, relief="groove")
+frame.pack(padx=3, pady=5)  # 设置窗口的边距为10像素
+
+input_entry = tk.Entry(frame, width=75)
 input_entry.grid(row=0, column=2)
-browse_button = tk.Button(root, text="模拟代码文件", command=browse_file)
+browse_button = tk.Button(frame, text="模拟代码文件路径", command=browse_file)
 browse_button.grid(row=0, column=1)
 
-output_entry = tk.Entry(root, width=80)
+output_entry = tk.Entry(frame, width=75)
 output_entry.grid(row=1, column=2)
-browse_save_button = tk.Button(root, text="视频保存文件", command=browse_save)
+browse_save_button = tk.Button(frame, text="视频保存文件路径", command=browse_save)
 browse_save_button.grid(row=1, column=1)
-open_output_dir_button = tk.Button(root, text="...", command=open_output_dir)
+open_output_dir_button = tk.Button(frame, text="打开目录", command=open_output_dir)
 open_output_dir_button.grid(row=1, column=3)
 
 checkbox3d_var = tk.IntVar()
-checkbox3d = tk.Checkbutton(root, text="生成3D视频", command=check3d, variable=checkbox3d_var)
+checkbox3d = tk.Checkbutton(frame, text="生成3D视频", command=check3d, variable=checkbox3d_var)
 checkbox3d.grid(row=2, column=1)
-generate_button = tk.Button(root, text="点击开始", width=20, command=start)
+generate_button = tk.Button(frame, text="点击开始", width=20, command=start)
 generate_button.grid(row=2, column=2)
 
 # root.withdraw()  # 隐藏主窗口
-screen_width = 680
+screen_width = 700
 screen_height = 200
 x = (screen_width / 2) - (root.winfo_width() / 2)
 y = (screen_height / 2) - (root.winfo_height() / 2)

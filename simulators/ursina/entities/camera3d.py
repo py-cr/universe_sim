@@ -23,39 +23,41 @@ class Camera3d(Entity):
     o = OCamera()
     is_ready = False
 
-    def __init__(self, **kwargs):
+    def __init__(self, eye_distance=None, **kwargs):
         super().__init__()
         for key, value in kwargs.items():
             setattr(self, key, value)
 
+        if eye_distance is None:
+            eye_distance = 1000
+
         camera.parent = self
         self.camera_pos = "right"
-        # self.camera_l2r = 0.002 * AU * UrsinaConfig.SCALE_FACTOR
-        self.camera_l2r = 0.0005
+        self.eye_distance = eye_distance * UrsinaConfig.SCALE_FACTOR
 
     def switch_position(self):
         if self.camera_pos == "right":  # 摄像机右眼
-            self.x -= 2 * self.camera_l2r
+            self.x -= 2 * self.eye_distance
             self.camera_pos = "left"
         elif self.camera_pos == "left":  # 摄像机左眼
-            self.x += 2 * self.camera_l2r
+            self.x += 2 * self.eye_distance
             self.camera_pos = "right"
 
     def update(self):
         pass
 
     @staticmethod
-    def init(init_pos=None):
+    def init(eye_distance=None, init_pos=None):
         Camera3d.is_ready = True
 
         def on_ready():
-            Camera3d.init_on_ready(init_pos)
+            Camera3d.init_on_ready(eye_distance, init_pos)
 
         UrsinaEvent.on_ready_subscription(on_ready)
         UrsinaEvent.on_before_evolving_subscription(Camera3d.exec_on_before_evolving)
 
     @staticmethod
-    def init_on_ready(position):
+    def init_on_ready(eye_distance, position):
         if hasattr(Camera3d.o, "init_position"):
             position = Camera3d.o.init_position
         elif position is None:
@@ -63,7 +65,7 @@ class Camera3d(Entity):
         else:
             position = np.array(position) * UrsinaConfig.SCALE_FACTOR
 
-        Camera3d.o.camera3d = Camera3d()
+        Camera3d.o.camera3d = Camera3d(eye_distance)
         Camera3d.o.camera3d.position = position
         Camera3d.o._3d_card = create_3d_card()
 

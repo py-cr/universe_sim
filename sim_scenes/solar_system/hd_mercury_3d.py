@@ -2,7 +2,7 @@
 # title           :高清水星3D效果
 # description     :高清水星3D效果
 # author          :Python超人
-# date            :2023-02-11
+# date            :2023-07-26
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
@@ -21,9 +21,9 @@ if __name__ == '__main__':
     ]
     mercury = bodies[0]
 
-    # 3D摄像机初始化
+    # TODO: 3D摄像机
     from simulators.ursina.entities.camera3d import Camera3d
-
+    # 3D摄像机初始化
     Camera3d.init()
 
     # 使用 ursina 查看的运行效果
@@ -31,8 +31,8 @@ if __name__ == '__main__':
     # position = 左-右+、上+下-、前+后-
     ursina_run(bodies, SECONDS_PER_DAY,
                position=(2.0 * mercury.radius, 0, -14000),
-               cosmic_bg="",
-               show_grid=False,
-               show_camera_info=False,
-               show_control_info=False,
+               # cosmic_bg="",  # 无背景（黑色）
+               show_grid=False,  # 不显示网格
+               show_camera_info=False,  # 不显示摄像机信息
+               show_control_info=False,  # 不显示控制提示信息
                view_closely=0.001)

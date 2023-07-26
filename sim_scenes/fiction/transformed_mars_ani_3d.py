@@ -35,9 +35,9 @@ def create_satellites():
     for i, info in enumerate(satellite_infos):
         # Satellite Satellite2
         satellite = Satellite2(name=f'卫星{i + 1}', mass=4.4e10,
-                              size_scale=2e2, color=(255, 200, 0),
-                              init_position=info["position"],
-                              init_velocity=info["velocity"])
+                               size_scale=2e2, color=(255, 200, 0),
+                               init_position=info["position"],
+                               init_velocity=info["velocity"])
         # info["satellite"] = satellite
         satellites.append(satellite)
     return satellites
@@ -83,13 +83,8 @@ def transformed_mars_ani(transformed_texture=None, texture=None, camera3d=False)
     bodies = bodies + satellites
     bodies.append(clouds)
 
-    init_pos = (1.80 * mars.radius,
-                0,
-                -38000)
     if camera3d:
-        init_pos = np.array(init_pos) * UrsinaConfig.SCALE_FACTOR
-        Camera3d.init(init_pos)
-        init_pos = (0, 0, 0)
+        Camera3d.init()
 
     def on_ready():
         # 为了较好的立体效果，可以增加太阳光线，光线指向火星（target=mars）
@@ -147,7 +142,7 @@ def transformed_mars_ani(transformed_texture=None, texture=None, camera3d=False)
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
     ursina_run(bodies, SECONDS_PER_HOUR / 2,
-               position=init_pos,
+               position=(1.80 * mars.radius, 0, -38000),
                show_grid=False,
                show_camera_info=False,
                show_control_info=False,

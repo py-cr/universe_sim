@@ -43,19 +43,14 @@ def run_transformed_planet(transformed_texture=None, texture=None, with_clouds=T
 
         bodies.append(clouds)
 
-    init_pos = (1.45 * earth.radius,
-                0,
-                -30000)
     if camera3d:
-        init_pos = np.array(init_pos) * UrsinaConfig.SCALE_FACTOR
-        Camera3d.init(init_pos)
-        init_pos = (0, 0, 0)
+        Camera3d.init()
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
     ursina_run(bodies, SECONDS_PER_HOUR / 2,
-               position=init_pos,
+               position=(1.45 * earth.radius, 0, -30000),
                show_grid=False,
                show_camera_info=False,
                show_control_info=False,

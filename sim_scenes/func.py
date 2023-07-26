@@ -154,6 +154,12 @@ def ursina_run(bodies,
         for body in body_sys.bodies:
             body.show_name = True
 
+    from simulators.ursina.entities.camera3d import Camera3d
+    if Camera3d.is_ready and position != (0, 0, 0):
+        from simulators.ursina.ursina_config import UrsinaConfig
+        Camera3d.o.init_position = np.array(position) * UrsinaConfig.SCALE_FACTOR
+        position = (0, 0, 0)
+
     if save_as_json is not None:
         try:
             body_sys.save_to_json(save_as_json, {"dt": dt, "position": position,

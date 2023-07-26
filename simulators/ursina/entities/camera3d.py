@@ -6,7 +6,8 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
-from ursina import Entity, camera
+import numpy as np
+from ursina import Entity, camera, Vec3
 
 from common.consts import AU
 from sim_scenes.func import create_3d_card
@@ -20,6 +21,7 @@ class OCamera:
 
 class Camera3d(Entity):
     o = OCamera()
+    is_ready = False
 
     def __init__(self, **kwargs):
         super().__init__()
@@ -43,7 +45,9 @@ class Camera3d(Entity):
         pass
 
     @staticmethod
-    def init(init_pos):
+    def init(init_pos=None):
+        Camera3d.is_ready = True
+
         def on_ready():
             Camera3d.init_on_ready(init_pos)
 
@@ -52,13 +56,24 @@ class Camera3d(Entity):
 
     @staticmethod
     def init_on_ready(position):
+        if hasattr(Camera3d.o, "init_position"):
+            position = Camera3d.o.init_position
+        elif position is None:
+            position = camera.position
+        else:
+            position = np.array(position) * UrsinaConfig.SCALE_FACTOR
+
         Camera3d.o.camera3d = Camera3d()
         Camera3d.o.camera3d.position = position
         Camera3d.o._3d_card = create_3d_card()
 
     @staticmethod
     def exec_on_before_evolving(evolve_args):
+
         Camera3d.o._3d_card.switch_color()
         Camera3d.o.camera3d.switch_position()
         if Camera3d.o._3d_card.switch_flag == 1:
             evolve_args["evolve_dt"] = 0.0
+
+        # if isinstance(camera.parent, Camera3d):
+        #     camera.position = Vec3(0, 0, 0)

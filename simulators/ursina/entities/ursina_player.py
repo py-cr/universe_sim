@@ -40,6 +40,7 @@ class UrsinaPlayer(FirstPersonController):
         self.position = Vec3(pos[0], pos[1], pos[2])
         # 将摄像机位置设置为 x=0、y=1、z=0 的位置
         camera.position = Vec3(pos[0], pos[1], pos[2])
+        # camera.player = self
         # self.x = 90
         # self.position = Vec3(pos[0], pos[1], pos[2])
         # 将摄像机的观察角度绕 x 轴旋转 45 度，绕 y 轴旋转 0 度，绕 z 轴旋转 0 度

@@ -131,29 +131,29 @@ def video_write(video, l_frames, r_frames):
         return
     min_index = min(r_frames.keys())
     max_index = max(r_frames.keys())
-    print("index:", end='')
+    # print("index:", end='')
     for index in range(min_index, max_index + 1):
         rv = r_frames.get(index, None)
         lv = l_frames.get(index, None)
         if rv is None and lv is None:
-            print('[' + str(index) + "], ", end='')
+            # print('[' + str(index) + "], ", end='')
             continue
         if rv is None:
             rv = r_frames.get(index-1, None)
             if rv is None:
                 rv = r_frames.get(index + 1, None)
             if rv is None:
-                print('[R:'+str(index) + "], ", end='')
+                # print('[R:'+str(index) + "], ", end='')
                 continue
         if lv is None:
             lv = l_frames.get(index-1, None)
             if lv is None:
                 lv = l_frames.get(index + 1, None)
             if lv is None:
-                print('[L:' + str(index) + "], ", end='')
+                # print('[L:' + str(index) + "], ", end='')
                 continue
 
-        print(str(index) + ", ", end='')
+        # print(str(index) + ", ", end='')
         merged_list = [np.concatenate((lv[i], sublist), axis=0) for i, sublist in enumerate(rv)]
         try:
             video.write(np.array(merged_list))
@@ -361,6 +361,7 @@ def make_3d_video():
     clear_frame_temp_files()
     # crop('video.mp4')
     print("视频保存完成")
+    print(args.save_name)
 
 
 if __name__ == '__main__':

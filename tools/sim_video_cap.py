@@ -148,3 +148,4 @@ if __name__ == '__main__':
     cv2.destroyAllWindows()
     # crop('video.mp4')
     print("视频保存完成")
+    print(args.save_name)

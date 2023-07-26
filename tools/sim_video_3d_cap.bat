@@ -20,6 +20,6 @@ cd %SimFilePath%
 start python -m %SimFileName% 3d
 
 cd %SimDir%\tools
-python -m sim_video_3d_cap_ext --save_name=%SimFileName%.mp4 %param3%
+python -m sim_video_3d_cap_ext --save_name=%param3%
 
 

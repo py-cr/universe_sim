@@ -229,7 +229,7 @@ if __name__ == '__main__':
         day_of_year = dt.timetuple().tm_yday
         # 计算出：日期当天的偏转角度 - 贴图的误差
         # angle_of_day = day_of_year * (360 / 365) - 93.5  # 2023.7.25
-        angle_of_day = day_of_year * (360 / 365) - 73    # 2023.7.27
+        angle_of_day = day_of_year * (360 / 365) - 60    # 2023.7.27
         # 控制地球的自转速度和方向，保障白天，中国面对太阳（会存在一点点的误差，可以通过上面“贴图的误差”进行调整）。
         earth.planet.rotation_y = -(time_data.total_hours) * 15 - angle_of_day
 

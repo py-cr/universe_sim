@@ -1,6 +1,6 @@
 # -*- coding:utf-8 -*-
-# title           :太空飞船
-# description     :太空飞船
+# title           :太空战机
+# description     :太空战机
 # author          :Python超人
 # date            :2023-02-11
 # link            :https://gitcode.net/pythoncr/

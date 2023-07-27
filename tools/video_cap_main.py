@@ -129,7 +129,7 @@ open_output_dir_button.grid(row=1, column=3)
 checkbox3d_var = tk.IntVar()
 checkbox3d = tk.Checkbutton(frame, text="生成3D视频", command=check3d, variable=checkbox3d_var)
 checkbox3d.grid(row=2, column=1)
-generate_button = tk.Button(frame, text="点击开始", width=20, command=start)
+generate_button = tk.Button(frame, text="开始制作视频", width=20, command=start)
 generate_button.grid(row=2, column=2)
 
 # root.withdraw()  # 隐藏主窗口

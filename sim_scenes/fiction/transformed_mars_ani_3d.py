@@ -83,7 +83,7 @@ def transformed_mars_ani(transformed_texture=None, texture=None, camera3d=False)
     if camera3d:
         # TODO: 开启3D摄像机
         from simulators.ursina.entities.camera3d import Camera3d
-        # 3D摄像机初始化(眼睛的距离为1000公里效果)
+        # 3D摄像机初始化(两眼到鼻梁的距离为1000公里效果)
         Camera3d.init(eye_distance=1000)
 
     def on_ready():

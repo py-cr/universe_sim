@@ -31,7 +31,7 @@ if __name__ == '__main__':
 
     # TODO: 开启3D摄像机
     from simulators.ursina.entities.camera3d import Camera3d
-    # 3D摄像机初始化(眼睛的距离为1000公里效果)
+    # 3D摄像机初始化(两眼到鼻梁的距离为1000公里效果)
     Camera3d.init(eye_distance=1000)
 
     # 使用 ursina 查看的运行效果
@@ -39,8 +39,8 @@ if __name__ == '__main__':
     # position = 左-右+、上+下-、前+后-
     ursina_run(bodies, SECONDS_PER_HOUR / 2,
                position=(1.45 * earth.radius, 0, -30000),
-               show_grid=False,
-               show_camera_info=False,
-               show_control_info=False,
-               cosmic_bg="none",
+               cosmic_bg="",  # 无背景（黑色）
+               show_grid=False,  # 不显示网格
+               show_camera_info=False,  # 不显示摄像机信息
+               show_control_info=False,  # 不显示控制提示信息
                view_closely=0.001)  # 近距离观看 view_closely=True或0.001

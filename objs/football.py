@@ -45,3 +45,4 @@ class Football(Obj):
 if __name__ == '__main__':
     football = Football()
     print(football)
+    football.show_demo()

@@ -46,3 +46,4 @@ class SpaceShip(Obj):
 if __name__ == '__main__':
     spaceship = SpaceShip()
     print(spaceship)
+    spaceship.show_demo(size_scale=1000000)

@@ -477,6 +477,21 @@ class Obj(metaclass=ABCMeta):
 
         return body_data
 
+    def show_demo(self, size_scale=10000):
+        from sim_scenes.func import ursina_run
+        from sim_scenes.func import camera_look_at
+        from simulators.ursina.ursina_event import UrsinaEvent
+
+        self.size_scale = size_scale
+        self.init_position = np.array([0, -3000000, 9000000])
+        def on_ready():
+            camera_look_at(self)
+
+        # 运行前会触发 on_ready
+        UrsinaEvent.on_ready_subscription(on_ready)
+
+        ursina_run(bodies=[self], position=(0, 0, 0))
+
 
 if __name__ == '__main__':
     # build_bodies_from_json('../data/sun.json')

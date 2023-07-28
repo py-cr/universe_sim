@@ -130,14 +130,14 @@ current_time = Time.now()
 if __name__ == '__main__':
     #  以下展示的效果为太阳系真实的时间和位置
     #  由于宇宙空间尺度非常大，如果按照实际的天体大小，则无法看到天体，因此需要对天体的尺寸进行放大
-    sun = Sun(name="太阳", size_scale=0.4e2)  # 太阳放大 40 倍，TODO:调试时的大小，size_scale=0.04e2
+    sun = Sun(name="太阳", size_scale=0.04e2)  # 太阳放大 40 倍，TODO:调试时的大小，size_scale=0.04e2
     bodies = [
         sun,
         Mercury(name="水星", size_scale=1.5e3),  # 水星
         Venus(name="金星", size_scale=1e3),  # 金星
         Earth(name="地球",
               texture="earth_hd.jpg",
-              size_scale=1e3),  # 地球 TODO:调试时的大小，size_scale=10e3
+              size_scale=10e3),  # 地球 TODO:调试时的大小，size_scale=10e3
         # Earth(name="地球云层",
         #       texture="transparent_clouds.png",
         #       size_scale=1.01e3),  # 地球云层 TODO:调试时的大小，size_scale=10.1e3
@@ -228,8 +228,6 @@ if __name__ == '__main__':
         # 日期是当年的第几天
         timetuple = dt.timetuple()
 
-        day_of_year = timetuple.tm_yday
-
         # 计算出：日期当天的偏转角度 - 贴图的误差
         # angle_of_day = day_of_year * (360 / 365) - 93.5  # 2023.7.25
         # angle_of_day = day_of_year * (360 / 365) - 60    # 2023.7.27
@@ -237,8 +235,9 @@ if __name__ == '__main__':
         # earth.planet.rotation_y = -(time_data.total_hours) * 15 - angle_of_day
 
         # 计算出：日期当天的偏转角度
+        day_of_year = timetuple.tm_yday
         angle_of_day = day_of_year * (360 / 365)
-        total_hours = timetuple.tm_hour + timetuple.tm_min / 60  # + timetuple.tm_sec / 60 / 60
+        total_hours = timetuple.tm_hour + timetuple.tm_min / 60 + timetuple.tm_sec / 60 / 60
         earth.planet.rotation_y = -total_hours * 15 - angle_of_day
 
         # if len(in_line_datetimes) == 0:

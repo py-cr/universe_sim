@@ -130,14 +130,14 @@ current_time = Time.now()
 if __name__ == '__main__':
     #  以下展示的效果为太阳系真实的时间和位置
     #  由于宇宙空间尺度非常大，如果按照实际的天体大小，则无法看到天体，因此需要对天体的尺寸进行放大
-    sun = Sun(name="太阳", size_scale=0.04e2)  # 太阳放大 40 倍，TODO:调试时的大小，size_scale=0.04e2
+    sun = Sun(name="太阳", size_scale=0.4e2)  # 太阳放大 40 倍，TODO:调试时的大小，size_scale=0.04e2
     bodies = [
         sun,
         Mercury(name="水星", size_scale=1.5e3),  # 水星
         Venus(name="金星", size_scale=1e3),  # 金星
         Earth(name="地球",
               texture="earth_hd.jpg",
-              size_scale=10e3),  # 地球 TODO:调试时的大小，size_scale=10e3
+              size_scale=1e3),  # 地球 TODO:调试时的大小，size_scale=10e3
         # Earth(name="地球云层",
         #       texture="transparent_clouds.png",
         #       size_scale=1.01e3),  # 地球云层 TODO:调试时的大小，size_scale=10.1e3
@@ -170,6 +170,7 @@ if __name__ == '__main__':
     def on_ready():
         # 运行前触发
         camera.rotation_z = -20
+        # camera.fov = 20 # TODO:调试时，取消注释
         # 需要按照时间和日期控制地球的自转，不能随意转动
         delattr(earth.planet, "rotation_speed")
         delattr(earth.planet, "rotspeed")

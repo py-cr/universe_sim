@@ -226,12 +226,20 @@ if __name__ == '__main__':
 
         # 需要按照时间和日期控制地球的自转，不能随意转动
         # 日期是当年的第几天
-        day_of_year = dt.timetuple().tm_yday
+        timetuple = dt.timetuple()
+
+        day_of_year = timetuple.tm_yday
+
         # 计算出：日期当天的偏转角度 - 贴图的误差
         # angle_of_day = day_of_year * (360 / 365) - 93.5  # 2023.7.25
-        angle_of_day = day_of_year * (360 / 365) - 60    # 2023.7.27
+        # angle_of_day = day_of_year * (360 / 365) - 60    # 2023.7.27
         # 控制地球的自转速度和方向，保障白天，中国面对太阳（会存在一点点的误差，可以通过上面“贴图的误差”进行调整）。
-        earth.planet.rotation_y = -(time_data.total_hours) * 15 - angle_of_day
+        # earth.planet.rotation_y = -(time_data.total_hours) * 15 - angle_of_day
+
+        # 计算出：日期当天的偏转角度
+        angle_of_day = day_of_year * (360 / 365)
+        total_hours = timetuple.tm_hour + timetuple.tm_min / 60  # + timetuple.tm_sec / 60 / 60
+        earth.planet.rotation_y = -total_hours * 15 - angle_of_day
 
         # if len(in_line_datetimes) == 0:
         #     in_line = are_planets_in_line(positions, 5*AU)

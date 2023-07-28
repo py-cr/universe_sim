@@ -11,6 +11,7 @@ from common.consts import SECONDS_PER_DAY, SECONDS_PER_WEEK, SECONDS_PER_YEAR, A
 from sim_scenes.func import mayavi_run, mpl_run, ursina_run
 
 from bodies import FixedStar, Body
+from simulators.ursina.ursina_event import UrsinaEvent
 
 
 class BlackHole(FixedStar):
@@ -66,6 +67,12 @@ if __name__ == '__main__':
 
     # 3D摄像机初始化(两眼到鼻梁的距离为1000公里效果)
     # Camera3d.init(eye_distance=5000000)
+
+    def on_ready():
+        from ursina import window
+        window.size = (3840, 1920)
+
+    UrsinaEvent.on_ready_subscription(on_ready)
 
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹

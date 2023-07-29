@@ -71,6 +71,8 @@ if __name__ == '__main__':
     def on_ready():
         from ursina import window
         window.size = (3840, 1920)
+        # 黑色背景的宇宙背景
+        # SphereSky(texture='../../textures/bg_black.png')
 
     UrsinaEvent.on_ready_subscription(on_ready)
 

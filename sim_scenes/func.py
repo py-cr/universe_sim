@@ -123,6 +123,7 @@ def ursina_run(bodies,
                show_timer=False,
                timer_enabled=False,
                save_as_json=None,
+               save_cube_map=False,
                save_as_video=False,
                view_closely=False):
     """
@@ -172,9 +173,12 @@ def ursina_run(bodies,
     view_azimuth = 0  # 暂时未用
     player = UrsinaPlayer(position, view_azimuth, simulator.ursina_views)
 
-    # if save_as_video:
-    #     from common.video_recorder import VideoRecorder
-    #     vr = VideoRecorder()
+    if save_cube_map:
+        from simulators.ursina.entities.video_recorder import VideoRecorder
+        from ursina import camera
+        import sys
+        sys.modules["__main__"].video_recorder = VideoRecorder()
+        camera.fov = 90
 
     def callback_update():
         UrsinaEvent.on_application_run()
@@ -183,8 +187,8 @@ def ursina_run(bodies,
             if ursina_view.appeared:
                 ursina_view.update()
 
-        # if save_as_video:
-        #     vr.screenshot()
+        if save_cube_map:
+            sys.modules["__main__"].video_recorder.screenshot()
 
     import sys
     from simulators.ursina.ursina_config import UrsinaConfig

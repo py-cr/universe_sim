@@ -38,8 +38,8 @@ class VideoRecorder(Entity):
 
         if self.t >= 1 / self.fps:
             base.saveCubeMap(
-                namePrefix=f'\\{self.temp_dir}\\cmap_' + str(self.i).zfill(self.sd) + '_#.png',
-                size=1024
+                namePrefix=f'\\{self.temp_dir}\\cmap_' + str(self.i).zfill(self.sd) + '_#.jpg',
+                size=2048
                 # namePrefix = 'cube_map_#.png'
             )
         self.t = 0

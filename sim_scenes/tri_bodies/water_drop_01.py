@@ -23,6 +23,7 @@ if __name__ == '__main__':
     月球对地球的扰动
     """
     OFFSETTING = 0
+    WATER_SPEED = 400
     # TODO: 可以抵消月球带动地球的力，保持地球在原地
     # OFFSETTING = 0.01265
     # sun = Sun(name="太阳", size_scale=6e1, init_position=[0, 0, -AU]).set_ignore_gravity(True)
@@ -30,17 +31,21 @@ if __name__ == '__main__':
     earth = Earth(init_position=[0, -2500000, 0],
                   texture="earth_hd.jpg",
                   # rotate_angle=0,
+                  rotation_speed=0,
                   init_velocity=[OFFSETTING, 0, 0], size_scale=earth_size_scale).set_ignore_gravity(
         True)  # 地球放大 5 倍，距离保持不变
     # 创建云层（texture纹理图使用了透明云层的图片，云层的 size_scale 要稍微比地球大一点）
     clouds = Earth(name="地球云层", texture="transparent_clouds.png",
                    # rotate_angle=0,
+                   rotation_speed=0,
                    init_position=[0, -2500000, 0],
                    size_scale=earth_size_scale * 1.01, parent=earth).set_ignore_gravity(True)
 
-    water_drop = WaterDrop(init_position=[AU / 100, 0, AU / 40],
-                           init_velocity=[-1, 0, 0],
-                           size_scale=5e4).set_ignore_gravity(True)
+    water_drop = WaterDrop(init_position=[AU / 300, 0, AU / 100],
+                           texture="drops_bright.png",
+                           # trail_color=[200, 200, 255],
+                           init_velocity=[-WATER_SPEED, 0, 0],
+                           size_scale=4e4).set_ignore_gravity(True)
     # moon = Moon(init_position=[0, 0, 363104],  # 距地距离约: 363104 至 405696 km
     #             init_velocity=[-1.03, 0, 0], size_scale=2e1)  # 月球放大 10 倍，距离保持不变
     # moon.set_light_disable(True)
@@ -72,15 +77,24 @@ if __name__ == '__main__':
 
     bodies = [earth, clouds, water_drop] + ship_list
 
+    WATER_RANGE = 2e6
+
 
     def on_timer_changed(time_data: TimeData):
         if time_data.total_days > 27.5:
             exit(0)
-
+        if water_drop.position[0] < -WATER_RANGE:
+            water_drop.planet.rotation_z = -90
+            water_drop.velocity = [WATER_SPEED, 0, 0]
+        elif water_drop.position[0] > WATER_RANGE:
+            water_drop.planet.rotation_z = 90
+            water_drop.velocity = [-WATER_SPEED, 0, 0]
         # camera_look_at(water_drop, rotation_z=0)
 
 
     def on_ready():
+        UrsinaConfig.trail_type = 'line'
+        UrsinaConfig.trail_length = 10
         for body in bodies:
             if isinstance(body, CoreValagaClas):
                 body.planet.rotation_x = 0  # -10
@@ -105,11 +119,11 @@ if __name__ == '__main__':
                position=(0, 0, -220000),
                show_grid=False,
                cosmic_bg="",
-               gravity_works=False,
+               # gravity_works=False,
                # save_cube_map=True,
                timer_enabled=True,
                show_camera_info=False,
                show_control_info=False,
-               view_closely=True
-               # show_trail=True
+               view_closely=True,
+               show_trail=True
                )

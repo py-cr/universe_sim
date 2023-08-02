@@ -45,24 +45,28 @@ if __name__ == '__main__':
     #             init_velocity=[-1.03, 0, 0], size_scale=2e1)  # 月球放大 10 倍，距离保持不变
     # moon.set_light_disable(True)
     d = 100000
-    num_x = 9
-    num_z = 9
+    num_x = 3
+    num_y = 4
+    num_z = 3
     x_offset = - (num_x - 1) / 2 * d
+    y_offset = - (num_y) / 2 * (d / 2)
     z_offset = - (num_z - 1) / 2 * d
     ship_list = []
     for x in range(num_x):
-        for z in range(num_z):
-            core_valaga_clas = CoreValagaClas(size_scale=15,
-                                              init_position=[x_offset + x * d, -30000,
-                                                             z_offset + z * d - 20000]).set_ignore_gravity(True)
-            ship_list.append(core_valaga_clas)
+        for y in range(num_y):
+            for z in range(num_z):
+                core_valaga_clas = CoreValagaClas(size_scale=15,
+                                                  init_position=[x_offset + x * d, y_offset + (2 * y + 0.5) * (d / 2),
+                                                                 z_offset + z * d - 20000]).set_ignore_gravity(True)
+                ship_list.append(core_valaga_clas)
 
     for x in range(num_x):
-        for z in range(num_z):
-            sci_fi_bomber = SciFiBomber(size_scale=3.5,
-                                        init_position=[x_offset + x * d, 30000,
-                                                       z_offset + z * d - 20000]).set_ignore_gravity(True)
-            ship_list.append(sci_fi_bomber)
+        for y in range(num_y):
+            for z in range(num_z):
+                sci_fi_bomber = SciFiBomber(size_scale=3.5,
+                                            init_position=[x_offset + x * d, y_offset + (2 * y - 0.5) * (d / 2),
+                                                           z_offset + z * d - 20000]).set_ignore_gravity(True)
+                ship_list.append(sci_fi_bomber)
 
     # earth.rotation_speed /= 6  # 地球的转速降低50倍
 
@@ -101,6 +105,7 @@ if __name__ == '__main__':
                position=(0, 0, -220000),
                show_grid=False,
                cosmic_bg="",
+               gravity_works=False,
                # save_cube_map=True,
                timer_enabled=True,
                show_camera_info=False,

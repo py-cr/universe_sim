@@ -12,6 +12,7 @@ class VideoRecorder(Entity):
 
     app.run()
     """
+
     def __init__(self, temp_dir="screenshot_tmp", asset_folder=None):
         self.temp_dir = temp_dir
         # self.save_as_dir = save_as_dir
@@ -39,7 +40,8 @@ class VideoRecorder(Entity):
         if self.t >= 1 / self.fps:
             base.saveCubeMap(
                 namePrefix=f'\\{self.temp_dir}\\cmap_' + str(self.i).zfill(self.sd) + '_#.jpg',
-                size=2048
+                # size=8196  # 最大分辨率，用于图片
+                # size=4096  # 建议动态视频用这个
                 # namePrefix = 'cube_map_#.png'
             )
         self.t = 0

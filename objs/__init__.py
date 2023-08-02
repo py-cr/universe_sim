@@ -8,3 +8,4 @@ from objs.rock_snow import RockSnow
 from objs.rock import Rock, create_rock
 from objs.core_valaga_clas import CoreValagaClas
 from objs.sci_fi_bomber import SciFiBomber
+from objs.water_drop import WaterDrop

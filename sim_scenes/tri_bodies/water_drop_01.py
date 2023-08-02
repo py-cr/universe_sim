@@ -30,23 +30,26 @@ if __name__ == '__main__':
                   texture="earth_hd.jpg",
                   rotate_angle=-23.44,
                   init_velocity=[OFFSETTING, 0, 0], size_scale=2.5e1)  # 地球放大 5 倍，距离保持不变
-    water_drop = WaterDrop(init_position=[0, 0, AU / 40],
+    water_drop = WaterDrop(init_position=[AU / 100, 0, AU / 40],
                            init_velocity=[-1, 0, 0],
                            size_scale=5e4)
     # moon = Moon(init_position=[0, 0, 363104],  # 距地距离约: 363104 至 405696 km
     #             init_velocity=[-1.03, 0, 0], size_scale=2e1)  # 月球放大 10 倍，距离保持不变
     # moon.set_light_disable(True)
     d = 100000
-    x_offset = - 2 * d
+    num_x = 9
+    num_z = 5
+    x_offset = - (num_x - 1) / 2 * d
     ship_list = []
-    for x in range(5):
-        for z in range(5):
+    for x in range(num_x):
+        for z in range(num_z):
             core_valaga_clas = CoreValagaClas(size_scale=15,
-                                              init_position=[x_offset + x * d, -30000, z * d - 20000]).set_ignore_gravity(True)
+                                              init_position=[x_offset + x * d, -30000,
+                                                             z * d - 20000]).set_ignore_gravity(True)
             ship_list.append(core_valaga_clas)
 
-    for x in range(5):
-        for z in range(5):
+    for x in range(num_x):
+        for z in range(num_z):
             sci_fi_bomber = SciFiBomber(size_scale=3.5,
                                         init_position=[x_offset + x * d, 30000, z * d - 20000]).set_ignore_gravity(True)
             ship_list.append(sci_fi_bomber)
@@ -60,13 +63,15 @@ if __name__ == '__main__':
         if time_data.total_days > 27.5:
             exit(0)
 
+        camera_look_at(water_drop, rotation_z=0)
+
 
     def on_ready():
         for body in bodies:
             if isinstance(body, CoreValagaClas):
-                body.planet.rotation_x = 0 # -10
+                body.planet.rotation_x = 0  # -10
             elif isinstance(body, SciFiBomber):
-                 body.planet.rotation_x = -90
+                body.planet.rotation_x = -90
 
         water_drop.planet.rotation_z = 90
 
@@ -85,7 +90,7 @@ if __name__ == '__main__':
                # SECONDS_PER_WEEK * 4,
                position=(0, 0, -220000),
                show_grid=False,
-               # cosmic_bg="",
+               cosmic_bg="",
                # save_cube_map=True,
                timer_enabled=True,
                show_camera_info=False,

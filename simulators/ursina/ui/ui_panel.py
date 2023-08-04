@@ -63,7 +63,7 @@ class UiPanel(WindowPanel):
         """
         pass
 
-    def show_message(self, message, font=None, close_time=3):
+    def show_message(self, message, font=None, origin=(0, 0), position=(0, .25), close_time=3):
         """
         显示消息框
         @param message: 消息内容
@@ -78,7 +78,7 @@ class UiPanel(WindowPanel):
         # else:
         #     font = None
         # 创建消息框
-        message_box = Text(text=message, font=font, background=True, origin=(0, 0), y=.25)
+        message_box = Text(text=message, font=font, background=True, origin=origin, position=position)
 
         self.last_message_box = message_box
 

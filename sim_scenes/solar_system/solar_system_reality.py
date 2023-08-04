@@ -250,6 +250,8 @@ if __name__ == '__main__':
 
         # print(time_data.get_datetime(str(current_time)))
         ControlUI.current_ui.show_message(dt.strftime('%Y-%m-%d %H:%M:%S'),
+                                          position=(0.60, -0.465),
+                                          origin=(-0.5, 0.5),
                                           font="verdana.ttf",
                                           close_time=-1)
 
@@ -267,4 +269,5 @@ if __name__ == '__main__':
                position=(0, 0.2 * AU, -3 * AU),
                gravity_works=False,  # 关闭万有引力的计算
                show_grid=False,
+               show_camera_info=False,
                timer_enabled=True)

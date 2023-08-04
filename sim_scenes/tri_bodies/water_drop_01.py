@@ -16,6 +16,7 @@ from simulators.ursina.entities.body_timer import TimeData
 from simulators.ursina.entities.entity_utils import create_directional_light
 from simulators.ursina.ursina_config import UrsinaConfig
 from simulators.ursina.ursina_event import UrsinaEvent
+from ursina import camera
 
 if __name__ == '__main__':
     """
@@ -45,7 +46,9 @@ if __name__ == '__main__':
                            texture="drops_bright.png",
                            # trail_color=[200, 200, 255],
                            init_velocity=[-WATER_SPEED, 0, 0],
-                           size_scale=4e4).set_ignore_gravity(True).set_light_disable(True)
+                           # size_scale=4e4,
+                           size_scale=1e3
+                           ).set_ignore_gravity(True).set_light_disable(True)
     # moon = Moon(init_position=[0, 0, 363104],  # 距地距离约: 363104 至 405696 km
     #             init_velocity=[-1.03, 0, 0], size_scale=2e1)  # 月球放大 10 倍，距离保持不变
     # moon.set_light_disable(True)
@@ -88,15 +91,18 @@ if __name__ == '__main__':
 
 
     def on_timer_changed(time_data: TimeData):
-        if time_data.total_days > 27.5:
-            exit(0)
-        if water_drop.position[0] < -WATER_RANGE:
-            water_drop.planet.rotation_z = -90
-            water_drop.velocity = [WATER_SPEED, 0, 0]
-        elif water_drop.position[0] > WATER_RANGE:
-            water_drop.planet.rotation_z = 90
-            water_drop.velocity = [-WATER_SPEED, 0, 0]
-        # camera_look_at(water_drop, rotation_z=0)
+        if time_data.total_days > 0.2:
+            if water_drop.position[0] < -WATER_RANGE:
+                water_drop.planet.rotation_z = -90
+                water_drop.velocity = [WATER_SPEED, 0, 0]
+            elif water_drop.position[0] > WATER_RANGE:
+                water_drop.planet.rotation_z = 90
+                water_drop.velocity = [-WATER_SPEED, 0, 0]
+            else:
+                water_drop.acceleration = [-9.8e-4, 0, 0]
+
+        camera_look_at(water_drop, rotation_z=0)
+        # camera.y += UrsinaConfig.SCALE_FACTOR * 100
 
 
     def on_ready():
@@ -110,8 +116,8 @@ if __name__ == '__main__':
 
         water_drop.planet.rotation_z = 90
 
-        # water_drop.init_position = (0, 0, 0)
-        # water_drop.init_velocity = [0, 0, 0]
+        water_drop.init_position = (0, 0, 0)
+        water_drop.init_velocity = [0, 0, 0]
 
 
     # 订阅事件后，上面2个函数功能才会起作用
@@ -127,11 +133,13 @@ if __name__ == '__main__':
                SECONDS_PER_DAY / 24,
                # SECONDS_PER_WEEK * 4,
                # position=(0, 0, -220000),
-               position=(0, 0, 0),
+               position=(0, 0, -20000),
+               # position=(0, 0, 0),
                show_grid=False,
                # cosmic_bg="",
                # gravity_works=False,
                # save_cube_map=True,
+               show_timer=True,
                timer_enabled=True,
                show_camera_info=False,
                show_control_info=False,

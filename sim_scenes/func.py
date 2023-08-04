@@ -81,6 +81,28 @@ def set_camera_parent(target):
         camera.parent = target
 
 
+def create_main_entity(target, rotation_x=None, rotation_y=None, rotation_z=None):
+    from ursina import Entity
+
+    if hasattr(target, "planet"):
+        planet = target.planet
+    else:
+        planet = target
+
+    main_entity = Entity(position=planet.position)
+    planet.position = [0, 0, 0]
+    planet.parent = main_entity
+
+    if rotation_x is not None:
+        planet.rotation_x = rotation_x
+    if rotation_y is not None:
+        planet.rotation_y = rotation_y
+    if rotation_z is not None:
+        planet.rotation_z = rotation_z
+
+    planet.main_entity = main_entity
+
+
 def camera_look_at(target, rotation_x=None, rotation_y=None, rotation_z=None):
     """
     让摄像机看向指定天体

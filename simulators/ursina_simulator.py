@@ -93,7 +93,7 @@ class UrsinaSimulator(Simulator):
             return body.planet.enabled
 
         # Explosion animation
-        def body_explode(target=None):
+        def body_explode(target=None, scale=1, fps=6):
             # from panda3d.core import GeomUtils
             if body.planet.enabled:
                 # TODO:下面代码保留，由于运行太快导致两个天体不是在表面碰撞，这样就要进行计算，希望在表面爆炸，但是需要耗费CPU资源，暂时注释
@@ -107,8 +107,10 @@ class UrsinaSimulator(Simulator):
                 #     explode_pos = body.planet.position
                 # else:
                 #     print("explode_pos", explode_pos)
-
-                explode_pos = body.planet.position
+                if hasattr(body.planet, "main_entity"):
+                    explode_pos = body.planet.main_entity.position
+                else:
+                    explode_pos = body.planet.position
                 # 如果爆炸，则静止不动（停止并忽略引力）
                 body.stop_and_ignore_gravity()
                 body.planet.enabled = False
@@ -117,11 +119,11 @@ class UrsinaSimulator(Simulator):
                 # 获取体积数据（开三次方）
                 volume_scale = pow(body.planet.model.get_bounds().volume, 1 / 3)
                 # 根据体积、大小缩放判断爆炸的量
-                scale = 3 * volume_scale * body.size_scale * UrsinaConfig.SCALE_FACTOR
+                scale = 3 * volume_scale * body.size_scale * UrsinaConfig.SCALE_FACTOR * scale
                 print(scale, body)
                 explode_ani = Animation(explosion_file,
                                         position=explode_pos,
-                                        scale=scale, fps=6,
+                                        scale=scale, fps=fps,
                                         loop=False, autoplay=True)
                 explode_ani.set_light_off()
 

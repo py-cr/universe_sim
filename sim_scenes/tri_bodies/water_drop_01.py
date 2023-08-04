@@ -56,9 +56,9 @@ if __name__ == '__main__':
     num_x = 10
     num_y = 10
     num_z = 10
-    num_x = 4
-    num_y = 4
-    num_z = 4
+    num_x = 2
+    num_y = 2
+    num_z = 2
 
     x_offset = - (num_x) / 2 * d
     y_offset = - (num_y) / 2 * (d / 2)
@@ -89,6 +89,47 @@ if __name__ == '__main__':
 
     WATER_RANGE = 2e6
 
+    # def calc_velocity(current_pos, to_pos, velocity_fact):
+    #     """
+    #     计算一个物体，从物体当前位置（三维坐标系）到达指定位置（三维坐标系）的矢量速度 x,y,z 分量的速度( * 速度因子 velocity_fact）
+    #     @param current_pos: 物体当前位置（三维坐标系）
+    #     @param to_pos: 指定位置（三维坐标系）
+    #     @param velocity_fact: 速度因子
+    #     @return: 矢量速度 x,y,z 分量的速度
+    #     """
+    #     velocity = [0, 0, 0]
+    #     # TODO:在这里实现代码
+    #
+    #     return velocity
+    import math
+
+
+    def calc_velocity(current_pos, to_pos, velocity_fact):
+        """
+        Calculate the velocity vector components (x, y, z) for an object to move from its current position to a specified position,
+        considering the velocity factor.
+        @param current_pos: Current position of the object (in a three-dimensional coordinate system)
+        @param to_pos: Specified position (in a three-dimensional coordinate system)
+        @param velocity_fact: Velocity factor
+        @return: Velocity vector components (x, y, z)
+        """
+        velocity = [0, 0, 0]
+        # Calculate the differences in each dimension
+        diff_x = to_pos[0] - current_pos[0]
+        diff_y = to_pos[1] - current_pos[1]
+        diff_z = to_pos[2] - current_pos[2]
+        # Calculate the total distance
+        total_distance = math.sqrt(diff_x ** 2 + diff_y ** 2 + diff_z ** 2)
+        # Calculate the proportions of velocity in each dimension
+        velocity[0] = diff_x / total_distance
+        velocity[1] = diff_y / total_distance
+        velocity[2] = diff_z / total_distance
+        # Adjust the velocity using the velocity factor
+        velocity[0] *= velocity_fact
+        velocity[1] *= velocity_fact
+        velocity[2] *= velocity_fact
+        return velocity
+
 
     def on_timer_changed(time_data: TimeData):
         if time_data.total_days > 0.2:
@@ -99,7 +140,9 @@ if __name__ == '__main__':
                 water_drop.planet.rotation_z = 90
                 water_drop.velocity = [-WATER_SPEED, 0, 0]
             else:
-                water_drop.acceleration = [-9.8e-4, 0, 0]
+                velocity = calc_velocity(water_drop.position, ship_list[0].position, 1)
+                # water_drop.acceleration = [-9.8e-4, 0, 0]
+                water_drop.velocity = velocity
 
         camera_look_at(water_drop, rotation_z=0)
         # camera.y += UrsinaConfig.SCALE_FACTOR * 100

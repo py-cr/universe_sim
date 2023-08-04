@@ -75,7 +75,7 @@ if __name__ == '__main__':
     # 使用 ursina 查看的运行效果
     # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
     # position = 左-右+、上+下-、前+后-
-    ursina_run(bodies, SECONDS_PER_DAY,
+    ursina_run(bodies, SECONDS_PER_WEEK*4,
                position=(-300000, 1500000, -1000),
                show_timer=True,
                show_trail=True)

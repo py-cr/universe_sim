@@ -42,7 +42,7 @@ class SolarSystemRealitySim:
         self.sun_size_scale = 0.04e2 if self.debug_mode else 0.4e2
 
         # 地月缩放比例
-        # 为了好的展示效果，需要对月球的位置重新计算（地月距离放大，月球相对地球方向不变），重新计算位置后，地球和月球可以放大1000倍以上
+        # 为了更好的展示效果，需要对月球的位置重新计算（使得地月距离放大，月球相对地球方向不变），重新计算位置后，地球和月球可以放大1000倍以上
         if self.recalc_moon_pos:  # 重新计算月球位置
             self.earth_size_scale = 10e3 if self.debug_mode else 1e3
             self.moon_size_scale = 2e3
@@ -90,18 +90,7 @@ class SolarSystemRealitySim:
         if self.debug_mode:
             self.earth.set_light_disable(True)
 
-    def on_ready(self):
-        # 运行前触发
-        camera.rotation_z = -20
-        if self.debug_mode:
-            camera.fov = 20  # 调试时，拉近摄像机距离
 
-        # 需要按照时间和日期来控制地球的自转，所以删除控制地球自转的属性
-        delattr(self.earth.planet, "rotation_speed")
-        delattr(self.earth.planet, "rotspeed")
-
-        # 设置后，可以调整鼠标键盘的控制速度
-        application.time_scale = 2
 
     def set_earth_rotation(self, dt):
         """
@@ -158,7 +147,7 @@ class SolarSystemRealitySim:
                 # 获取天体的三维位置和矢量速度
                 posvel = get_body_posvel(body, t)
 
-            if isinstance(body, Moon):  # 如果是月球，为了好的展示效果，需要对月球的位置重新计算
+            if isinstance(body, Moon):  # 如果是月球，为了更好的展示效果，需要对月球的位置重新计算
                 moon_real_pos = [posvel[0].x.value * AU, posvel[0].z.value * AU, posvel[0].y.value * AU]
                 # TODO:注释下行，月球就会在真实的位置
                 if self.recalc_moon_pos:
@@ -200,16 +189,36 @@ class SolarSystemRealitySim:
                 # 记录地球的位置
                 earth_pos = posvel[0]
 
+    def on_ready(self):
+        """
+        事件绑定后，模拟器运行前会触发
+        @return:
+        """
+        # 运行前触发
+
+        camera.rotation_z = -20
+        if self.debug_mode:
+            camera.fov = 30  # 调试时，拉近摄像机距离
+
+        # 需要按照时间和日期来控制地球的自转，所以删除控制地球自转的属性
+        delattr(self.earth.planet, "rotation_speed")
+        delattr(self.earth.planet, "rotspeed")
+
+        # 设置后，可以调整鼠标键盘的控制速度
+        application.time_scale = 2
+
     def on_timer_changed(self, time_data: TimeData):
         """
-        时时刻刻运行
+        事件绑定后，时时刻刻都会触发
         @param time_data:
         @return:
         """
         dt = time_data.get_datetime(str(self.start_time))
         # 设置天体的位置（包含速度和加速度的信息）
         self.set_bodies_position(time_data)
+        # 保证地球的自转和北京时间同步
         self.set_earth_rotation(dt)
+        # 显示时钟
         self.show_clock(dt)
 
     def bind_events(self):
@@ -231,7 +240,7 @@ class SolarSystemRealitySim:
         @param start_time: 运行的开始时间
         @param show_asteroids: 是否显示小行星带
         @param show_earth_clouds: 地球是否显示云层（图片效果，不是真实的云层）
-        @param recalc_moon_pos: 为了好的展示效果，需要对月球的位置重新计算（地月距离放大，月球相对地球方向不变）
+        @param recalc_moon_pos: 为了更好的展示效果，需要对月球的位置重新计算（使得地月距离放大，月球相对地球方向不变）
         @param clock_position_center: 时钟是否显示在中间
         @return:
         """
@@ -274,9 +283,9 @@ if __name__ == '__main__':
     sim = SolarSystemRealitySim()
     sim.run(
         # debug_mode=True,  # 是否调试模式
-        # start_time='2023-08-05 19:20:00',  # 指定运行的开始时间，不指定为当前时间
+        # start_time='2023-01-01 02:20:00',  # 指定运行的开始时间，不指定为当前时间
         # show_asteroids=True,  # 是否显示小行星带（图片模拟）
         # show_earth_clouds=True,  # 地球是否显示云层（图片效果，不是真实的云层）
-        # recalc_moon_pos=False,  # 为了好的展示效果，需要对月球的位置重新计算（地月距离放大，月球相对地球方向不变）
+        # recalc_moon_pos=False,  # 为了更好的展示效果，需要对月球的位置重新计算（使得地月距离放大，月球相对地球方向不变）
         # clock_position_center=True  # 时钟是否显示在中间
     )

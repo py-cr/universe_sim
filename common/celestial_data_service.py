@@ -103,12 +103,13 @@ if __name__ == '__main__':
     # pip install astropy
     from astropy.coordinates import get_body_barycentric_posvel
     from astropy.time import Time
-    # from astropy.units. import Unit
-
-    from common.consts import AU, SECONDS_PER_DAY
+    import astropy.units as u
 
     t = Time.now()
     print("日期时间：", t)
     posvel = get_body_barycentric_posvel('earth', t)
-    print("坐标(公里)：", posvel[0] * AU)
-    print("速度(公里/秒)：", posvel[1] * AU / SECONDS_PER_DAY)
+    print("坐标(公里)：", [posvel[0].x.to(u.km), posvel[0].y.to(u.km), posvel[0].z.to(u.km)])
+    print("速度(公里/秒)：",
+          [posvel[1].x.to(u.km / u.second), posvel[1].y.to(u.km / u.second), posvel[1].z.to(u.km / u.second)])
+
+    # print("速度(公里/秒)：", posvel[1] * AU / SECONDS_PER_DAY)

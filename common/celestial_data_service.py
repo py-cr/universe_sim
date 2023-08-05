@@ -6,11 +6,31 @@
 # link            :https://gitcode.net/pythoncr/
 # python_version  :3.8
 # ==============================================================================
+import math
+from common.consts import G
+from bodies import Body
+
+
+def calc_solar_acceleration(body_or_pos, big_body):
+    if isinstance(body_or_pos, Body):
+        body_pos = body_or_pos.position
+    else:
+        body_pos = body_or_pos
+    x, y, z = body_pos[0] * 1000 - big_body.position[0] * 1000, \
+              body_pos[1] * 1000 - big_body.position[1] * 1000, \
+              body_pos[2] * 1000 - big_body.position[2] * 1000
+    r = math.sqrt(x ** 2 + y ** 2 + z ** 2)
+    a = G * big_body.mass / r ** 2
+    ax = -a * x / r
+    ay = -a * y / r
+    az = -a * z / r
+    return [ax / 1000, ay / 1000, az / 1000]  # 设置天体的加速度（单位：km/s²）
 
 
 def get_body_posvel(body, time=None):
     """
     获取太阳系天体指定时间的位置和矢量速度
+    pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com de423
     @param body: 天体（天体名称）
     @param time: 时间
     @return:
@@ -59,6 +79,7 @@ def recalc_moon_position(moon_posvel, earth_pos):
 
 
 def get_celestial_body_data(body_name):
+    # pip install ephem
     import ephem
     # 创建一个Observer对象，用于指定观测者的位置
     observer = ephem.Observer()
@@ -75,8 +96,19 @@ def get_celestial_body_data(body_name):
     velocity = (body.ra_velocity, body.dec_velocity)  # 天体的赤经速度和赤纬速度
     return position, velocity
 
-    # # 示例用法
-    # body_name = 'Mars'  # 天体名称，这里以火星为例
-    # position, velocity = get_celestial_body_data(body_name)
-    # print(f"The current position of {body_name} is: {position}")
-    # print(f"The current velocity of {body_name} is: {velocity}")
+
+# pip install Astropysics
+
+if __name__ == '__main__':
+    # pip install astropy
+    from astropy.coordinates import get_body_barycentric_posvel
+    from astropy.time import Time
+    # from astropy.units. import Unit
+
+    from common.consts import AU, SECONDS_PER_DAY
+
+    t = Time.now()
+    print("日期时间：", t)
+    posvel = get_body_barycentric_posvel('earth', t)
+    print("坐标(公里)：", posvel[0] * AU)
+    print("速度(公里/秒)：", posvel[1] * AU / SECONDS_PER_DAY)

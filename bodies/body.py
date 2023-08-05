@@ -26,7 +26,7 @@ class Body(metaclass=ABCMeta):
                  text_color=None,
                  texture=None, size_scale=1.0, distance_scale=1.0,
                  rotation_speed=None, parent=None, ignore_mass=False,
-                 is_fixed_star=False, trail_color=None, show_name=False):
+                 is_fixed_star=False, show_trail=True,trail_color=None, show_name=False):
         """
         天体类
         @param name: 天体名称
@@ -44,6 +44,7 @@ class Body(metaclass=ABCMeta):
         @param ignore_mass: 是否忽略质量（如果为True，则不计算引力）
                             TODO: 注意：这里的算法是基于牛顿的万有引力（质量为0不受引力的影响在天体物理学中是不严谨）
         @param is_fixed_star: 是否为恒星
+        @param show_trail: 天体拖尾是否显示
         @param trail_color: 天体拖尾颜色（默认天体颜色）
         @param show_name: 是否显示天体名称
         """
@@ -81,6 +82,7 @@ class Body(metaclass=ABCMeta):
         self.__rotation_speed = rotation_speed
 
         self.color = color
+        self.show_trail = show_trail
         self.trail_color = color if trail_color is None else trail_color
         self.texture = texture
 

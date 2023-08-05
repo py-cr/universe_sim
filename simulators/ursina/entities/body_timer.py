@@ -63,6 +63,8 @@ class TimeData:
     def get_datetime(self, init_datetime):
         import datetime
         # UTC_format = "%Y-%m-%dT%H:%M:%S.%fZ"
+        if len(init_datetime) == 19:
+            init_datetime = init_datetime + ".000"
         UTC = datetime.datetime.strptime(init_datetime + "Z", "%Y-%m-%d %H:%M:%S.%fZ")
         # BJS_format = "%Y-%m-%d %H:%M:%S"
         BJS = UTC + datetime.timedelta(hours=8+self.total_hours)

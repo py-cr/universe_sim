@@ -29,7 +29,7 @@ class Earth(Body):
                  color=(7, 0, 162), texture="earth1.jpg", text_color=None,
                  size_scale=1.0, distance_scale=1.0,
                  rotation_speed=15, ignore_mass=False,
-                 trail_color=None, show_name=False,
+                 show_trail=True, trail_color=None, show_name=False,
                  parent=None):
         params = {
             "name": name,
@@ -45,6 +45,7 @@ class Earth(Body):
             "distance_scale": distance_scale,
             "rotation_speed": rotation_speed,
             "ignore_mass": ignore_mass,
+            "show_trail": show_trail,
             "trail_color": trail_color,
             "show_name": show_name,
             "parent": parent

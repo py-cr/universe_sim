@@ -261,7 +261,7 @@ def create_rings(parent):
     # 创建行星环
     torus = create_torus(0.7, 1.2, 64)
     parent.ring = Entity(parent=parent, model=torus, texture=rings_texture, scale=1,
-                       rotation=(parent.ring_rotation_x, 0, 0), double_sided=True)
+                         rotation=(parent.ring_rotation_x, 0, 0), double_sided=True)
 
     # 设置行星环不受灯光影响，否则看不清行星环
     parent.ring.set_light_off()
@@ -327,7 +327,9 @@ def create_fixed_star_lights(fixed_star):
         if fixed_star.body_view.body.light_on:
             for i in range(2):
                 # 创建 PointLight 对象，作为恒星的灯光源
-                light = PointLight(parent=fixed_star, intensity=10, range=10, color=color.white)
+                light = PointLight(parent=fixed_star, # model="sphere",
+                                   scale=10,
+                                   intensity=10, range=10, color=color.white)
 
 
 def get_value_direction_vectors(vectors):

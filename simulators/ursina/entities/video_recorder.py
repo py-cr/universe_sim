@@ -40,7 +40,7 @@ class VideoRecorder(Entity):
         if self.t >= 1 / self.fps:
             base.saveCubeMap(
                 namePrefix=f'\\{self.temp_dir}\\cmap_' + str(self.i).zfill(self.sd) + '_#.jpg',
-                # size=8196  # 最大分辨率，用于图片
+                size=8196  # 最大分辨率，用于图片
                 # size=4096  # 建议动态视频用这个
                 # namePrefix = 'cube_map_#.png'
             )

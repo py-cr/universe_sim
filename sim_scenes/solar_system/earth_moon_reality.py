@@ -107,9 +107,10 @@ class SolarSystemRealitySim:
         @return:
         """
         if self.clock_position_center:
-            position, origin = (0, .25), (0, 0),
+            position, origin = (0, .25), (0, 0)
         else:
-            position, origin = (0.60, -0.465), (-0.5, 0.5),
+            # position, origin = (0.60, -0.465), (-0.5, 0.5)
+            position, origin = (-0.60, -0.465), (-0.5, 0.5)
 
         ControlUI.current_ui.show_message(dt.strftime('%Y-%m-%d %H:%M:%S'),
                                           position=position,
@@ -208,9 +209,9 @@ class SolarSystemRealitySim:
             self.earth_camera.camera_init_val = +3000000
         elif time_data.total_days > 90:
             self.earth_camera.camera_init_val = +1200000
+        elif time_data.total_days > 90:
+            self.earth_camera.camera_init_val += 600000
         elif time_data.total_days > 60:
-            self.earth_camera.camera_init_val += 300000
-        elif time_data.total_days > 30:
             self.earth_camera.camera_init_val += 100000
 
         camera.x = -300  # 100

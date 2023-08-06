@@ -126,9 +126,14 @@ class BodyTrailLine(Entity):
         else:
             direction = (0, 0, 0)
 
+        if "thickness" in kwargs:
+            thickness = kwargs['thickness']
+        else:
+            thickness = 1.0
+
         super().__init__(
             # model='line',
-            model=Mesh(vertices=((0, 0, 0), direction), mode='line', thickness=2),
+            model=Mesh(vertices=((0, 0, 0), direction), mode='line', thickness=2*thickness),
             ignore_paused=True,
             **kwargs
         )

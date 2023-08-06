@@ -15,6 +15,8 @@ class UrsinaConfig:
     # 天体缩放的因子（不能太大，否则无法容得下大数量级的天体）调整 5e-7 最佳
     __SCALE_FACTOR = 5e-7
     auto_scale_factor = 1.0  # __SCALE_FACTOR 不能满足，需要自动进行调整
+    trail_factor = 1.0   # 拖尾大小因子。默认为1.0
+    trail_thickness_factor = 1.0   # 线条拖尾厚度大小因子。默认为1.0
     # 旋转因子为1，则为正常的转速
     ROTATION_SPEED_FACTOR = 1.0
     # ROTATION_SPEED_FACTOR = 0.01

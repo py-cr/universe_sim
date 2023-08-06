@@ -152,7 +152,9 @@ def create_trail_sphere(parent, pos):
     @return:
     """
     # sphere = create_sphere(1,6)  diamond sphere
-    trail = BodyTrail(color=parent.trail_color, scale=parent.trail_scale, position=pos)
+    trail = BodyTrail(color=parent.trail_color,
+                      scale=parent.trail_scale * UrsinaConfig.trail_factor,
+                      position=pos)
 
     # trail.set_color_off()
     # trail.set_color_scale_off()
@@ -233,7 +235,10 @@ def create_trail_line(parent, pos):
         trail_last_pos = parent.trail_last_pos
         if distance(pos, trail_last_pos) > 0:
             value, direction = get_value_direction_vectors(pos - trail_last_pos)
-            trail = BodyTrailLine(color=parent.trail_color, scale=parent.trail_scale, position=trail_last_pos,
+            trail = BodyTrailLine(color=parent.trail_color,
+                                  scale=parent.trail_scale * UrsinaConfig.trail_factor,
+                                  thickness=UrsinaConfig.trail_thickness_factor,
+                                  position=trail_last_pos,
                                   direction=Vec3(direction))
             trail.set_light_off()
         parent.last_trail = trail
@@ -327,7 +332,7 @@ def create_fixed_star_lights(fixed_star):
         if fixed_star.body_view.body.light_on:
             for i in range(2):
                 # 创建 PointLight 对象，作为恒星的灯光源
-                light = PointLight(parent=fixed_star, # model="sphere",
+                light = PointLight(parent=fixed_star,  # model="sphere",
                                    scale=10,
                                    intensity=10, range=10, color=color.white)
 

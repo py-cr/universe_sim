@@ -10,8 +10,14 @@
 <img src="images/3.png?raw=true" width="80.7%">
 <img src="images/4.png?raw=true" width="80.7%">
 
-# 抖音课堂：
+# 更多资源：
+<img src="images/universe_sim_list.jpg?raw=true" width="80.7%">
+<img src="images/chatgpt_list.jpg?raw=true" width="80.7%">
+<img src="images/python_oa_list.jpg?raw=true" width="80.7%">
+
+# 关注更多资源：
 <img src="https://gitcode.net/pythoncr/universe_sim/-/raw/master/images/douyin_x.jpg" width="40%">
+
 
 # 课程下载
 https://gitcode.net/pythoncr/universe_sim

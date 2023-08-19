@@ -196,6 +196,10 @@ class SolarSystemRealitySim:
         """
         # 运行前触发
 
+        # from simulators.ursina.entities.sphere_sky import SphereSky
+        # from common.image_utils import find_texture
+        # SphereSky(texture=find_texture("bg_pan.jpg")).scale = 10000
+
         camera.rotation_z = -20
         if self.debug_mode:
             camera.fov = 30  # 调试时，拉近摄像机距离
@@ -274,6 +278,7 @@ class SolarSystemRealitySim:
                    position=(0, 0.2 * AU, -3 * AU),
                    gravity_works=False,  # 关闭万有引力的计算
                    show_grid=False,
+                   # cosmic_bg='',
                    show_camera_info=False,
                    timer_enabled=True)
 

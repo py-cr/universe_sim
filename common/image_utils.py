@@ -191,10 +191,11 @@ def find_texture_root_path():
     return None
 
 
-def find_texture(texture):
+def find_texture(texture, default_val=""):
     """
     尝试在多个路径下寻找纹理图片
     @param texture: 纹理图片
+    @param default_val: 如果没有找到，返回的默认值
     @return: 纹理图片的路径
     """
     if os.path.exists(texture):
@@ -214,7 +215,7 @@ def find_texture(texture):
                 p = p[:-4]
             return p
 
-    return ""
+    return default_val
 
 
 def gen_color_body_texture(color, save_file, color_body_img="color_body.jpg", bright=None, contrast=None):

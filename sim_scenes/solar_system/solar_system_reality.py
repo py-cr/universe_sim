@@ -85,12 +85,10 @@ class SolarSystemRealitySim:
         @return:
         """
         # 让地球显示自转轴线
-        self.earth.rotate_axis_color = (255, 255, 50)
+        # self.earth.rotate_axis_color = (255, 255, 50)
         # 如果为调试模式，则太阳光对地球无效，方便查看
         if self.debug_mode:
             self.earth.set_light_disable(True)
-
-
 
     def set_earth_rotation(self, dt):
         """
@@ -196,9 +194,9 @@ class SolarSystemRealitySim:
         """
         # 运行前触发
 
-        # from simulators.ursina.entities.sphere_sky import SphereSky
-        # from common.image_utils import find_texture
-        # SphereSky(texture=find_texture("bg_pan.jpg")).scale = 10000
+        if self.sky_texture is not None:
+            from simulators.ursina.entities.sphere_sky import SphereSky
+            SphereSky(texture=self.sky_texture).scale = 10000
 
         camera.rotation_z = -20
         if self.debug_mode:
@@ -269,6 +267,13 @@ class SolarSystemRealitySim:
             self.start_time = Time(datetime.strptime(start_time + '+0800', '%Y-%m-%d %H:%M:%S%z'),
                                    format='datetime')
 
+        from common.image_utils import find_texture
+        self.sky_texture = find_texture("bg_pan.jpg", None)
+        if self.sky_texture is None:
+            cosmic_bg = None
+        else:
+            cosmic_bg = ''
+
         dt = SECONDS_PER_DAY  # 1秒=1天
         dt = 1  # 1秒=1秒
         # 使用 ursina 查看的运行效果
@@ -278,7 +283,7 @@ class SolarSystemRealitySim:
                    position=(0, 0.2 * AU, -3 * AU),
                    gravity_works=False,  # 关闭万有引力的计算
                    show_grid=False,
-                   # cosmic_bg='',
+                   cosmic_bg=cosmic_bg,
                    show_camera_info=False,
                    timer_enabled=True)
 
@@ -288,7 +293,7 @@ if __name__ == '__main__':
     sim = SolarSystemRealitySim()
     sim.run(
         # debug_mode=True,  # 是否调试模式
-        # start_time='2023-01-01 02:20:00',  # 指定运行的开始时间，不指定为当前时间
+        start_time='2050-01-01 00:00:00',  # 指定运行的开始时间，不指定为当前时间
         # show_asteroids=True,  # 是否显示小行星带（图片模拟）
         # show_earth_clouds=True,  # 地球是否显示云层（图片效果，不是真实的云层）
         # recalc_moon_pos=False,  # 为了更好的展示效果，需要对月球的位置重新计算（使得地月距离放大，月球相对地球方向不变）

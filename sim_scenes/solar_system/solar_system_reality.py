@@ -10,7 +10,8 @@
 import numpy as np
 
 from bodies import Sun, Mercury, Venus, Earth, Mars, Asteroids, Jupiter, Saturn, Uranus, Neptune, Moon
-from common.celestial_data_service import get_body_posvel, recalc_moon_position, calc_solar_acceleration
+from common.celestial_data_service import get_body_posvel, recalc_moon_position, calc_solar_acceleration, \
+    set_solar_system_celestial_position, set_earth_rotation
 from common.consts import SECONDS_PER_WEEK, SECONDS_PER_DAY, AU
 from sim_scenes.func import ursina_run
 from simulators.ursina.entities.body_timer import TimeData
@@ -90,26 +91,6 @@ class SolarSystemRealitySim:
         if self.debug_mode:
             self.earth.set_light_disable(True)
 
-    def set_earth_rotation(self, dt):
-        """
-        根据指定的时间控制地球的旋转角度（保证地球的自转和北京时间同步）
-        @param dt: 时间 datetime
-        @return:
-        """
-
-        # timetuple 可以获取当天的小时数、分数钟、秒数
-        timetuple = dt.timetuple()
-        # 当年的第几天
-        day_of_year = timetuple.tm_yday
-        # 根据当年的第几天计算出该日期当天的偏转角度：360度 / 365天 = 当天的偏转角度
-        angle_of_day = day_of_year * (360 / 365)
-        # 计算出精确的小时数
-        total_hours = timetuple.tm_hour + timetuple.tm_min / 60 + timetuple.tm_sec / 60 / 60
-        # -total_hours： 负号控制地球的旋转方向、1天24小时，360度/24=15
-        # total_hours * 15：1天24小时，360度/24小时=1小时15度
-        # angle_of_day： 1年第几天的角度
-        self.earth.planet.rotation_y = -total_hours * 15 - angle_of_day + 15  # 精确调整
-
     def show_clock(self, dt):
         """
         显示时钟
@@ -134,58 +115,7 @@ class SolarSystemRealitySim:
         @return:
         """
         t = self.start_time + time_data.total_days
-
-        earth_pos = None
-        sun_pos = None
-
-        for body in self.bodies:
-            if isinstance(body, Asteroids):  # 小行星带是模拟，不是正常的天体
-                posvel = None
-            else:
-                # 获取天体的三维位置和矢量速度
-                posvel = get_body_posvel(body, t)
-
-            if isinstance(body, Moon):  # 如果是月球，为了更好的展示效果，需要对月球的位置重新计算
-                moon_real_pos = [posvel[0].x.value * AU, posvel[0].z.value * AU, posvel[0].y.value * AU]
-                # TODO:注释下行，月球就会在真实的位置
-                if self.recalc_moon_pos:
-                    posvel = recalc_moon_position(posvel, earth_pos)
-
-            if posvel is None:
-                # posvel 为空，则使用太阳的坐标
-                position, velocity = [sun_pos.x.value * AU,
-                                      sun_pos.z.value * AU,
-                                      sun_pos.y.value * AU], [0, 0, 0]
-            else:
-                # 坐标单位：千米  速度单位：千米/秒
-                position, velocity = [posvel[0].x.value * AU, posvel[0].z.value * AU, posvel[0].y.value * AU], \
-                                     [posvel[1].x.value * AU / SECONDS_PER_DAY,
-                                      posvel[1].z.value * AU / SECONDS_PER_DAY,
-                                      posvel[1].y.value * AU / SECONDS_PER_DAY]
-
-            # 实时调整天体的位置和速度
-            body.position = np.array(position)
-            body.velocity = np.array(velocity)
-
-            if isinstance(body, Asteroids):
-                pass
-            elif isinstance(body, Sun):
-                # 记录太阳的位置
-                sun_pos = posvel[0]
-            elif isinstance(body, Moon):
-                # 月球受到2个影响比较大的天体引力（地球和太阳），计算引力引起的加速度和
-                acc_earth = calc_solar_acceleration(moon_real_pos, self.earth)
-                acc_sun = calc_solar_acceleration(moon_real_pos, self.sun)
-                body.acceleration = [acc_earth[0] + acc_sun[0],
-                                     acc_earth[1] + acc_sun[1],
-                                     acc_earth[2] + acc_sun[2]]
-            else:
-                # 其他天体受到太阳引力
-                body.acceleration = calc_solar_acceleration(body, self.sun)
-
-            if isinstance(body, Earth):
-                # 记录地球的位置
-                earth_pos = posvel[0]
+        set_solar_system_celestial_position(self.bodies, t, self.recalc_moon_pos)
 
     def on_ready(self):
         """
@@ -219,7 +149,7 @@ class SolarSystemRealitySim:
         # 设置天体的位置（包含速度和加速度的信息）
         self.set_bodies_position(time_data)
         # 保证地球的自转和北京时间同步
-        self.set_earth_rotation(dt)
+        set_earth_rotation(self.earth, dt)
         # 显示时钟
         self.show_clock(dt)
 

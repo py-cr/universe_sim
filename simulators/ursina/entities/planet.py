@@ -31,6 +31,15 @@ class Planet(Entity):
         clear_trails(self)
         self.body.reset()
 
+    @property
+    def init_scale(self):
+        return self.__init_scale
+
+    @init_scale.setter
+    def init_scale(self, val):
+        self.body_scale *= val / self.__init_scale
+        self.__init_scale = val
+
     def __init__(self, body_view: BodyView):
         self.body_view = body_view
         if hasattr(self.body, "rotation_speed"):
@@ -45,7 +54,9 @@ class Planet(Entity):
         else:
             scale = self.body.size_scale * UrsinaConfig.SCALE_FACTOR
 
-        self.init_scale = scale
+        self.__init_scale = scale
+        self.body_scale = 1.0
+
         if hasattr(body_view, "texture"):
             texture = load_texture(body_view.texture)
             # color.white

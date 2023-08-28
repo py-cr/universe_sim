@@ -126,9 +126,12 @@ class SolarSystemRealitySim:
 
         if self.sky_texture is not None:
             from simulators.ursina.entities.sphere_sky import SphereSky
-            SphereSky(texture=self.sky_texture).scale = 10000
+            SphereSky(texture=self.sky_texture).scale = 80000
 
-        camera.rotation_z = -20
+        camera.clip_plane_near = 0.1
+        camera.clip_plane_far = 100000
+
+        # camera.rotation_z = -20
         if self.debug_mode:
             camera.fov = 30  # 调试时，拉近摄像机距离
 
@@ -137,7 +140,7 @@ class SolarSystemRealitySim:
         delattr(self.earth.planet, "rotspeed")
 
         # 设置后，可以调整鼠标键盘的控制速度
-        application.time_scale = 2
+        application.time_scale = 1
 
     def on_timer_changed(self, time_data: TimeData):
         """
@@ -223,7 +226,7 @@ if __name__ == '__main__':
     sim = SolarSystemRealitySim()
     sim.run(
         # debug_mode=True,  # 是否调试模式
-        start_time='2050-01-01 00:00:00',  # 指定运行的开始时间，不指定为当前时间
+        start_time='2050-01-01 12:00:00',  # 指定运行的开始时间，不指定为当前时间
         # show_asteroids=True,  # 是否显示小行星带（图片模拟）
         # show_earth_clouds=True,  # 地球是否显示云层（图片效果，不是真实的云层）
         # recalc_moon_pos=False,  # 为了更好的展示效果，需要对月球的位置重新计算（使得地月距离放大，月球相对地球方向不变）

@@ -16,8 +16,7 @@
 <img src="images/python_oa_list.jpg?raw=true" width="80.7%">
 
 # 关注更多资源：
-<img src="https://gitcode.net/pythoncr/universe_sim/-/raw/master/images/douyin_x.jpg" width="40%">
-
+<img src="images/dy_xhs.jpg?raw=true" width="80%">
 
 # 课程下载
 https://gitcode.net/pythoncr/universe_sim

@@ -123,13 +123,14 @@ class SolarSystemRealitySim:
         self.text_panel = create_text_panel()
         self.text_panel.text = "太阳缩放：1.0\n地球缩放：1.0\n月球缩放：1.0"
 
-        # if self.sky_texture is not None:
-        #     from simulators.ursina.entities.sphere_sky import SphereSky
-        #     SphereSky(texture=self.sky_texture).scale = 10000
-        camera.clip_plane_near = 0.1
-        camera.clip_plane_far = 100000
-        camera.fov = 1.0000000001
-
+        # camera.rotation_z = -20
+        # if self.debug_mode:
+        #     camera.fov = 30  # 调试时，拉近摄像机距离
+        # camera.fov = 40
+        camera.clip_plane_near = 10
+        # camera.clip_plane_far = 1000000
+        camera.parent = self.earth_camera.planet
+        # camera.update = self.camera_update
 
         # 需要按照时间和日期来控制地球的自转，所以删除控制地球自转的属性
         delattr(self.earth.planet, "rotation_speed")
@@ -153,25 +154,86 @@ class SolarSystemRealitySim:
     #     # 摄像机看向地球
     #     camera_look_at(self.earth)
 
-    # def body_show(self, body):
-    #     body.planet.enabled = True
-    #     body.show_trail = True
-    #
-    # def body_hide(self, body):
-    #     body.planet.enabled = False
-    #     body.show_trail = False
-    #     # clear_trails(body.planet)
+    def body_show(self, body):
+        body.planet.enabled = True
+        body.show_trail = True
+
+    def body_hide(self, body):
+        body.planet.enabled = False
+        body.show_trail = False
+        # clear_trails(body.planet)
 
     def body_scale(self, body, value):
-        body.planet.init_scale = 6 * value * 1e-9
+        body.planet.init_scale *= value
         if hasattr(body.planet.main_entity, "trail_scale"):
-            body.planet.main_entity.trail_scale = value * 1e-9
+            body.planet.main_entity.trail_scale *= value
 
     def set_camera_pos(self, time_data: TimeData):
-        d = camera.world_z / -74 * 1e6
-        self.body_scale(self.earth, d)
-        self.body_scale(self.moon, d)
-        self.body_scale(self.sun, d)
+        if time_data.total_days > 120:
+            self.earth_camera.camera_init_val += 300000
+        elif time_data.total_days > 90:
+            self.earth_camera.camera_init_val += 60000
+        elif time_data.total_days > 90:
+            self.earth_camera.camera_init_val += 20000
+        elif time_data.total_days > 30:
+            self.earth_camera.camera_init_val += 18000
+        elif time_data.total_days > 10:
+            self.earth_camera.camera_init_val += 4000
+        elif time_data.total_days > 2:
+            self.earth_camera.camera_init_val += 500
+
+        # if UrsinaConfig.trail_factor < 50:
+        #     self.body_scale(1.002)
+        if time_data.total_days < 5:
+            self.earth.show_trail = False
+            self.moon.show_trail = False
+        if 30 > time_data.total_days > 5:
+            self.earth.show_trail = True
+            self.moon.show_trail = True
+            self.body_scale(self.moon, 1.0025)
+            self.body_scale(self.earth, 1.002)
+        elif 60 > time_data.total_days > 30:
+            # self.body_hide(self.moon)
+            self.body_scale(self.moon, 1.002)
+            self.body_scale(self.earth, 1.002)
+            self.body_scale(self.sun, 1.002)
+        elif 150 > time_data.total_days > 60:
+            self.earth.planet.init_scale = 0.01
+            self.earth.planet.main_entity.trail_scale = 0.03
+            # self.body_scale(self.earth, 0.02)
+            # self.body_hide(self.earth)
+            # self.earth.planet.init_scale = 0.01
+            # self.body_show(self.moon)
+            # self.body_scale(1.0015)
+            # self.sun_scale(1.0015)
+        # else:
+        #     self.body_scale(1.002)
+        #     self.sun_scale(1.0005)
+
+        print("%s,%s" % (round(self.moon.planet.body_scale, 1), time_data.total_days))
+
+        # camera.x = -300  # 100
+        # camera.z = 200
+        # camera.y += self.earth_camera.camera_init_val * UrsinaConfig.SCALE_FACTOR
+
+        # camera.x = -80  # 100
+        # camera.z = -10
+        dis_au = round(camera.y / UrsinaConfig.SCALE_FACTOR / AU, 2)
+
+        if dis_au < 400:
+            if self.earth_camera.camera_init_val > 0:
+                camera.y += self.earth_camera.camera_init_val * UrsinaConfig.SCALE_FACTOR
+            else:
+                camera.y = 80
+
+        self.text_panel.text = "太阳大小缩放：%.1f\n地球大小缩放：%.1f\n月球大小缩放：%.1f\n摄像机距地球：%.2f天文单位" % \
+                               (self.sun.planet.body_scale,
+                                self.earth.planet.body_scale,
+                                self.moon.planet.body_scale,
+                                dis_au)
+
+        # UrsinaConfig.trail_factor = 3 * math.sqrt(camera.y / 250)
+        pass
 
     def on_timer_changed(self, time_data: TimeData):
         """
@@ -187,7 +249,7 @@ class SolarSystemRealitySim:
         # 调整摄像机的位置
         self.set_camera_pos(time_data)
         # 摄像机看向地球
-        camera_look_at(self.earth)
+        camera_look_at(self.sun)
         # 显示时钟
         self.show_clock(dt)
 
@@ -229,26 +291,19 @@ class SolarSystemRealitySim:
             self.start_time = Time(datetime.strptime(start_time + '+0800', '%Y-%m-%d %H:%M:%S%z'),
                                    format='datetime')
 
-        # from common.image_utils import find_texture
-        # self.sky_texture = find_texture("bg_pan.jpg", None)
-        # if self.sky_texture is None:
-        #     cosmic_bg = None
-        # else:
-        #     cosmic_bg = ''
-
         dt = SECONDS_PER_DAY  # 1秒=1天
         # dt = 1  # 1秒=1秒
         # 使用 ursina 查看的运行效果
         # 常用快捷键： P：运行和暂停  O：重新开始  I：显示天体轨迹
         # position = 左-右+、上+下-、前+后-
         ursina_run(self.bodies, dt,
-                   # position=(0, 0, 0),
-                   position=(0, 0, -AU),
+                   position=(0, 0, 0),
+                   # position=(0, 0.2 * AU, -3 * AU),
                    gravity_works=False,  # 关闭万有引力的计算
                    show_grid=False,
                    show_trail=True,
-                   cosmic_bg='',
-                   # show_camera_info=False,
+                   # cosmic_bg='',
+                   show_camera_info=False,
                    timer_enabled=True)
 
 

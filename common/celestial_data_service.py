@@ -206,19 +206,38 @@ def set_earth_rotation(earth, dt):
     earth.planet.rotation_y = -total_hours * 15 - angle_of_day + 15  # 精确调整
 
 
+def get_astropy_time(str_time):
+    from datetime import datetime
+    return Time(datetime.strptime(str_time + '+0800', '%Y-%m-%d %H:%M:%S%z'), format='datetime')
+
+
 # pip install Astropysics
 
 if __name__ == '__main__':
-    # pip install astropy
-    from astropy.coordinates import get_body_barycentric_posvel
-    from astropy.time import Time
-    import astropy.units as u
+    # 安装天文包
+    # pip install -i http://pypi.douban.com/simple/ --trusted-host=pypi.douban.com astropy
+    from astropy.coordinates import get_body_barycentric_posvel  # 获取天体的坐标pos和速度vel
+    from astropy.time import Time  # 时间
+    from astropy.coordinates import solar_system_ephemeris
+    import astropy.units as u  # 单位
+    import pytz
 
+    # 获取当前时间
     t = Time.now()
-    print("日期时间：", t)
-    posvel = get_body_barycentric_posvel('earth', t)
-    print("坐标(公里)：", [posvel[0].x.to(u.km), posvel[0].y.to(u.km), posvel[0].z.to(u.km)])
-    print("速度(公里/秒)：",
-          [posvel[1].x.to(u.km / u.second), posvel[1].y.to(u.km / u.second), posvel[1].z.to(u.km / u.second)])
+    # 指定日期时间
+    # t = get_astropy_time('2050-01-01 12:00:00')
+
+    print("北京时间：", t.to_datetime(timezone=pytz.timezone('Asia/Shanghai')))
+    # 打印天体名
+    # print("天体名：", solar_system_ephemeris.bodies)
+    # 获取地球的坐标和速度
+    earth_pos_vel = get_body_barycentric_posvel('earth', t)
+    print("地球坐标(公里)：", [earth_pos_vel[0].x.to(u.km),
+                        earth_pos_vel[0].y.to(u.km),
+                        earth_pos_vel[0].z.to(u.km)])
+    print("地球速度(公里/秒)：",
+          [earth_pos_vel[1].x.to(u.km / u.second),
+           earth_pos_vel[1].y.to(u.km / u.second),
+           earth_pos_vel[1].z.to(u.km / u.second)])
 
     # print("速度(公里/秒)：", posvel[1] * AU / SECONDS_PER_DAY)
